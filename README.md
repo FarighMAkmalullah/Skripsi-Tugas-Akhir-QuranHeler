@@ -1,2 +1,2 @@
-# QuranHealer-flutter
+# QuranHealer
 Front End Kelompok Proyek Perangkat Lunak Kelompok
