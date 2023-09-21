@@ -1,2 +1,2 @@
 # QuranHealer
-Front End Kelompok Proyek Perangkat Lunak Kelompok
+Front End Kelompok 2 Proyek Perangkat Lunak
