@@ -15,7 +15,7 @@ class QuranHealer extends StatelessWidget {
           title: const Text("QuranHealer"),
         ),
         body: const Center(
-          child: Text("QuranHealer"),
+          child: Text("Fitur B"),
         ),
       ),
     );
