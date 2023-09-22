@@ -14,9 +14,8 @@ class QuranHealer extends StatelessWidget {
         appBar: AppBar(
           title: const Text("QuranHealer"),
         ),
-        body: const Center(
-          child: Text("Hallo Saya Mau Bikin Aplikasi Di Branch fitur-text-a"),
-        ),
+        body: Text("Hallo Saya Mau Bikin Aplikasi Di Branch "),
+      
       ),
     );
   }
