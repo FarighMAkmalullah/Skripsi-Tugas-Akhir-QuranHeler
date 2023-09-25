@@ -10,9 +10,12 @@ class QuranService {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data'];
-        return data.cast<Map<String, dynamic>>();
+        return data
+            .map<Map<String, dynamic>>(
+                (item) => Map<String, dynamic>.from(item))
+            .toList();
       } else {
-        throw Exception('Failed to load surahs');
+        throw Exception('Failed to load Quran');
       }
     } catch (error) {
       throw Exception('Error: $error');
