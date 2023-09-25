@@ -38,7 +38,31 @@ class _QuranScreenState extends State<QuranScreen> {
                 itemCount: quran.quranlist.length,
                 itemBuilder: (context, index) {
                   var data = quran.quranlist[index];
-                  return Text(data.namaLatin);
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              child: Text('${data.nomor}'),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(data.namaLatin),
+                                Text(
+                                    "${data.arti},${data.tempatTurun}, ${data.jumlahAyat}")
+                              ],
+                            )
+                          ],
+                        ),
+                        Text('${data.nama}')
+                      ],
+                    ),
+                  );
                 },
               );
             }
