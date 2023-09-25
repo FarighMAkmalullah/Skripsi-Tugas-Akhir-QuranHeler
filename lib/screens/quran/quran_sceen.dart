@@ -34,36 +34,62 @@ class _QuranScreenState extends State<QuranScreen> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
-              return ListView.builder(
-                itemCount: quran.quranlist.length,
-                itemBuilder: (context, index) {
-                  var data = quran.quranlist[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              child: Text('${data.nomor}'),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(data.namaLatin),
-                                Text(
-                                    "${data.arti},${data.tempatTurun}, ${data.jumlahAyat}")
-                              ],
-                            )
-                          ],
-                        ),
-                        Text('${data.nama}')
-                      ],
-                    ),
-                  );
-                },
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  itemCount: quran.quranlist.length,
+                  itemBuilder: (context, index) {
+                    var data = quran.quranlist[index];
+                    return Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black45)),
+                      padding: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(2.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.green[600]),
+                                    child: Center(
+                                      child: Text(
+                                        '${data.nomor}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(data.namaLatin),
+                                      Text(
+                                          "${data.arti},${data.tempatTurun}, ${data.jumlahAyat}")
+                                    ],
+                                  )
+                                ],
+                              ),
+                              Text(data.nama)
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               );
             }
           },
