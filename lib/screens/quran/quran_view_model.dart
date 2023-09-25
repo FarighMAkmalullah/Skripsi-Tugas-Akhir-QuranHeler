@@ -8,7 +8,7 @@ class QuranViewModel extends ChangeNotifier {
 
   List<QuranModel> get quranlist => _quranlist;
 
-  Future<void> fetchSurahs() async {
+  Future<void> fetchQuranViewModel() async {
     try {
       final List<Map<String, dynamic>> quranData =
           await _apiService.fetchQuranData();

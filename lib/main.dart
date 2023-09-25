@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
-import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(
@@ -22,6 +22,7 @@ class QuranHealer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'QuranHealer',
       initialRoute: '/',
       routes: {
