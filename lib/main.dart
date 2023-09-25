@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/quran/quran_sceen.dart';
 
 void main() {
   runApp(const QuranHealer());
@@ -13,7 +14,7 @@ class QuranHealer extends StatelessWidget {
       title: 'QuranHealer',
       initialRoute: '/',
       routes: {
-        '/': (context) => const QuranHealer(),
+        '/': (context) => const QuranScreen(),
       },
     );
   }

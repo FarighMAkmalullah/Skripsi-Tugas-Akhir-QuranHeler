@@ -10,8 +10,12 @@ class QuranScreen extends StatefulWidget {
 class _QuranScreenState extends State<QuranScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Quran in QuranHealer'),
+        centerTitle: true,
+      ),
+      body: const Center(
         child: Text('Quran Digital'),
       ),
     );
