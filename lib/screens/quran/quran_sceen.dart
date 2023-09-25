@@ -30,12 +30,16 @@ class _QuranScreenState extends State<QuranScreen> {
           future: quranDataViewModel,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
-              return const Center(
-                child: Text('Quran Digital'),
+              return ListView.builder(
+                itemCount: quran.quranlist.length,
+                itemBuilder: (context, index) {
+                  var data = quran.quranlist[index];
+                  return Text(data.namaLatin);
+                },
               );
             }
           },
