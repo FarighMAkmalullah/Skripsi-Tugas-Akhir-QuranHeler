@@ -77,12 +77,20 @@ class _QuranScreenState extends State<QuranScreen> {
                                     children: [
                                       Text(data.namaLatin),
                                       Text(
-                                          "${data.arti},${data.tempatTurun}, ${data.jumlahAyat}")
+                                        "${data.arti}, ${data.tempatTurun}, ${data.jumlahAyat}",
+                                        style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54),
+                                      )
                                     ],
                                   )
                                 ],
                               ),
-                              Text(data.nama)
+                              Text(
+                                data.nama,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              )
                             ],
                           ),
                         ],
