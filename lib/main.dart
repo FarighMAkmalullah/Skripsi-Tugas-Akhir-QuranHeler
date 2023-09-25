@@ -10,14 +10,11 @@ class QuranHealer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("QuranHealer"),
-        ),
-        body: const Center(
-          child: Text("QuranHealer"),
-        ),
-      ),
+      title: 'QuranHealer',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const QuranHealer(),
+      },
     );
   }
 }
