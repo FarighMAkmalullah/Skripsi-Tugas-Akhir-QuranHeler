@@ -20,19 +20,27 @@ class _QuranScreenState extends State<QuranScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Quran in QuranHealer'),
-        centerTitle: true,
-      ),
-      body: FutureBuilder<void>(
-        future: quranDataViewModel,
-        builder: (context, snapshot) {
-          return const Center(
-            child: Text('Quran Digital'),
-          );
-        },
-      ),
-    );
+    return Consumer<QuranViewModel>(builder: (context, quran, child) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Quran in QuranHealer'),
+          centerTitle: true,
+        ),
+        body: FutureBuilder<void>(
+          future: quranDataViewModel,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return const Center(
+                child: Text('Quran Digital'),
+              );
+            }
+          },
+        ),
+      );
+    });
   }
 }

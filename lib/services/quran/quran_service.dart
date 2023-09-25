@@ -6,7 +6,7 @@ class QuranService {
 
   Future<List<Map<String, dynamic>>> fetchQuranData() async {
     try {
-      final response = await _dio.get(quranAPI);
+      final response = await _dio.get("$quranAPI/api/v2/surat");
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data'];
