@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
+import 'package:quranhealer/screens/quran/widgets/card_quran.dart';
 
 class QuranScreen extends StatefulWidget {
   const QuranScreen({super.key});
@@ -40,61 +41,13 @@ class _QuranScreenState extends State<QuranScreen> {
                   itemCount: quran.quranlist.length,
                   itemBuilder: (context, index) {
                     var data = quran.quranlist[index];
-                    return Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.black45)),
-                      padding: const EdgeInsets.all(8.0),
-                      margin: const EdgeInsets.all(2.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.green[600]),
-                                    child: Center(
-                                      child: Text(
-                                        '${data.nomor}',
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(data.namaLatin),
-                                      Text(
-                                        "${data.arti}, ${data.tempatTurun}, ${data.jumlahAyat}",
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black54),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              Text(
-                                data.nama,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                    return CardQuran(
+                      nomor: data.nomor,
+                      namaLatin: data.namaLatin,
+                      arti: data.arti,
+                      tempatTurun: data.tempatTurun,
+                      jumlahAyat: data.jumlahAyat,
+                      nama: data.nama,
                     );
                   },
                 ),
