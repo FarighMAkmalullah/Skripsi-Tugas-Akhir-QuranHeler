@@ -44,24 +44,39 @@ class _DetailSurahScreensState extends State<DetailSurahScreens> {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData) {
               return Container(
-                padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
-                child: ListView.builder(
-                  itemCount: detail!.ayat.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "${detail.ayat[index].teksArab} ( ${detail.ayat[index].nomorAyat} ) ",
-                          style: const TextStyle(fontSize: 25),
-                          textAlign: TextAlign.right,
+                padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 30, 8, 20),
+                        child: Text(
+                          'Surah ${detail!.namaLatin}',
+                          style: const TextStyle(fontSize: 20),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        )
-                      ],
-                    );
-                  },
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: detail.ayat.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "${detail.ayat[index].teksArab} ( ${detail.ayat[index].nomorAyat} ) ",
+                                style: const TextStyle(fontSize: 25),
+                                textAlign: TextAlign.right,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               );
             } else {
