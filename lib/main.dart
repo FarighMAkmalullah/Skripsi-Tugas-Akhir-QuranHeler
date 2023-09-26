@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
+import 'package:quranhealer/screens/quran/quran_sceen.dart';
+import 'package:quranhealer/screens/quran/quran_view_model.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const QuranHealer());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => QuranViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DetailSurahViewModel(),
+        )
+      ],
+      child: const QuranHealer(),
+    ),
+  );
 }
 
 class QuranHealer extends StatelessWidget {
@@ -10,14 +26,12 @@ class QuranHealer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("QuranHealer"),
-        ),
-        body: const Center(
-          child: Text("QuranHealer"),
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      title: 'QuranHealer',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const QuranScreen(),
+      },
     );
   }
 }
