@@ -76,6 +76,5 @@ class _CardQuranState extends State<CardQuran> {
         ],
       ),
     );
-    ;
   }
 }

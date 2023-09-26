@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/quran/detail_quran_screen.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
 import 'package:quranhealer/screens/quran/widgets/card_quran.dart';
 
@@ -41,13 +42,23 @@ class _QuranScreenState extends State<QuranScreen> {
                   itemCount: quran.quranlist.length,
                   itemBuilder: (context, index) {
                     var data = quran.quranlist[index];
-                    return CardQuran(
-                      nomor: data.nomor,
-                      namaLatin: data.namaLatin,
-                      arti: data.arti,
-                      tempatTurun: data.tempatTurun,
-                      jumlahAyat: data.jumlahAyat,
-                      nama: data.nama,
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailSurahScreens(nomor: data.nomor)),
+                        );
+                      },
+                      child: CardQuran(
+                        nomor: data.nomor,
+                        namaLatin: data.namaLatin,
+                        arti: data.arti,
+                        tempatTurun: data.tempatTurun,
+                        jumlahAyat: data.jumlahAyat,
+                        nama: data.nama,
+                      ),
                     );
                   },
                 ),

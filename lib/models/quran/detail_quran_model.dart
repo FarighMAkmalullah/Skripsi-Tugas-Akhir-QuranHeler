@@ -29,7 +29,7 @@ class QuranInfo {
   final Map<String, String> audioFull;
   final List<QuranAyat> ayat;
   final QuranSurat suratSelanjutnya;
-  final bool suratSebelumnya;
+  final dynamic suratSebelumnya;
 
   QuranInfo({
     required this.nomor,

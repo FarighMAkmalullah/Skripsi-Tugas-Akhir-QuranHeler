@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,9 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => QuranViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => DetailSurahViewModel(),
+        )
       ],
       child: const QuranHealer(),
     ),
