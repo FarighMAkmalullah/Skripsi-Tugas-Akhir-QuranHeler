@@ -1,14 +1,14 @@
-class AdzanKota {
+class AdzanListModel {
   final String id;
   final String nama;
 
-  AdzanKota({
+  AdzanListModel({
     required this.id,
     required this.nama,
   });
 
-  factory AdzanKota.fromJson(Map<String, dynamic> json) {
-    return AdzanKota(
+  factory AdzanListModel.fromJson(Map<String, dynamic> json) {
+    return AdzanListModel(
       id: json['id'],
       nama: json['nama'],
     );
