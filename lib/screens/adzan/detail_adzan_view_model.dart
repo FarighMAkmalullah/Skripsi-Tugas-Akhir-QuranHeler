@@ -11,7 +11,7 @@ class DetailAdzanViewModel extends ChangeNotifier {
       final response = await DetailAdzanService.getDetailAdzan(kode, tanggal);
 
       if (response.statusCode == 200) {
-        final responseData = response.data['data'];
+        final responseData = response.data['jadwal']['data'];
         _detailAdzan = JadwalAdzan.fromJson(responseData);
         notifyListeners();
       } else {
