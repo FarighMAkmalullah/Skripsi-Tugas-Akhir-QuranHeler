@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quranhealer/screens/adzan/adzan_screen.dart';
+import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
@@ -14,7 +15,10 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => DetailSurahViewModel(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AdzanViewModel(),
+        ),
       ],
       child: const QuranHealer(),
     ),

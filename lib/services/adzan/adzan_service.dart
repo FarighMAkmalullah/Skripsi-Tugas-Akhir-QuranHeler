@@ -9,7 +9,7 @@ class AdzanService {
       final response = await _dio.get("$adzanAPI/sholat/format/json/kota");
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = response.data['data'];
+        final List<dynamic> data = response.data['kota'];
         return data
             .map<Map<String, dynamic>>(
                 (item) => Map<String, dynamic>.from(item))
