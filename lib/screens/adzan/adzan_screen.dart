@@ -44,7 +44,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Jadwal Adzan'),
+          title: const Text('List Kota Adzan'),
           centerTitle: true,
         ),
         body: FutureBuilder<void>(
