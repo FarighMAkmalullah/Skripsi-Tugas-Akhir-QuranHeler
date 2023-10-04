@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
+import 'package:quranhealer/screens/adzan/detail_adzan_screen.dart';
 
 class AdzanScreen extends StatefulWidget {
   const AdzanScreen({super.key});
@@ -87,6 +88,15 @@ class _AdzanScreenState extends State<AdzanScreen> {
                               : adzan.adzanlist[index];
 
                           return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailAdzan(id: data.id, nama: data.nama),
+                                ),
+                              );
+                            },
                             child: Container(
                               padding: const EdgeInsets.all(10),
                               margin: const EdgeInsets.all(3),
