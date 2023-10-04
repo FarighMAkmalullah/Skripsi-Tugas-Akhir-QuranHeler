@@ -27,7 +27,7 @@ class _DetailAdzanState extends State<DetailAdzan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jadwal Adzan'),
+        title: const Text('Jadwal Shalat'),
         centerTitle: true,
       ),
       body: StreamBuilder<DateTime>(
