@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/adzan/adzan_screen.dart';
+import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
+import 'package:quranhealer/screens/adzan/detail_adzan_view_model.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
@@ -13,7 +16,13 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => DetailSurahViewModel(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AdzanViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DetailAdzanViewModel(),
+        ),
       ],
       child: const QuranHealer(),
     ),
@@ -30,7 +39,9 @@ class QuranHealer extends StatelessWidget {
       title: 'QuranHealer',
       initialRoute: '/',
       routes: {
-        '/': (context) => const QuranScreen(),
+        '/': (context) => const AdzanScreen(),
+        '/quran': (context) => const QuranScreen(),
+        '/adzan': (context) => const AdzanScreen(),
       },
     );
   }

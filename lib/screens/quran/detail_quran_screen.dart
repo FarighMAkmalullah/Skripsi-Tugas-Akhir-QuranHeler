@@ -33,7 +33,6 @@ class _DetailSurahScreensState extends State<DetailSurahScreens> {
       final detail = provider.detailSurah;
       return Scaffold(
         body: FutureBuilder(
-          // Gunakan FutureBuilder untuk menampilkan data dari provider
           future: detailDataFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
