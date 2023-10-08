@@ -20,16 +20,17 @@ class _DoaScreenState extends State<DoaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DoaViewModel>(builder: (
-      context,
-      doa,
-      _,
-    ) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Doa Pilihan'),
-        ),
-        body: FutureBuilder<void>(
+    return Consumer<DoaViewModel>(
+      builder: (
+        context,
+        doa,
+        _,
+      ) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Doa Pilihan'),
+          ),
+          body: FutureBuilder<void>(
             future: doaDataViewModel,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -40,19 +41,50 @@ class _DoaScreenState extends State<DoaScreen> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
-                      itemCount: doa.doalist.length,
-                      itemBuilder: (context, index) {
-                        var data = doa.doalist[index];
-                        return Container(
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.all(8),
-                          child: Text('${data.title}'),
-                        );
-                      }),
+                    itemCount: doa.doalist.length,
+                    itemBuilder: (context, index) {
+                      var data = doa.doalist[index];
+                      return Container(
+                        padding: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              data.title,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              data.arabic,
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              data.translation,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 );
               }
-            }),
-      );
-    });
+            },
+          ),
+        );
+      },
+    );
   }
 }
