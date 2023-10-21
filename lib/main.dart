@@ -7,6 +7,8 @@ import 'package:quranhealer/screens/doa/doa_view_model.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
+import 'package:quranhealer/screens/onBoarding/splash_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -32,6 +34,8 @@ void main() {
       child: const QuranHealer(),
     ),
   );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {});
 }
 
 class QuranHealer extends StatelessWidget {
@@ -44,10 +48,11 @@ class QuranHealer extends StatelessWidget {
       title: 'QuranHealer',
       initialRoute: '/',
       routes: {
-        '/': (context) => const DoaScreen(),
+        '/': (context) => const SplashScreen(),
         '/quran': (context) => const QuranScreen(),
         '/adzan': (context) => const AdzanScreen(),
         '/doa': (context) => const DoaScreen(),
+        '/screen': (context) => const SplashScreen(),
       },
     );
   }
