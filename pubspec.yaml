@@ -66,6 +66,8 @@ flutter:
   assets:
     - assets/logo/logo.png
     - assets/images/splash3.svg
+    - assets/images/splash2-1.svg
+    - assets/images/splash2-2.svg
     - assets/images/splash1.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
