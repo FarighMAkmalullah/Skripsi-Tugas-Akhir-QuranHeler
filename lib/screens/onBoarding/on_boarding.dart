@@ -11,14 +11,13 @@ class OnBoarding extends StatefulWidget {
 class _OnBoardingState extends State<OnBoarding> {
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double containerHeight = screenHeight / 2.7;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Expanded(
             child: Container(
+              width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: const Color(0xFF239D6A).withOpacity(0.6),
@@ -36,7 +35,6 @@ class _OnBoardingState extends State<OnBoarding> {
             ),
           ),
           SizedBox(
-            height: containerHeight,
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
@@ -48,58 +46,59 @@ class _OnBoardingState extends State<OnBoarding> {
                     color: const Color(0xFF239D6A).withOpacity(0.6),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(35),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Curhat Bareng Uztadz",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 21,
-                          ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.all(35),
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Curhat Bareng Uztadz",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 21,
                         ),
-                        SizedBox(
-                          height: 20,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Ga perlu repot cari ustadz untuk masalah sehari-hari cukup curhat bareng ustadz dari QuranHealer biar dapet bimbingan dan nasihat Islami..",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF6D6666),
                         ),
-                        Text(
-                          "Ga perlu repot cari ustadz untuk masalah sehari-hari cukup curhat bareng ustadz dari QuranHealer biar dapet bimbingan dan nasihat Islami..",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF6D6666),
-                          ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text(
+                        "GET STARTED",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFE38800),
                         ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        Text(
-                          "GET STARTED",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFFE38800),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(),
-                            Text(
-                              "LANJUT",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF1E4A2A),
-                              ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(),
+                          Text(
+                            "LANJUT",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF1E4A2A),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
                   ),
                 ),
               ],
