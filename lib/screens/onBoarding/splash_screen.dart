@@ -13,6 +13,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    // Setelah penundaan 3 detik, pindah ke halaman berikutnya
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.of(context).pushReplacementNamed('/boarding');
+    });
   }
 
   @override
@@ -57,8 +61,21 @@ class _SplashScreenState extends State<SplashScreen> {
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/splash2-1.svg",
+                      fit: BoxFit.fill,
+                      height: 103,
+                    ),
+                    const SizedBox(
+                      height: 55,
+                    )
+                  ],
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -77,6 +94,19 @@ class _SplashScreenState extends State<SplashScreen> {
                           fontSize: 15,
                           fontWeight: FontWeight.w600),
                     ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/splash2-2.svg",
+                      fit: BoxFit.fill,
+                      height: 103,
+                    ),
+                    const SizedBox(
+                      height: 55,
+                    )
                   ],
                 ),
               ],
