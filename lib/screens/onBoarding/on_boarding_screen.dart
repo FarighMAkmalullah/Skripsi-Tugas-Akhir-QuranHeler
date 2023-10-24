@@ -11,6 +11,7 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingState extends State<OnBoardingScreen> {
   final PageController _pageControllerDescription = PageController();
+  int currentPage = 0;
 
   Map<String, dynamic> boardingData = {
     'boarding': [
@@ -24,14 +25,14 @@ class _OnBoardingState extends State<OnBoardingScreen> {
       {
         'img': 'assets/images/onboarding/onboarding2.png',
         'judul': 'Fitur Muslim',
-        'devide': 'assets/images/onboarding/updevide2.svg',
+        'devide': 'assets/images/onboarding/updevide3.svg',
         'deskripsi':
             'Kamu bisa dapet fitur Muslim seperti Al-Quran, Doa Pilihan, serta Jadwal Adzan..Jadi semua sudah ada di QuranHealer'
       },
       {
         'img': 'assets/images/onboarding/onboarding3.png',
         'judul': 'Daftar Gratis',
-        'devide': 'assets/images/onboarding/updevide3.svg',
+        'devide': 'assets/images/onboarding/updevide2.svg',
         'deskripsi':
             'Kamu bisa daftar di QuranHealer dengan gratis tanpa dipungut biaya sedikitpun..'
       }
@@ -47,6 +48,11 @@ class _OnBoardingState extends State<OnBoardingScreen> {
             child: PageView.builder(
                 controller: _pageControllerDescription,
                 itemCount: boardingData['boarding'].length,
+                onPageChanged: (int page) {
+                  setState(() {
+                    currentPage = page;
+                  });
+                },
                 itemBuilder: (context, index) {
                   final boarding = boardingData['boarding'][index];
                   return Container(
@@ -73,7 +79,7 @@ class _OnBoardingState extends State<OnBoardingScreen> {
               children: [
                 SizedBox(
                   child: SvgPicture.asset(
-                    "assets/images/onboarding/updevide1.svg",
+                    boardingData['boarding'][currentPage]['devide'],
                     fit: BoxFit.fill,
                     // ignore: deprecated_member_use
                     color: const Color(0xFF239D6A).withOpacity(0.6),
@@ -85,9 +91,9 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Curhat Bareng Uztadz",
-                        style: TextStyle(
+                      Text(
+                        boardingData['boarding'][currentPage]['judul'],
+                        style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 21,
                         ),
@@ -95,20 +101,24 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        "Ga perlu repot cari ustadz untuk masalah sehari-hari cukup curhat bareng ustadz dari QuranHealer biar dapet bimbingan dan nasihat Islami..",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF6D6666),
+                      SizedBox(
+                        height: 50,
+                        child: Text(
+                          boardingData['boarding'][currentPage]['deskripsi'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF6D6666),
+                          ),
                         ),
                       ),
                       const SizedBox(
                         height: 25,
                       ),
-                      const Text(
-                        "GET STARTED",
-                        style: TextStyle(
+                      Text(
+                        currentPage == 2 ? "" : "GET STARTED",
+                        style: const TextStyle(
                           fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: Color(0xFFE38800),
                         ),
                       ),
@@ -128,13 +138,41 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                               dotWidth: 14,
                             ),
                           ),
-                          const Text(
-                            "LANJUT",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF1E4A2A),
-                            ),
-                          ),
+                          currentPage != 2
+                              ? InkWell(
+                                  onTap: () {
+                                    if (currentPage <
+                                        boardingData['boarding'].length - 1) {
+                                      _pageControllerDescription.nextPage(
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease,
+                                      );
+                                    }
+                                  },
+                                  child: const Text(
+                                    "LANJUT",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xFF1E4A2A),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                )
+                              : InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/boarding-2');
+                                  },
+                                  child: const Text(
+                                    "GET STARTED",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xFF1E4A2A),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
                       const SizedBox(
