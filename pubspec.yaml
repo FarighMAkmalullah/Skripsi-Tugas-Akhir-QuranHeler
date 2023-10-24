@@ -39,6 +39,7 @@ dependencies:
   dio: ^5.3.3
   intl: ^0.18.1
   flutter_svg: ^2.0.7
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,10 @@ flutter:
     - assets/logo/logo.png
     - assets/images/splash3.svg
     - assets/images/onboarding/onboarding1.png
+    
+    - assets/images/onboarding/onboarding2.png
+    
+    - assets/images/onboarding/onboarding3.png
     - assets/images/onboarding/updevide1.svg
     - assets/images/splash2-1.svg
     - assets/images/splash2-2.svg
