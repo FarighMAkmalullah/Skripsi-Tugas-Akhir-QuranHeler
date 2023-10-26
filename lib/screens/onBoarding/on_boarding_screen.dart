@@ -114,12 +114,17 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                       const SizedBox(
                         height: 25,
                       ),
-                      Text(
-                        currentPage == 2 ? "" : "GET STARTED",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFFE38800),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/boarding-2');
+                        },
+                        child: Text(
+                          currentPage == 2 ? "" : "GET STARTED",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFFE38800),
+                          ),
                         ),
                       ),
                       const SizedBox(
