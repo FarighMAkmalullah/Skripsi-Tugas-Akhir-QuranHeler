@@ -59,7 +59,9 @@ class OnBoardingAutentication extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/login');
+                      },
                       child: Row(
                         children: [
                           const SizedBox(

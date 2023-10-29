@@ -4,6 +4,7 @@ import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_view_model.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';
 import 'package:quranhealer/screens/doa/doa_view_model.dart';
+import 'package:quranhealer/screens/login/login_screen.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_autenticaton.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_screen.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
@@ -57,6 +58,7 @@ class QuranHealer extends StatelessWidget {
         '/screen': (context) => const SplashScreen(),
         '/boarding': (context) => const OnBoardingScreen(),
         '/boarding-2': (context) => const OnBoardingAutentication(),
+        '/login': (context) => const LoginScreen(),
       },
     );
   }
