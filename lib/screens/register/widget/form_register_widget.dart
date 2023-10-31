@@ -15,11 +15,8 @@ class _LoginFormState extends State<RegisterForm> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   bool isChecked = false;
-
   String gender = 'Laki - laki';
-
   final formKey = GlobalKey<FormState>();
-
   bool loading = false;
   @override
   Widget build(BuildContext context) {
