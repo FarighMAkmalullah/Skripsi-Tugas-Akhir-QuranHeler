@@ -117,20 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.fromLTRB(16, 55, 16, 55),
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50),
-                ),
               ),
               child: const Column(
-                children: [
-                  Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                children: [],
               ),
             ),
           )
