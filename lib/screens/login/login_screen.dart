@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/login/widget/form_login_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -89,8 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
           SliverToBoxAdapter(
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 800,
-              padding: const EdgeInsets.fromLTRB(16, 55, 16, 55),
+              padding: const EdgeInsets.fromLTRB(20, 55, 20, 55),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -106,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  LoginForm(),
                 ],
               ),
             ),
@@ -113,16 +114,70 @@ class _LoginScreenState extends State<LoginScreen> {
           SliverToBoxAdapter(
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 800,
-              padding: const EdgeInsets.fromLTRB(16, 55, 16, 55),
+              padding: const EdgeInsets.fromLTRB(20, 55, 20, 55),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFFEAE9E9),
               ),
-              child: const Column(
-                children: [],
+              child: Column(
+                children: [
+                  FractionallySizedBox(
+                    widthFactor: 1.0,
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(0),
+                          backgroundColor: MaterialStateProperty.all(
+                            Colors.white,
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              side: const BorderSide(width: 1),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/icons/onboarding/google.png',
+                              height: 28,
+                              width: 28,
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            const Text(
+                              'Login With Google',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  const Text('Dont have an account ?'),
+                  const Text(
+                    'Regiter Here',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

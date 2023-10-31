@@ -56,7 +56,9 @@ class QuranHealer extends StatelessWidget {
         '/adzan': (context) => const AdzanScreen(),
         '/doa': (context) => const DoaScreen(),
         '/screen': (context) => const SplashScreen(),
-        '/boarding': (context) => const OnBoardingScreen(),
+        '/boarding': (context) => const OnBoardingScreen(
+              page: 0,
+            ),
         '/boarding-2': (context) => const OnBoardingAutentication(),
         '/login': (context) => const LoginScreen(),
       },
