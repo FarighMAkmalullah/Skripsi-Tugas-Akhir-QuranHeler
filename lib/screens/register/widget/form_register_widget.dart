@@ -14,6 +14,9 @@ class _LoginFormState extends State<RegisterForm> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  bool isChecked = false;
+
+  String gender = 'Laki - laki';
 
   final formKey = GlobalKey<FormState>();
 
@@ -24,6 +27,7 @@ class _LoginFormState extends State<RegisterForm> {
       key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -140,16 +144,98 @@ class _LoginFormState extends State<RegisterForm> {
             ),
           ),
           const SizedBox(height: 25.0),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'Forgot Password ?',
-                style: TextStyle(fontWeight: FontWeight.bold),
+          const Text('Gender'),
+          const SizedBox(height: 10.0),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: const Color(0xFF777070),
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        gender = 'Laki - laki';
+                      });
+                    },
+                    child: Container(
+                      height: 50,
+                      color: gender == 'Laki - laki'
+                          ? Colors.blue
+                          : Colors.transparent,
+                      child: Center(
+                        child: Text(
+                          'Laki - laki',
+                          style: TextStyle(
+                            color: gender == 'Laki - laki'
+                                ? Colors.white
+                                : const Color(0xFF777070),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        gender = 'Perempuan';
+                      });
+                    },
+                    child: Container(
+                      color: gender == 'Perempuan'
+                          ? Colors.blue
+                          : Colors.transparent,
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'Perempuan',
+                          style: TextStyle(
+                            color: gender == 'Perempuan'
+                                ? Colors.white
+                                : const Color(0xFF777070),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 7.0),
+          Row(
+            children: <Widget>[
+              SizedBox(
+                width: 24,
+                child: Checkbox(
+                  value: isChecked,
+                  onChanged: (value) {
+                    setState(() {
+                      isChecked = value!;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(
+                width: 7,
+              ),
+              const Text(
+                'I Agree with Terms and Condition',
+                // style: GoogleFonts.roboto(
+                //   fontWeight: FontWeight.w500,
+                //   fontSize: 14,
+                // ),
               ),
             ],
           ),
-          const SizedBox(height: 25.0),
+          const SizedBox(height: 10.0),
           FractionallySizedBox(
             widthFactor: 1.0,
             child: SizedBox(
