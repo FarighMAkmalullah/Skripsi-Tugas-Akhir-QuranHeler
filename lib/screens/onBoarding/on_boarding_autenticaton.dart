@@ -8,7 +8,7 @@ class OnBoardingAutentication extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushReplacementNamed('/boarding');
-        return true;
+        return false;
       },
       child: Scaffold(
         body: Container(
@@ -143,10 +143,15 @@ class OnBoardingAutentication extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              const Text(
-                "Register Here",
-                style: TextStyle(
-                  color: Color(0xFFF0D338),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/daftar');
+                },
+                child: const Text(
+                  "Register Here",
+                  style: TextStyle(
+                    color: Color(0xFFF0D338),
+                  ),
                 ),
               ),
               const SizedBox(

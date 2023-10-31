@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:quranhealer/screens/login/widget/form_login_widget.dart';
+import 'package:quranhealer/screens/register/widget/form_register_widget.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 250,
+            expandedHeight: 200,
             stretch: true,
             automaticallyImplyLeading: false,
             elevation: 0,
@@ -48,12 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.of(context).pushNamed('/daftar');
+                            Navigator.of(context).pushNamed('/login');
                           },
                           child: const Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Text(
-                              "Register",
+                              "Login",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -64,25 +65,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Text(
+                          "Daftar",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 40),
+                        ),
                         SizedBox(
-                          width: 71,
-                          height: 56,
-                          child: Image.asset("assets/logo/logo.png"),
+                          height: 10,
                         ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const Text(
-                          "Senang bertemu denganmu lagi...",
+                        Text(
+                          "Senang bertemu denganmu...",
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.w500),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 15,
                         ),
                       ],
@@ -104,14 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: const Column(
                 children: [
-                  Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  LoginForm(),
+                  RegisterForm(),
                 ],
               ),
             ),
@@ -125,64 +121,18 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: Column(
                 children: [
-                  FractionallySizedBox(
-                    widthFactor: 1.0,
-                    child: SizedBox(
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(0),
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.white,
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: const BorderSide(width: 1),
-                            ),
-                          ),
-                        ),
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icons/onboarding/google.png',
-                              height: 28,
-                              width: 28,
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            const Text(
-                              'Login With Google',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
                   const Text(
-                    'Dont have an account ?',
+                    'You have an account ?',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).pushNamed('/daftar');
+                      Navigator.of(context).pushNamed('/login');
                     },
                     child: const Text(
-                      'Regiter Here',
+                      'Login Here',
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.w600,

@@ -13,6 +13,7 @@ import 'package:quranhealer/screens/quran/quran_view_model.dart';
 import 'package:quranhealer/screens/onBoarding/splash_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/register/register_screen.dart';
 
 void main() {
   runApp(
@@ -61,6 +62,7 @@ class QuranHealer extends StatelessWidget {
             ),
         '/boarding-2': (context) => const OnBoardingAutentication(),
         '/login': (context) => const LoginScreen(),
+        '/daftar': (context) => const RegisterScreen(),
       },
     );
   }

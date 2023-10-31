@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<RegisterForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends State<RegisterForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -22,7 +25,37 @@ class _LoginFormState extends State<LoginForm> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
-          const SizedBox(height: 40.0),
+          TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            // obscureText: loginViewModel.getObsecureText,
+            controller: nameController,
+            validator: (value) {
+              if (value != null && value.length < 5) {
+                return 'Enter min. 5 characters';
+              } else {
+                return null;
+              }
+            },
+            decoration: const InputDecoration(
+              labelText: 'Nama Lengkap',
+              // hintStyle: GoogleFonts.roboto(
+              //   fontWeight: FontWeight.w400,
+              //   fontSize: 16,
+              // ),
+              // suffixIcon: IconButton(
+              //   icon: Icon(
+              //     getObsecureText ? Icons.visibility_off : Icons.visibility,
+              //   ),
+              //   onPressed: () {
+              //     loginViewModel.setTogglePasswordVisibility(!getObsecureText);
+              //   },
+              // ),
+              hintText: 'Maukkan Nama Lengkap',
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 25.0),
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: emailController,
@@ -45,8 +78,6 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           const SizedBox(height: 25.0),
-          // Input Password
-          //========================================================
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             // obscureText: loginViewModel.getObsecureText,
@@ -78,6 +109,37 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           const SizedBox(height: 25.0),
+          TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            // obscureText: loginViewModel.getObsecureText,
+            controller: confirmPasswordController,
+            validator: (value) {
+              if (value != null && value.length < 5) {
+                return 'Enter min. 5 characters';
+              } else {
+                return null;
+              }
+            },
+            decoration: const InputDecoration(
+              labelText: 'Confirm Password',
+              // hintStyle: GoogleFonts.roboto(
+              //   fontWeight: FontWeight.w400,
+              //   fontSize: 16,
+              // ),
+              // suffixIcon: IconButton(
+              //   icon: Icon(
+              //     getObsecureText ? Icons.visibility_off : Icons.visibility,
+              //   ),
+              //   onPressed: () {
+              //     loginViewModel.setTogglePasswordVisibility(!getObsecureText);
+              //   },
+              // ),
+              hintText: 'Masukkan Password Lagi',
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 25.0),
           const Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -87,7 +149,6 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ],
           ),
-
           const SizedBox(height: 25.0),
           FractionallySizedBox(
             widthFactor: 1.0,
@@ -112,7 +173,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
                 child: !loading
                     ? const Text(
-                        'Login',
+                        'Register',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
