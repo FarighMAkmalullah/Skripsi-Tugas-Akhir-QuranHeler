@@ -13,7 +13,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Setelah penundaan 3 detik, pindah ke halaman berikutnya
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacementNamed('/boarding');
     });

@@ -3,7 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({super.key});
+  final int page;
+  const OnBoardingScreen({
+    super.key,
+    required this.page,
+  });
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingState();
@@ -11,7 +15,14 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingState extends State<OnBoardingScreen> {
   final PageController _pageControllerDescription = PageController();
-  int currentPage = 0;
+  int currentPage = 0; // Atur nilai awal sesuai kebutuhan
+
+  @override
+  void initState() {
+    super.initState();
+    currentPage =
+        widget.page; // Mengambil nilai parameter dan menetapkannya di initState
+  }
 
   Map<String, dynamic> boardingData = {
     'boarding': [
@@ -167,7 +178,7 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                               : InkWell(
                                   onTap: () {
                                     Navigator.of(context)
-                                        .pushNamed('/boarding-2');
+                                        .pushReplacementNamed('/boarding-2');
                                   },
                                   child: const Text(
                                     "GET STARTED",

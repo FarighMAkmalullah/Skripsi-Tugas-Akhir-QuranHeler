@@ -41,6 +41,7 @@ dependencies:
   flutter_svg: ^2.0.7
   smooth_page_indicator: ^1.1.0
   flare_splash_screen: ^4.0.0
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,7 @@ flutter:
     - assets/images/onboarding/updevide3.svg
     - assets/icons/onboarding/login.png
     - assets/icons/onboarding/google.png
+    - assets/icons/login/arrowback.png
     - assets/images/splash2-1.svg
     - assets/images/splash2-2.svg
     - assets/images/splash1.svg
