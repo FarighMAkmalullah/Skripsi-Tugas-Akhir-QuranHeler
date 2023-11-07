@@ -22,13 +22,9 @@ class _QuranScreenState extends State<QuranScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<QuranViewModel>(builder: (context, quran, child) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Quran in QuranHealer'),
-          centerTitle: true,
-        ),
-        body: FutureBuilder<void>(
+    return Consumer<QuranViewModel>(
+      builder: (context, quran, child) {
+        return FutureBuilder<void>(
           future: quranDataViewModel,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -37,7 +33,7 @@ class _QuranScreenState extends State<QuranScreen> {
               return Text('Error: ${snapshot.error}');
             } else {
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ListView.builder(
                   itemCount: quran.quranlist.length,
                   itemBuilder: (context, index) {
@@ -65,8 +61,8 @@ class _QuranScreenState extends State<QuranScreen> {
               );
             }
           },
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

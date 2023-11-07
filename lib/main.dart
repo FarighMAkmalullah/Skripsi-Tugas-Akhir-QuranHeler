@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:quranhealer/screens/adzan/adzan_screen.dart';
 import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_view_model.dart';
+import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
+import 'package:quranhealer/screens/dashboard/dahboard_screen.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';
 import 'package:quranhealer/screens/doa/doa_view_model.dart';
 import 'package:quranhealer/screens/login/login_screen.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_autenticaton.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_screen.dart';
+import 'package:quranhealer/screens/onBoarding/splash_screen.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
-import 'package:quranhealer/screens/onBoarding/splash_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/register/register_screen.dart';
@@ -52,7 +54,7 @@ class QuranHealer extends StatelessWidget {
       title: 'QuranHealer',
       initialRoute: '/',
       routes: {
-        '/': (context) => const SplashScreen(),
+        '/': (context) => const BottomBar(),
         '/quran': (context) => const QuranScreen(),
         '/adzan': (context) => const AdzanScreen(),
         '/doa': (context) => const DoaScreen(),
@@ -63,6 +65,8 @@ class QuranHealer extends StatelessWidget {
         '/boarding-2': (context) => const OnBoardingAutentication(),
         '/login': (context) => const LoginScreen(),
         '/daftar': (context) => const RegisterScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
+        '/bottombar': (context) => const BottomBar(),
       },
     );
   }
