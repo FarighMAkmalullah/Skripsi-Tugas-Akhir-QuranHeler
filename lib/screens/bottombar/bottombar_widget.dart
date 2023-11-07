@@ -20,10 +20,10 @@ class _BottomBarState extends State<BottomBar> {
   final List<Widget> _children = [
     const DashboardScreen(),
     const Center(
-      child: Text("Curhat Uztad"),
+      child: Text("Curhat Uztad Coming Soon"),
     ),
     const Center(
-      child: Text("Profil"),
+      child: Text("Profil Coming Soon"),
     )
   ];
 
@@ -48,8 +48,9 @@ class _BottomBarState extends State<BottomBar> {
       backgroundColor: Colors.white,
       body: _children[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
         type: BottomNavigationBarType.fixed,
+        unselectedItemColor: const Color(0xFFC7C6CA),
+        selectedItemColor: const Color(0xFF0E6927),
         unselectedLabelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -57,8 +58,8 @@ class _BottomBarState extends State<BottomBar> {
         ),
         selectedLabelStyle: const TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: Color(0xFF0074E5),
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF0E6927),
         ),
         currentIndex: currentIndex,
         onTap: onTabTapped,
@@ -70,7 +71,7 @@ class _BottomBarState extends State<BottomBar> {
                   width: 24,
                   height: 24,
                   child: Image.asset(
-                    currentIndex == 0 ? listAssets[4] : listAssets[1],
+                    currentIndex == 0 ? listAssets[3] : listAssets[0],
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -88,7 +89,7 @@ class _BottomBarState extends State<BottomBar> {
                   width: 24,
                   height: 24,
                   child: Image.asset(
-                    currentIndex == 1 ? listAssets[5] : listAssets[2],
+                    currentIndex == 1 ? listAssets[4] : listAssets[1],
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -97,7 +98,7 @@ class _BottomBarState extends State<BottomBar> {
                 )
               ],
             ),
-            label: "Order",
+            label: "Curhat",
           ),
           BottomNavigationBarItem(
             icon: Column(
@@ -106,7 +107,7 @@ class _BottomBarState extends State<BottomBar> {
                   width: 24,
                   height: 24,
                   child: Image.asset(
-                    currentIndex == 2 ? listAssets[6] : listAssets[3],
+                    currentIndex == 2 ? listAssets[5] : listAssets[2],
                     fit: BoxFit.contain,
                   ),
                 ),

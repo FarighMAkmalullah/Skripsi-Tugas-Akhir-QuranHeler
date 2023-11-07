@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quranhealer/screens/dashboard/widget/notification_widget.dart';
+import 'package:quranhealer/screens/quran/quran_sceen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -151,17 +152,15 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  Container(
-                                    child: Text(
-                                      listFeature['listFeature'][currentIndex]
-                                          ['deskripsi'],
-                                      overflow: TextOverflow.clip,
-                                      maxLines: 1,
-                                      softWrap: false,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF3E3C3C),
-                                      ),
+                                  Text(
+                                    listFeature['listFeature'][currentIndex]
+                                        ['deskripsi'],
+                                    overflow: TextOverflow.clip,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFF3E3C3C),
                                     ),
                                   ),
                                 ],
@@ -244,9 +243,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   child: TabBarView(
                     controller: _listFeatoreController,
                     children: const [
-                      Center(
-                        child: Text('Al-Quran'),
-                      ),
+                      QuranScreen(),
                       Center(
                         child: Text('Doa Pilihan'),
                       ),
@@ -254,13 +251,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                         child: Text('Adzan'),
                       ),
                       Center(
-                        child: Text('Hadist'),
+                        child: Text('Hadist Coming Soon'),
                       ),
                       Center(
-                        child: Text('Iqro'),
+                        child: Text('Iqro Coming Soon'),
                       ),
                       Center(
-                        child: Text('Kisah Nabi'),
+                        child: Text('Kisah Nabi Coming Soon'),
                       ),
                     ],
                   ),
