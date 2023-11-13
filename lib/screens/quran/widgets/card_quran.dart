@@ -24,57 +24,69 @@ class CardQuran extends StatefulWidget {
 class _CardQuranState extends State<CardQuran> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black45)),
-      padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.all(2.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
+    return Column(
+      children: [
+        const SizedBox(
+          height: 7,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Stack(
+                  children: [
+                    SizedBox(
+                      width: 45,
+                      height: 45,
+                      child: Image.asset('assets/icons/quran/ayat-icon.png'),
+                    ),
+                    Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.green[600]),
-                    child: Center(
-                      child: Text(
-                        '${widget.nomor}',
-                        style: const TextStyle(color: Colors.white),
+                        // color: Colors.green[600],
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${widget.nomor}',
+                          // style: const TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(widget.namaLatin),
-                      Text(
-                        "${widget.arti}, ${widget.tempatTurun}, ${widget.jumlahAyat}",
-                        style: const TextStyle(
-                            fontSize: 12, color: Colors.black54),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              Text(
-                widget.nama,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-        ],
-      ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(widget.namaLatin),
+                    Text(
+                      "${widget.arti}, ${widget.jumlahAyat} Ayat",
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.black54),
+                    )
+                  ],
+                )
+              ],
+            ),
+            Text(
+              widget.nama,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 7,
+        ),
+        const Divider(
+          color: Color(0xFF8B8A8A),
+        )
+      ],
     );
   }
 }

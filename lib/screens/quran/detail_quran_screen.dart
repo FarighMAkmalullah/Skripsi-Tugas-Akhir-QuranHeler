@@ -5,13 +5,25 @@ import 'dart:async';
 
 class DetailSurahScreens extends StatefulWidget {
   final int nomor;
-  const DetailSurahScreens({super.key, required this.nomor});
+  final String namaLatin;
+  final String arti;
+  final int jumlahAyat;
+  final String tempatTurun;
+  const DetailSurahScreens({
+    super.key,
+    required this.nomor,
+    required this.arti,
+    required this.jumlahAyat,
+    required this.namaLatin,
+    required this.tempatTurun,
+  });
 
   @override
   State<DetailSurahScreens> createState() => _DetailSurahScreensState();
 }
 
 class _DetailSurahScreensState extends State<DetailSurahScreens> {
+  var bismillah = true;
   late Future<dynamic> detailDataFuture;
   @override
   void initState() {
@@ -23,6 +35,8 @@ class _DetailSurahScreensState extends State<DetailSurahScreens> {
     detailDataFuture = detailViewModel.getSurahDetail(widget.nomor);
   }
 
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<DetailSurahViewModel>(builder: (
@@ -32,56 +46,188 @@ class _DetailSurahScreensState extends State<DetailSurahScreens> {
     ) {
       final detail = provider.detailSurah;
       return Scaffold(
-        body: FutureBuilder(
-          future: detailDataFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (!snapshot.hasData) {
-              return Container(
-                padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 30, 8, 20),
-                        child: Text(
-                          'Surah ${detail!.namaLatin}',
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: detail.ayat.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                "${detail.ayat[index].teksArab} ( ${detail.ayat[index].nomorAyat} ) ",
-                                style: const TextStyle(fontSize: 25),
-                                textAlign: TextAlign.right,
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              )
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+        appBar: AppBar(
+          title: Text(
+            widget.namaLatin,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.black,
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.all(25),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0E6927),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              );
-            } else {
-              return const Text('Tidak ada data');
-            }
-          },
+                child: Column(
+                  children: [
+                    Text(
+                      '${widget.nomor}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 36,
+                      ),
+                    ),
+                    Text(
+                      widget.namaLatin,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                    Text(
+                      widget.arti,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Text(
+                      '${widget.tempatTurun}, ${widget.jumlahAyat} Ayat',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(16, 30, 16, 8),
+                decoration: BoxDecoration(
+                  color: const Color(
+                    0xFF9A9090,
+                  ).withOpacity(0.18),
+                ),
+                child: FutureBuilder(
+                  future: detailDataFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData) {
+                      return Column(
+                        children: [
+                          bismillah
+                              ? const Text(
+                                  "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Color(0xFFA7711F),
+                                  ),
+                                )
+                              : const Text(""),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: detail?.ayat.length,
+                            itemBuilder: (context, index) {
+                              // if (detail?.ayat[0].teksArab ==
+                              //     "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ") {
+                              //   setState(() {
+                              //     bismillah = false;
+                              //   });
+                              // }
+                              return detail?.ayat[index].teksArab !=
+                                      "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ"
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        RichText(
+                                          textAlign: TextAlign.right,
+                                          textDirection: TextDirection.rtl,
+                                          text: TextSpan(
+                                            children: <InlineSpan>[
+                                              TextSpan(
+                                                text:
+                                                    "${detail?.ayat[index].teksArab}  ",
+                                                style: const TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              WidgetSpan(
+                                                child: Stack(
+                                                  children: [
+                                                    Container(
+                                                      width: 35,
+                                                      height: 35,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              15),
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0xFF0E6927),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 35,
+                                                      height: 35,
+                                                      child: Center(
+                                                        child: Text(
+                                                          "${detail?.ayat[index].nomorAyat}",
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        )
+                                      ],
+                                    )
+                                  : Container();
+                            },
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const Text('Tidak ada data');
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       );
     });

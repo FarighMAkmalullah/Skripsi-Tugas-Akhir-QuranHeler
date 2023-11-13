@@ -28,27 +28,23 @@ class _AdzanScreenState extends State<AdzanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AdzanViewModel>(builder: (
-      context,
-      adzan,
-      _,
-    ) {
-      void filterAdzanList(String query) {
-        final filteredList = adzan.adzanlist.where((adzan) {
-          return adzan.nama.toLowerCase().contains(query.toLowerCase());
-        }).toList();
+    return Consumer<AdzanViewModel>(
+      builder: (
+        context,
+        adzan,
+        _,
+      ) {
+        void filterAdzanList(String query) {
+          final filteredList = adzan.adzanlist.where((adzan) {
+            return adzan.nama.toLowerCase().contains(query.toLowerCase());
+          }).toList();
 
-        setState(() {
-          filteredAdzanList = filteredList;
-        });
-      }
+          setState(() {
+            filteredAdzanList = filteredList;
+          });
+        }
 
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('List Kota Adzan'),
-          centerTitle: true,
-        ),
-        body: FutureBuilder<void>(
+        return FutureBuilder<void>(
           future: adzanDataViewModel,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -117,8 +113,8 @@ class _AdzanScreenState extends State<AdzanScreen> {
               );
             }
           },
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

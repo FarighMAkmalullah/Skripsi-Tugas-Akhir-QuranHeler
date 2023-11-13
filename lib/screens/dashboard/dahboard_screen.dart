@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/adzan/adzan_screen.dart';
 import 'package:quranhealer/screens/dashboard/widget/notification_widget.dart';
+import 'package:quranhealer/screens/doa/doa_screen.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -244,12 +246,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                     controller: _listFeatoreController,
                     children: const [
                       QuranScreen(),
-                      Center(
-                        child: Text('Doa Pilihan'),
-                      ),
-                      Center(
-                        child: Text('Adzan'),
-                      ),
+                      DoaScreen(),
+                      AdzanScreen(),
                       Center(
                         child: Text('Hadist Coming Soon'),
                       ),

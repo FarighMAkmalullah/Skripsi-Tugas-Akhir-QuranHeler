@@ -43,8 +43,14 @@ class _QuranScreenState extends State<QuranScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailSurahScreens(nomor: data.nomor)),
+                            builder: (context) => DetailSurahScreens(
+                              nomor: data.nomor,
+                              arti: data.arti,
+                              jumlahAyat: data.jumlahAyat,
+                              namaLatin: data.namaLatin,
+                              tempatTurun: data.tempatTurun,
+                            ),
+                          ),
                         );
                       },
                       child: CardQuran(
