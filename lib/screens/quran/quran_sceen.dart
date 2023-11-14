@@ -11,7 +11,8 @@ class QuranScreen extends StatefulWidget {
   State<QuranScreen> createState() => _QuranScreenState();
 }
 
-class _QuranScreenState extends State<QuranScreen> {
+class _QuranScreenState extends State<QuranScreen>
+    with AutomaticKeepAliveClientMixin<QuranScreen> {
   late Future<void> quranDataViewModel;
   @override
   void initState() {
@@ -21,7 +22,10 @@ class _QuranScreenState extends State<QuranScreen> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Consumer<QuranViewModel>(
       builder: (context, quran, child) {
         return FutureBuilder<void>(

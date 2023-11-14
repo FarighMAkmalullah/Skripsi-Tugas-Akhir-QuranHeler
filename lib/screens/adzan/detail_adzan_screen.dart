@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_view_model.dart';
+import 'package:quranhealer/screens/adzan/widget/adzan_time.dart';
 
 class DetailAdzan extends StatefulWidget {
   final String id;
@@ -13,8 +14,10 @@ class DetailAdzan extends StatefulWidget {
   State<DetailAdzan> createState() => _DetailAdzanState();
 }
 
-class _DetailAdzanState extends State<DetailAdzan> {
+class _DetailAdzanState extends State<DetailAdzan>
+    with AutomaticKeepAliveClientMixin<DetailAdzan> {
   late Future<dynamic> detailDataFuture;
+
   @override
   void initState() {
     super.initState();
@@ -34,20 +37,35 @@ class _DetailAdzanState extends State<DetailAdzan> {
     return Stream.periodic(Duration(seconds: 1), (i) => DateTime.now());
   }
 
+  String getHariIni() {
+    var now = DateTime.now();
+    var formatter = DateFormat('EEEE', 'id');
+    String formatted = formatter.format(now);
+    return formatted;
+  }
+
+  String getTanggalSekarang() {
+    var now = DateTime.now();
+    var formatter = DateFormat('dd MMM yyyy', 'id_ID');
+    String formatted = formatter.format(now);
+    return formatted;
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<DetailAdzanViewModel>(builder: (
-      context,
-      provider,
-      _,
-    ) {
-      final detail = provider.detailAdzan;
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Jadwal Shalat'),
-          centerTitle: true,
-        ),
-        body: StreamBuilder<DateTime>(
+    super.build(context);
+    initializeDateFormatting('id_ID', null);
+    return Consumer<DetailAdzanViewModel>(
+      builder: (
+        context,
+        provider,
+        _,
+      ) {
+        final detail = provider.detailAdzan;
+        return StreamBuilder<DateTime>(
           stream: clockStream(),
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
@@ -61,117 +79,150 @@ class _DetailAdzanState extends State<DetailAdzan> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else if (!snapshot.hasData) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Kota: ${widget.nama}',
-                            style: const TextStyle(fontSize: 24),
+                    return ListView(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFEFF8F2),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          Text(
-                            '${detail?.tanggal}',
-                            style: const TextStyle(fontSize: 24),
-                          ),
-                          Text(
-                            'Jam saat ini: $formattedTime',
-                            style: const TextStyle(fontSize: 24),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            width: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                  color: Color(
+                                    0xFF0C5138,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            widget.nama,
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            formattedTime,
+                                            style: const TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            getHariIni(),
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            getTanggalSekarang(),
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        child: Image.asset(
+                                          'assets/icons/adzan/mosque.png',
+                                          height: 120,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            padding: const EdgeInsets.all(6),
-                            margin: const EdgeInsets.all(6),
-                            child: Text(
-                              'Subuh : ${detail?.subuh}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
+                              const SizedBox(
+                                height: 5,
                               ),
-                            ),
-                            padding: const EdgeInsets.all(6),
-                            margin: const EdgeInsets.all(6),
-                            child: Text(
-                              'Dhuha : ${detail?.dhuha}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  children: [
+                                    AdzanTime(
+                                      jadwalShalat: 'Subuh',
+                                      waktuShalat: '${detail?.subuh}',
+                                    ),
+                                    AdzanTime(
+                                      jadwalShalat: 'Dhuha',
+                                      waktuShalat: '${detail?.subuh}',
+                                    ),
+                                    AdzanTime(
+                                      jadwalShalat: 'Dzuhur',
+                                      waktuShalat: '${detail?.subuh}',
+                                    ),
+                                    AdzanTime(
+                                      jadwalShalat: 'Ashar',
+                                      waktuShalat: '${detail?.subuh}',
+                                    ),
+                                    AdzanTime(
+                                      jadwalShalat: 'Maghrib',
+                                      waktuShalat: '${detail?.subuh}',
+                                    ),
+                                    AdzanTime(
+                                      jadwalShalat: 'Isya',
+                                      waktuShalat: '${detail?.subuh}',
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            padding: const EdgeInsets.all(6),
-                            margin: const EdgeInsets.all(6),
-                            child: Text(
-                              'Dzuhur : ${detail?.dzuhur}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 20),
-                            ),
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: const BoxDecoration(
+                                  color: Color(
+                                    0xFF0C5138,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(15),
+                                    bottomRight: Radius.circular(15),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    "Ganti Kota Adzan",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          Container(
-                            width: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                              ),
-                            ),
-                            padding: const EdgeInsets.all(6),
-                            margin: const EdgeInsets.all(6),
-                            child: Text(
-                              'Ashar : ${detail?.ashar}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                              ),
-                            ),
-                            padding: const EdgeInsets.all(6),
-                            margin: const EdgeInsets.all(6),
-                            child: Text(
-                              'Maghrib : ${detail?.maghrib}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                              ),
-                            ),
-                            padding: const EdgeInsets.all(6),
-                            margin: const EdgeInsets.all(6),
-                            child: Text(
-                              'Isya : ${detail?.isya}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     );
                   } else {
                     return const Text('Tidak ada data');
@@ -184,8 +235,8 @@ class _DetailAdzanState extends State<DetailAdzan> {
               );
             }
           },
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

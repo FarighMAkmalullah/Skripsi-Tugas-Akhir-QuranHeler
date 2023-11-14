@@ -95,6 +95,10 @@ flutter:
   - assets/icons/bottombar/chatselected.png
   - assets/icons/bottombar/userselected.png
   - assets/icons/quran/ayat-icon.png
+  - assets/icons/pray/praying.png
+  - assets/icons/pray/up.png
+  - assets/icons/adzan/mosque.png
+  - assets/icons/pray/down.png
   - assets/images/splash2-1.svg
   - assets/images/splash2-2.svg
   - assets/images/splash1.svg
