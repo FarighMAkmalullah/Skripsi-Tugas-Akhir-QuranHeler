@@ -95,6 +95,8 @@ flutter:
   - assets/icons/bottombar/chatselected.png
   - assets/icons/bottombar/userselected.png
   - assets/icons/quran/ayat-icon.png
+  - assets/icons/quran/play.png
+  - assets/icons/quran/pause.png
   - assets/icons/pray/praying.png
   - assets/icons/pray/up.png
   - assets/icons/adzan/mosque.png

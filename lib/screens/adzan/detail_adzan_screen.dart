@@ -70,6 +70,7 @@ class _DetailAdzanState extends State<DetailAdzan>
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
               final formattedTime = DateFormat.Hms().format(snapshot.data!);
+
               return FutureBuilder(
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -78,7 +79,7 @@ class _DetailAdzanState extends State<DetailAdzan>
                     );
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
-                  } else if (!snapshot.hasData) {
+                  } else if (snapshot.hasData) {
                     return ListView(
                       children: [
                         Container(
@@ -173,27 +174,27 @@ class _DetailAdzanState extends State<DetailAdzan>
                                   children: [
                                     AdzanTime(
                                       jadwalShalat: 'Subuh',
-                                      waktuShalat: '${detail?.subuh}',
+                                      waktuShalat: '${detail?.jadwal.subuh}',
                                     ),
                                     AdzanTime(
                                       jadwalShalat: 'Dhuha',
-                                      waktuShalat: '${detail?.subuh}',
+                                      waktuShalat: '${detail?.jadwal.dhuha}',
                                     ),
                                     AdzanTime(
                                       jadwalShalat: 'Dzuhur',
-                                      waktuShalat: '${detail?.subuh}',
+                                      waktuShalat: '${detail?.jadwal.dzuhur}',
                                     ),
                                     AdzanTime(
                                       jadwalShalat: 'Ashar',
-                                      waktuShalat: '${detail?.subuh}',
+                                      waktuShalat: '${detail?.jadwal.ashar}',
                                     ),
                                     AdzanTime(
                                       jadwalShalat: 'Maghrib',
-                                      waktuShalat: '${detail?.subuh}',
+                                      waktuShalat: '${detail?.jadwal.maghrib}',
                                     ),
                                     AdzanTime(
                                       jadwalShalat: 'Isya',
-                                      waktuShalat: '${detail?.subuh}',
+                                      waktuShalat: '${detail?.jadwal.isya}',
                                     ),
                                   ],
                                 ),
@@ -229,6 +230,8 @@ class _DetailAdzanState extends State<DetailAdzan>
                   }
                 },
               );
+            } else if (snapshot.hasError || !snapshot.hasData) {
+              return Text('Error: ${snapshot.error}');
             } else {
               return const Center(
                 child: CircularProgressIndicator(),

@@ -51,10 +51,10 @@ class QuranHealer extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'QuranHealer',
+      title: 'Quran Healer',
       initialRoute: '/',
       routes: {
-        '/': (context) => const BottomBar(),
+        '/': (context) => const SplashScreen(),
         '/quran': (context) => const QuranScreen(),
         '/adzan': (context) => const AdzanScreen(),
         '/doa': (context) => const DoaScreen(),

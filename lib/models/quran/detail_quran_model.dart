@@ -28,8 +28,8 @@ class QuranInfo {
   final String deskripsi;
   final Map<String, String> audioFull;
   final List<QuranAyat> ayat;
-  final QuranSurat suratSelanjutnya;
-  final dynamic suratSebelumnya;
+  final QuranSurat? suratSelanjutnya;
+  final QuranSurat? suratSebelumnya;
 
   QuranInfo({
     required this.nomor,
@@ -52,6 +52,9 @@ class QuranInfo {
     final ayatList = json['ayat'] as List<dynamic>;
     final ayat = ayatList.map((item) => QuranAyat.fromJson(item)).toList();
 
+    final suratSelanjutnyaJson = json['suratSelanjutnya'];
+    final suratSebelumnyaJson = json['suratSebelumnya'];
+
     return QuranInfo(
       nomor: json['nomor'],
       nama: json['nama'],
@@ -62,8 +65,12 @@ class QuranInfo {
       deskripsi: json['deskripsi'],
       audioFull: audioFull,
       ayat: ayat,
-      suratSelanjutnya: QuranSurat.fromJson(json['suratSelanjutnya']),
-      suratSebelumnya: json['suratSebelumnya'],
+      suratSelanjutnya: suratSelanjutnyaJson != false
+          ? QuranSurat.fromJson(suratSelanjutnyaJson)
+          : null,
+      suratSebelumnya: suratSebelumnyaJson != false
+          ? QuranSurat.fromJson(suratSebelumnyaJson)
+          : null,
     );
   }
 }

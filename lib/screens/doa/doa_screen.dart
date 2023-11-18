@@ -14,12 +14,19 @@ class _DoaScreenState extends State<DoaScreen>
     with AutomaticKeepAliveClientMixin<DoaScreen> {
   late Future<void> doaDataViewModel;
 
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
-    final quranViewModel = Provider.of<DoaViewModel>(context, listen: false);
-    doaDataViewModel = quranViewModel.fetchDoaViewModel();
+    final doaViewModel = Provider.of<DoaViewModel>(context, listen: false);
+    doaDataViewModel = doaViewModel.fetchDoaViewModel();
+
+    filteredQuranList = doaViewModel.doalist;
     super.initState();
   }
+
+  List filteredQuranList = [];
 
   @override
   bool get wantKeepAlive => true;
@@ -33,13 +40,25 @@ class _DoaScreenState extends State<DoaScreen>
         doa,
         _,
       ) {
+        void filterQuranList(String query) {
+          final filteredList = doa.doalist.where((surah) {
+            return surah.title.toLowerCase().contains(query.toLowerCase());
+          }).toList();
+
+          setState(() {
+            filteredQuranList = filteredList;
+          });
+        }
+
         return FutureBuilder<void>(
           future: doaDataViewModel,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -91,12 +110,44 @@ class _DoaScreenState extends State<DoaScreen>
                           ],
                         ),
                       ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        height: 55,
+                        child: TextField(
+                          controller: searchController,
+                          onChanged: (value) {
+                            setState(() {
+                              isSearching = true;
+                            });
+                            filterQuranList(value);
+                          },
+                          decoration: InputDecoration(
+                              hintText: 'Cari Surah...',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: const BorderSide(
+                                  color: Colors.black,
+                                  width: 2,
+                                ),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Colors.black,
+                              ),
+                              contentPadding: const EdgeInsets.all(1)),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: doa.doalist.length,
+                        itemCount: isSearching
+                            ? filteredQuranList.length
+                            : doa.doalist.length,
                         itemBuilder: (context, index) {
-                          var data = doa.doalist[index];
+                          var data = isSearching
+                              ? filteredQuranList[index]
+                              : doa.doalist[index];
 
                           // bool doaDetail = true;
                           return DoaWidget(
