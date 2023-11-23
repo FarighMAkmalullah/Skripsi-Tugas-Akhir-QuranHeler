@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
 import 'dart:async';
 
+import 'package:quranhealer/screens/quran/widgets/ayat_item.dart';
+
 class DetailSurahScreens extends StatefulWidget {
   final int nomor;
   final String namaLatin;
@@ -31,6 +33,10 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
   late Future<dynamic> detailDataFuture;
+  final ScrollController _controller = ScrollController();
+  final TextEditingController searchAyatControler = TextEditingController();
+  late List<double> ayahHeights;
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +45,10 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
         Provider.of<DetailSurahViewModel>(context, listen: false);
 
     detailDataFuture = detailViewModel.getSurahDetail(widget.nomor);
+
+// untuk Search Surah
+    ayahHeights = List<double>.generate(widget.jumlahAyat, (index) => 0.0);
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -70,6 +80,19 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
     });
   }
 
+// Untuk Search Ayat
+  void _scrollToAyah(int ayahNumber) {
+    double offset = ayahHeights
+        .getRange(0, ayahNumber)
+        .fold(0, (sum, height) => sum + height);
+
+    _controller.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -98,6 +121,7 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
             elevation: 0,
           ),
           body: SingleChildScrollView(
+            controller: _controller,
             child: Column(
               children: [
                 Container(
@@ -200,9 +224,9 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                                       );
                                     },
                                     child: Container(
-                                      margin: const EdgeInsets.only(right: 16),
+                                      margin: const EdgeInsets.only(right: 6),
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 8, horizontal: 16),
+                                          vertical: 3, horizontal: 16),
                                       decoration: BoxDecoration(
                                         color: detail?.suratSebelumnya == null
                                             ? const Color(0xFFB8C2B8)
@@ -269,9 +293,9 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                                       );
                                     },
                                     child: Container(
-                                      margin: const EdgeInsets.only(right: 16),
+                                      margin: const EdgeInsets.only(right: 6),
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 8, horizontal: 16),
+                                          vertical: 3, horizontal: 16),
                                       decoration: BoxDecoration(
                                         color: detail?.suratSelanjutnya == null
                                             ? const Color(0xFFB8C2B8)
@@ -280,8 +304,9 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                                             BorderRadius.circular(100),
                                       ),
                                       child: detail?.suratSelanjutnya == null
-                                          ? const SizedBox(
-                                              child: Icon(
+                                          ? Container(
+                                              padding: const EdgeInsets.all(0),
+                                              child: const Icon(
                                                 Icons.block,
                                                 color: Color(0xFFB8C2B8),
                                               ),
@@ -295,40 +320,100 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                                                   style: const TextStyle(
                                                       color: Colors.white),
                                                 ),
-                                                const Icon(
-                                                  Icons.chevron_right,
-                                                  color: Colors.white,
+                                                const Padding(
+                                                  padding: EdgeInsets.all(0),
+                                                  child: Icon(
+                                                    Icons.chevron_right,
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
                                               ],
                                             ),
                                     ),
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: _toggleSearch,
-                                  child: const Icon(
-                                    Icons.search,
-                                    color: Colors.black,
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: InkWell(
+                                    onTap: _toggleSearch,
+                                    child: const Icon(
+                                      Icons.search,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                             Visibility(
-                                visible: searchAyat,
-                                child: SlideTransition(
-                                  position: _slideAnimation,
+                              visible: searchAyat,
+                              child: SlideTransition(
+                                position: _slideAnimation,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
                                   child: Column(
                                     children: [
-                                      const TextField(),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      TextField(
+                                        controller: searchAyatControler,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          labelText: 'Cari Ayat...',
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFF7E7777),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
                                       FractionallySizedBox(
                                         widthFactor: 1.0,
                                         child: ElevatedButton(
-                                            onPressed: () {},
-                                            child: const Text('Cari Ayat')),
+                                          onPressed: () {
+                                            int? nomorAyatTujuan = int.tryParse(
+                                                searchAyatControler.text);
+                                            _scrollToAyah(nomorAyatTujuan!);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.transparent,
+                                            elevation: 0,
+                                            side: const BorderSide(
+                                              color: Colors.black,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Cari Ayat',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Icon(
+                                                Icons.search,
+                                                color: Colors.black,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       )
                                     ],
                                   ),
-                                )),
+                                ),
+                              ),
+                            ),
                             const SizedBox(
                               height: 25,
                             ),
@@ -370,134 +455,19 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: detail?.ayat.length,
                               itemBuilder: (context, index) {
-                                // if (detail?.ayat[0].teksArab ==
-                                //     "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ") {
-                                //   setState(() {
-                                //     bismillah = false;
-                                //   });
-                                // }
                                 return detail?.ayat[index].teksArab !=
                                         "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ"
-                                    ? Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          RichText(
-                                            textAlign: TextAlign.right,
-                                            textDirection: TextDirection.rtl,
-                                            text: TextSpan(
-                                              children: <InlineSpan>[
-                                                TextSpan(
-                                                  text:
-                                                      "${detail?.ayat[index].teksArab}  ",
-                                                  style: const TextStyle(
-                                                    fontSize: 25,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                WidgetSpan(
-                                                  child: Stack(
-                                                    children: [
-                                                      Container(
-                                                        width: 35,
-                                                        height: 35,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(15),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: const Color(
-                                                              0xFF0E6927),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      100),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 35,
-                                                        height: 35,
-                                                        child: Center(
-                                                          child: Text(
-                                                            "${detail?.ayat[index].nomorAyat}",
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 12,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.7,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "${detail?.ayat[index].teksLatin}",
-                                                      style: const TextStyle(
-                                                          color: Color(
-                                                              0xFFA7711F)),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 7,
-                                                    ),
-                                                    Text(
-                                                        "${detail?.ayat[index].teksIndonesia}")
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        8, 8, 6, 8),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: Colors.black,
-                                                    width: 2,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                ),
-                                                child: Image.asset(
-                                                  'assets/icons/quran/play.png',
-                                                  height: 16,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          const Divider(
-                                            height: 1,
-                                            color: Color(0xFF8B8A8A),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                        ],
+                                    ? AyatItem(
+                                        index: index,
+                                        onBuild: (height) {
+                                          ayahHeights[index] = height;
+                                        },
+                                        nomorAyat:
+                                            detail!.ayat[index].nomorAyat,
+                                        textIndonesia:
+                                            detail.ayat[index].teksIndonesia,
+                                        textLatin: detail.ayat[index].teksLatin,
+                                        textArab: detail.ayat[index].teksArab,
                                       )
                                     : Container();
                               },
