@@ -129,7 +129,7 @@ class _AyatItemState extends State<AyatItem> {
                   padding: const EdgeInsets.fromLTRB(8, 8, 6, 8),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: widget.isPlaying ? Colors.blue : Colors.black,
+                      color: Colors.black,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(100),
