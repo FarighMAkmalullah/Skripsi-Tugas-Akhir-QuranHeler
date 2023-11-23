@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quranhealer/screens/adzan/adzan_screen.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_screen.dart';
 import 'package:quranhealer/screens/dashboard/widget/notification_widget.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';

@@ -107,6 +107,7 @@ class _QuranScreenState extends State<QuranScreen>
                                     jumlahAyat: data.jumlahAyat,
                                     namaLatin: data.namaLatin,
                                     tempatTurun: data.tempatTurun,
+                                    quran: quran.quranlist,
                                   ),
                                 ),
                               );
@@ -127,7 +128,7 @@ class _QuranScreenState extends State<QuranScreen>
                 ),
               );
             } else {
-              return Center();
+              return const Center();
             }
           },
         );

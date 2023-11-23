@@ -9,6 +9,7 @@ class DetailSurahScreens extends StatefulWidget {
   final String arti;
   final int jumlahAyat;
   final String tempatTurun;
+  final List quran;
   const DetailSurahScreens({
     super.key,
     required this.nomor,
@@ -16,14 +17,19 @@ class DetailSurahScreens extends StatefulWidget {
     required this.jumlahAyat,
     required this.namaLatin,
     required this.tempatTurun,
+    required this.quran,
   });
 
   @override
   State<DetailSurahScreens> createState() => _DetailSurahScreensState();
 }
 
-class _DetailSurahScreensState extends State<DetailSurahScreens> {
+class _DetailSurahScreensState extends State<DetailSurahScreens>
+    with SingleTickerProviderStateMixin {
   var bismillah = true;
+  bool searchAyat = false;
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
   late Future<dynamic> detailDataFuture;
   @override
   void initState() {
@@ -33,6 +39,35 @@ class _DetailSurahScreensState extends State<DetailSurahScreens> {
         Provider.of<DetailSurahViewModel>(context, listen: false);
 
     detailDataFuture = detailViewModel.getSurahDetail(widget.nomor);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0.0, 1.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleSearch() {
+    setState(() {
+      searchAyat = !searchAyat;
+      if (searchAyat) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
   }
 
   TextEditingController searchController = TextEditingController();
@@ -110,7 +145,7 @@ class _DetailSurahScreensState extends State<DetailSurahScreens> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(16, 30, 16, 8),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                   decoration: BoxDecoration(
                     color: const Color(
                       0xFF9A9090,
@@ -132,6 +167,171 @@ class _DetailSurahScreensState extends State<DetailSurahScreens> {
                       } else if (!snapshot.hasData) {
                         return Column(
                           children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailSurahScreens(
+                                              nomor: detail!
+                                                  .suratSebelumnya!.nomor,
+                                              arti: widget
+                                                  .quran[detail.suratSebelumnya!
+                                                          .nomor -
+                                                      1]
+                                                  .arti,
+                                              jumlahAyat: widget
+                                                  .quran[detail.suratSebelumnya!
+                                                          .nomor -
+                                                      1]
+                                                  .jumlahAyat,
+                                              namaLatin: detail
+                                                  .suratSebelumnya!.namaLatin,
+                                              tempatTurun: widget
+                                                  .quran[detail.suratSebelumnya!
+                                                          .nomor -
+                                                      1]
+                                                  .tempatTurun,
+                                              quran: widget.quran),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(right: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 16),
+                                      decoration: BoxDecoration(
+                                        color: detail?.suratSebelumnya == null
+                                            ? const Color(0xFFB8C2B8)
+                                            : const Color(0xFF0E6927),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      child: detail?.suratSebelumnya == null
+                                          ? const SizedBox(
+                                              child: Icon(
+                                                Icons.block,
+                                                color: Color(0xFFB8C2B8),
+                                              ),
+                                            )
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                const Icon(
+                                                  Icons.chevron_left,
+                                                  color: Colors.white,
+                                                ),
+                                                Text(
+                                                  "${detail!.suratSebelumnya?.namaLatin}",
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailSurahScreens(
+                                              nomor: detail!
+                                                  .suratSelanjutnya!.nomor,
+                                              arti: widget
+                                                  .quran[detail
+                                                          .suratSelanjutnya!
+                                                          .nomor -
+                                                      1]
+                                                  .arti,
+                                              jumlahAyat: widget
+                                                  .quran[detail
+                                                          .suratSelanjutnya!
+                                                          .nomor -
+                                                      1]
+                                                  .jumlahAyat,
+                                              namaLatin: detail
+                                                  .suratSelanjutnya!.namaLatin,
+                                              tempatTurun: widget
+                                                  .quran[detail
+                                                          .suratSelanjutnya!
+                                                          .nomor -
+                                                      1]
+                                                  .tempatTurun,
+                                              quran: widget.quran),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(right: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 16),
+                                      decoration: BoxDecoration(
+                                        color: detail?.suratSelanjutnya == null
+                                            ? const Color(0xFFB8C2B8)
+                                            : const Color(0xFF0E6927),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      child: detail?.suratSelanjutnya == null
+                                          ? const SizedBox(
+                                              child: Icon(
+                                                Icons.block,
+                                                color: Color(0xFFB8C2B8),
+                                              ),
+                                            )
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Text(
+                                                  "${detail!.suratSelanjutnya?.namaLatin}",
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                                const Icon(
+                                                  Icons.chevron_right,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: _toggleSearch,
+                                  child: const Icon(
+                                    Icons.search,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Visibility(
+                                visible: searchAyat,
+                                child: SlideTransition(
+                                  position: _slideAnimation,
+                                  child: Column(
+                                    children: [
+                                      const TextField(),
+                                      FractionallySizedBox(
+                                        widthFactor: 1.0,
+                                        child: ElevatedButton(
+                                            onPressed: () {},
+                                            child: const Text('Cari Ayat')),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                            const SizedBox(
+                              height: 25,
+                            ),
                             bismillah
                                 ? const Column(
                                     children: [

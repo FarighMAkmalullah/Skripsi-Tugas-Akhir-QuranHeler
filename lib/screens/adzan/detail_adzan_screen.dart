@@ -80,158 +80,169 @@ class _DetailAdzanState extends State<DetailAdzan>
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else if (snapshot.hasData) {
-                    return ListView(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEFF8F2),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                  color: Color(
-                                    0xFF0C5138,
+                    return Container();
+                  } else {
+                    if (detail?.jadwal.dhuha == null) {
+                      return const Text('Tidak ada data');
+                    } else {
+                      return ListView(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEFF8F2),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: Color(
+                                      0xFF0C5138,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15),
+                                    ),
                                   ),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(24.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              widget.nama,
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              formattedTime,
+                                              style: const TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              getHariIni(),
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              getTanggalSekarang(),
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          child: Image.asset(
+                                            'assets/icons/adzan/mosque.png',
+                                            height: 120,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(24.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: Column(
                                     children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            widget.nama,
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            formattedTime,
-                                            style: const TextStyle(
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            getHariIni(),
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            getTanggalSekarang(),
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
+                                      AdzanTime(
+                                        jadwalShalat: 'Subuh',
+                                        waktuShalat: '${detail?.jadwal.subuh}',
                                       ),
-                                      SizedBox(
-                                        child: Image.asset(
-                                          'assets/icons/adzan/mosque.png',
-                                          height: 120,
-                                        ),
-                                      )
+                                      AdzanTime(
+                                        jadwalShalat: 'Terbit',
+                                        waktuShalat: '${detail?.jadwal.terbit}',
+                                      ),
+                                      AdzanTime(
+                                        jadwalShalat: 'Dhuha',
+                                        waktuShalat: '${detail?.jadwal.dhuha}',
+                                      ),
+                                      AdzanTime(
+                                        jadwalShalat: 'Dzuhur',
+                                        waktuShalat: '${detail?.jadwal.dzuhur}',
+                                      ),
+                                      AdzanTime(
+                                        jadwalShalat: 'Ashar',
+                                        waktuShalat: '${detail?.jadwal.ashar}',
+                                      ),
+                                      AdzanTime(
+                                        jadwalShalat: 'Maghrib',
+                                        waktuShalat:
+                                            '${detail?.jadwal.maghrib}',
+                                      ),
+                                      AdzanTime(
+                                        jadwalShalat: 'Isya',
+                                        waktuShalat: '${detail?.jadwal.isya}',
+                                      ),
                                     ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Column(
-                                  children: [
-                                    AdzanTime(
-                                      jadwalShalat: 'Subuh',
-                                      waktuShalat: '${detail?.jadwal.subuh}',
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: const BoxDecoration(
+                                    color: Color(
+                                      0xFF0C5138,
                                     ),
-                                    AdzanTime(
-                                      jadwalShalat: 'Dhuha',
-                                      waktuShalat: '${detail?.jadwal.dhuha}',
-                                    ),
-                                    AdzanTime(
-                                      jadwalShalat: 'Dzuhur',
-                                      waktuShalat: '${detail?.jadwal.dzuhur}',
-                                    ),
-                                    AdzanTime(
-                                      jadwalShalat: 'Ashar',
-                                      waktuShalat: '${detail?.jadwal.ashar}',
-                                    ),
-                                    AdzanTime(
-                                      jadwalShalat: 'Maghrib',
-                                      waktuShalat: '${detail?.jadwal.maghrib}',
-                                    ),
-                                    AdzanTime(
-                                      jadwalShalat: 'Isya',
-                                      waktuShalat: '${detail?.jadwal.isya}',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: const BoxDecoration(
-                                  color: Color(
-                                    0xFF0C5138,
-                                  ),
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15),
-                                  ),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "Ganti Kota Adzan",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
+                                  child: const Center(
+                                    child: Text(
+                                      "Ganti Kota Adzan",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return const Text('Tidak ada data');
+                        ],
+                      );
+                    }
                   }
                 },
               );
             } else if (snapshot.hasError || !snapshot.hasData) {
-              return Text('Error: ${snapshot.error}');
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             } else {
               return const Center(
                 child: CircularProgressIndicator(),
