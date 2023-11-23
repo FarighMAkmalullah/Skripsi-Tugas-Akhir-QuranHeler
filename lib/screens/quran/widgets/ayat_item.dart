@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class AyatItem extends StatefulWidget {
   final int index;
@@ -7,21 +8,34 @@ class AyatItem extends StatefulWidget {
   final int nomorAyat;
   final String textLatin;
   final String textIndonesia;
+  final bool isPlaying;
+  final Function(bool) onPlayToggle;
 
-  const AyatItem(
-      {super.key,
-      required this.index,
-      required this.onBuild,
-      required this.nomorAyat,
-      required this.textIndonesia,
-      required this.textLatin,
-      required this.textArab});
+  const AyatItem({
+    super.key,
+    required this.index,
+    required this.onBuild,
+    required this.nomorAyat,
+    required this.textIndonesia,
+    required this.textLatin,
+    required this.textArab,
+    required this.isPlaying,
+    required this.onPlayToggle,
+  });
 
   @override
   State<AyatItem> createState() => _AyatItemState();
 }
 
 class _AyatItemState extends State<AyatItem> {
+  AudioPlayer audioPlayer = AudioPlayer();
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
   final GlobalKey _key = GlobalKey();
   @override
   void initState() {
@@ -107,18 +121,25 @@ class _AyatItemState extends State<AyatItem> {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(8, 8, 6, 8),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
+              InkWell(
+                onTap: () {
+                  widget.onPlayToggle(!widget.isPlaying);
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 6, 8),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: widget.isPlaying ? Colors.blue : Colors.black,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(100),
                   ),
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Image.asset(
-                  'assets/icons/quran/play.png',
-                  height: 16,
+                  child: Image.asset(
+                    widget.isPlaying
+                        ? 'assets/icons/quran/stop.png'
+                        : 'assets/icons/quran/play.png',
+                    height: 16,
+                  ),
                 ),
               )
             ],

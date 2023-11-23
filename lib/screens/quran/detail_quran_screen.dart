@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'package:quranhealer/screens/quran/widgets/ayat_item.dart';
 
@@ -61,11 +62,28 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
+
+    //Untuk Menghentikan Audio saat selesai
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      switch (event) {
+        case PlayerState.completed:
+          setState(
+            () {
+              playingAyatIndex = -1; // Set isPlaying to false
+            },
+          );
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+
+    audioPlayer.dispose();
     super.dispose();
   }
 
@@ -91,6 +109,25 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  //Untuk Play Audio
+  AudioPlayer audioPlayer = AudioPlayer();
+  int playingAyatIndex = -1;
+
+  void playAyat(int index, String audioUrl) async {
+    if (playingAyatIndex == index) {
+      await audioPlayer.stop();
+      setState(() {
+        playingAyatIndex = -1;
+      });
+    } else {
+      await audioPlayer.stop();
+      await audioPlayer.play(UrlSource(audioUrl));
+      setState(() {
+        playingAyatIndex = index;
+      });
+    }
   }
 
   TextEditingController searchController = TextEditingController();
@@ -455,6 +492,7 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: detail?.ayat.length,
                               itemBuilder: (context, index) {
+                                final isPlaying = playingAyatIndex == index;
                                 return detail?.ayat[index].teksArab !=
                                         "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ"
                                     ? AyatItem(
@@ -468,6 +506,11 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                                             detail.ayat[index].teksIndonesia,
                                         textLatin: detail.ayat[index].teksLatin,
                                         textArab: detail.ayat[index].teksArab,
+                                        isPlaying: isPlaying,
+                                        onPlayToggle: (bool isPlaying) {
+                                          playAyat(index,
+                                              detail.ayat[index].audio["01"]!);
+                                        },
                                       )
                                     : Container();
                               },
@@ -483,6 +526,7 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
               ],
             ),
           ),
+          bottomNavigationBar: BottomAppBar(),
         );
       },
     );

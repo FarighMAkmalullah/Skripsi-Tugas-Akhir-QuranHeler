@@ -42,6 +42,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   flare_splash_screen: ^4.0.0
   email_validator: ^2.1.17
+  audioplayers: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -97,6 +98,8 @@ flutter:
   - assets/icons/quran/ayat-icon.png
   - assets/icons/quran/play.png
   - assets/icons/quran/pause.png
+  
+  - assets/icons/quran/stop.png
   - assets/icons/pray/praying.png
   - assets/icons/pray/up.png
   - assets/icons/adzan/mosque.png
