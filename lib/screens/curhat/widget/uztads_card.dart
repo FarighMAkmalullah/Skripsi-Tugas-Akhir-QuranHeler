@@ -30,7 +30,7 @@ class _UztadsCardState extends State<UztadsCard> {
                     height: 50,
                     width: 50,
                     child: CircleAvatar(
-                      backgroundColor: Color(0xFFD9D9D9),
+                      backgroundColor: Color(0xFFD9DCE1),
                       radius: 100,
                       child: Icon(
                         Icons.person,
