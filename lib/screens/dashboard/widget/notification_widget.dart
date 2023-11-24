@@ -35,14 +35,10 @@ class _LogoAndAccountWidgetState extends State<NotifocationWidget> {
               )
             ],
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: 28,
-                height: 23,
-                child: Image.asset("assets/icons/dashboard/notification.png"),
-              ),
-            ],
+          SizedBox(
+            width: 28,
+            height: 23,
+            child: Image.asset("assets/icons/dashboard/notification.png"),
           ),
         ],
       ),

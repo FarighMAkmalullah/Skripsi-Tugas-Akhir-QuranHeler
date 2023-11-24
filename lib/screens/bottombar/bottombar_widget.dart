@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/curhat/choose_ustadz_screen.dart';
 import 'package:quranhealer/screens/dashboard/dahboard_screen.dart';
+import 'package:quranhealer/screens/profil/profil_screen.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
@@ -19,12 +21,8 @@ class _BottomBarState extends State<BottomBar> {
 
   final List<Widget> _children = [
     const DashboardScreen(),
-    const Center(
-      child: Text("Curhat Uztad Coming Soon"),
-    ),
-    const Center(
-      child: Text("Profil Coming Soon"),
-    )
+    const ChooseUstadzScreen(),
+    const ProfilScreen(),
   ];
 
   void onTabTapped(int index) {
