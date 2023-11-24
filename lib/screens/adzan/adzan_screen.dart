@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_screen.dart';
+import 'package:quranhealer/screens/error/error_screen.dart';
 
 class AdzanScreen extends StatefulWidget {
   const AdzanScreen({super.key});
@@ -28,97 +29,149 @@ class _AdzanScreenState extends State<AdzanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AdzanViewModel>(builder: (
-      context,
-      adzan,
-      _,
-    ) {
-      void filterAdzanList(String query) {
-        final filteredList = adzan.adzanlist.where((adzan) {
-          return adzan.nama.toLowerCase().contains(query.toLowerCase());
-        }).toList();
+    return Consumer<AdzanViewModel>(
+      builder: (
+        context,
+        adzan,
+        _,
+      ) {
+        void filterAdzanList(String query) {
+          final filteredList = adzan.adzanlist.where((adzan) {
+            return adzan.lokasi.toLowerCase().contains(query.toLowerCase());
+          }).toList();
 
-        setState(() {
-          filteredAdzanList = filteredList;
-        });
-      }
+          setState(() {
+            filteredAdzanList = filteredList;
+          });
+        }
 
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('List Kota Adzan'),
-          centerTitle: true,
-        ),
-        body: FutureBuilder<void>(
-          future: adzanDataViewModel,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: TextField(
-                        controller: searchController,
-                        onChanged: (value) {
-                          setState(() {
-                            isSearching = true;
-                          });
-                          filterAdzanList(value);
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Cari Kota Adzan',
+              style: TextStyle(color: Colors.black),
+            ),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            iconTheme: const IconThemeData(color: Colors.black),
+            actions: [
+              IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.location_city))
+            ],
+          ),
+          body: SafeArea(
+            child: FutureBuilder<void>(
+              future: adzanDataViewModel,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return ErrorScreen(
+                    onRefreshPressed: () {
+                      setState(
+                        () {
+                          adzanDataViewModel = adzan.fetchAdzanViewModel();
                         },
-                        decoration: const InputDecoration(
-                          hintText: 'Cari Kota...',
-                          border: OutlineInputBorder(),
+                      );
+                    },
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: searchController,
+                          onChanged: (value) {
+                            setState(() {
+                              isSearching = true;
+                            });
+                            filterAdzanList(value);
+                          },
+                          decoration: InputDecoration(
+                              hintText: 'Cari Surah...',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: const BorderSide(
+                                  color: Colors.black,
+                                  width: 2,
+                                ),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Colors.black,
+                              ),
+                              contentPadding: const EdgeInsets.all(1)),
+                          style: const TextStyle(fontSize: 16),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: isSearching
-                            ? filteredAdzanList.length
-                            : adzan.adzanlist.length,
-                        itemBuilder: (context, index) {
-                          var data = isSearching
-                              ? filteredAdzanList[index]
-                              : adzan.adzanlist[index];
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: isSearching
+                                ? filteredAdzanList.length
+                                : adzan.adzanlist.length,
+                            itemBuilder: (context, index) {
+                              var data = isSearching
+                                  ? filteredAdzanList[index]
+                                  : adzan.adzanlist[index];
 
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailAdzan(id: data.id, nama: data.nama),
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailAdzan(
+                                        id: data.id,
+                                        nama: data.lokasi,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(8),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            data.lokasi,
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const Icon(Icons.location_on)
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 9,
+                                      ),
+                                      const Divider(
+                                        color: Color(0xFF8B8A8A),
+                                        height: 1,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               );
                             },
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              child: Text(data.nama),
-                            ),
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-      );
-    });
+                  );
+                }
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }

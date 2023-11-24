@@ -6,8 +6,7 @@ class DetailAdzanService {
 
   static Future<Response> getDetailAdzan(String kode, String tanggal) async {
     try {
-      final response = await _dio.get(
-          "$adzanAPI/sholat/format/json/jadwal/kota/$kode/tanggal/$tanggal");
+      final response = await _dio.get("$adzanAPI/sholat/jadwal/$kode/$tanggal");
       return response;
     } catch (e) {
       return Future.error(e);

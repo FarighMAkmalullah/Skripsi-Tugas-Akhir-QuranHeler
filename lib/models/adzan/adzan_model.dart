@@ -1,16 +1,16 @@
 class AdzanListModel {
   final String id;
-  final String nama;
+  final String lokasi;
 
   AdzanListModel({
     required this.id,
-    required this.nama,
+    required this.lokasi,
   });
 
   factory AdzanListModel.fromJson(Map<String, dynamic> json) {
     return AdzanListModel(
       id: json['id'],
-      nama: json['nama'],
+      lokasi: json['lokasi'],
     );
   }
 }

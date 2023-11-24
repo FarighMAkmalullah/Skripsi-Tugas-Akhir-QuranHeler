@@ -109,6 +109,7 @@ class _LoginFormState extends State<LoginForm> {
                   setState(() {
                     loading = true;
                   });
+                  Navigator.pushNamed(context, '/bottombar');
                 },
                 child: !loading
                     ? const Text(
