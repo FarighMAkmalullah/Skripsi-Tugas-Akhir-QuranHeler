@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_screen.dart';
+import 'package:quranhealer/screens/error/error_screen.dart';
 
 class AdzanScreen extends StatefulWidget {
   const AdzanScreen({super.key});
@@ -66,7 +67,15 @@ class _AdzanScreenState extends State<AdzanScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return ErrorScreen(
+                    onRefreshPressed: () {
+                      setState(
+                        () {
+                          adzanDataViewModel = adzan.fetchAdzanViewModel();
+                        },
+                      );
+                    },
+                  );
                 } else {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),

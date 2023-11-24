@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/widget/adzan_time.dart';
+import 'package:quranhealer/screens/error/error_screen.dart';
 
 class DetailAdzan extends StatefulWidget {
   final String id;
@@ -69,20 +70,42 @@ class _DetailAdzanState extends State<DetailAdzan>
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
               final formattedTime = DateFormat.Hms().format(snapshot.data!);
-
               return FutureBuilder(
+                future: detailDataFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
+                    return ErrorScreen(
+                      onRefreshPressed: () {
+                        String currentDate =
+                            DateFormat('yyyy/MM/dd').format(DateTime.now());
+                        setState(
+                          () {
+                            detailDataFuture =
+                                provider.getAdzanDetail("1501", currentDate);
+                          },
+                        );
+                      },
+                    );
                   } else if (snapshot.hasData) {
                     return Container();
                   } else {
                     if (detail?.jadwal.dhuha == null) {
-                      return const Text('Tidak ada data');
+                      return ErrorScreen(
+                        onRefreshPressed: () {
+                          String currentDate =
+                              DateFormat('yyyy/MM/dd').format(DateTime.now());
+                          setState(
+                            () {
+                              detailDataFuture =
+                                  provider.getAdzanDetail("1501", currentDate);
+                            },
+                          );
+                        },
+                      );
                     } else {
                       return ListView(
                         children: [

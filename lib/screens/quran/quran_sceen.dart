@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/error/error_screen.dart';
 import 'package:quranhealer/screens/quran/detail_quran_screen.dart';
 import 'package:quranhealer/screens/quran/quran_view_model.dart';
 import 'package:quranhealer/screens/quran/widgets/card_quran.dart';
@@ -51,7 +52,15 @@ class _QuranScreenState extends State<QuranScreen>
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return ErrorScreen(
+                onRefreshPressed: () {
+                  setState(
+                    () {
+                      quranDataViewModel = quran.fetchQuranViewModel();
+                    },
+                  );
+                },
+              );
             } else if (snapshot.connectionState == ConnectionState.done) {
               return SingleChildScrollView(
                 child: Padding(

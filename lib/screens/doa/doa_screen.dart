@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/doa/doa_view_model.dart';
 import 'package:quranhealer/screens/doa/widget/doa_widget.dart';
+import 'package:quranhealer/screens/error/error_screen.dart';
 
 class DoaScreen extends StatefulWidget {
   const DoaScreen({super.key});
@@ -56,8 +57,14 @@ class _DoaScreenState extends State<DoaScreen>
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
+              return ErrorScreen(
+                onRefreshPressed: () {
+                  setState(
+                    () {
+                      doaDataViewModel = doa.fetchDoaViewModel();
+                    },
+                  );
+                },
               );
             } else {
               return Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/error/error_screen.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
@@ -224,7 +225,16 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                           ),
                         );
                       } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return ErrorScreen(
+                          onRefreshPressed: () {
+                            setState(
+                              () {
+                                detailDataFuture =
+                                    provider.getSurahDetail(widget.nomor);
+                              },
+                            );
+                          },
+                        );
                       } else if (!snapshot.hasData) {
                         return Column(
                           children: [
@@ -518,7 +528,16 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                           ],
                         );
                       } else {
-                        return const Text('Tidak ada data');
+                        return ErrorScreen(
+                          onRefreshPressed: () {
+                            setState(
+                              () {
+                                detailDataFuture =
+                                    provider.getSurahDetail(widget.nomor);
+                              },
+                            );
+                          },
+                        );
                       }
                     },
                   ),

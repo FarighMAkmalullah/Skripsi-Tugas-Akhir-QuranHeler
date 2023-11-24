@@ -103,6 +103,7 @@ flutter:
   - assets/icons/pray/up.png
   - assets/icons/adzan/mosque.png
   - assets/icons/adzan/city.png
+  - assets/icons/error/error.png
   - assets/icons/pray/down.png
   - assets/images/splash2-1.svg
   - assets/images/splash2-2.svg
