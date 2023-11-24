@@ -69,7 +69,7 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
         case PlayerState.completed:
           setState(
             () {
-              playingAyatIndex = -1; // Set isPlaying to false
+              playingAyatIndex = -1; // Mengubah isPlaying jadi false
             },
           );
           break;
@@ -526,7 +526,7 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
               ],
             ),
           ),
-          bottomNavigationBar: BottomAppBar(),
+          bottomNavigationBar: const BottomAppBar(),
         );
       },
     );

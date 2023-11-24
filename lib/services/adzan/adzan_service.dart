@@ -6,11 +6,10 @@ class AdzanService {
 
   Future<List<Map<String, dynamic>>> fetchAdzanData() async {
     try {
-      final response = await _dio.get("$adzanAPI/sholat/format/json/kota");
+      final response = await _dio.get("$adzanAPI/sholat/kota/semua");
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = response.data['kota'];
-        return data
+        return response.data
             .map<Map<String, dynamic>>(
                 (item) => Map<String, dynamic>.from(item))
             .toList();

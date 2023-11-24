@@ -24,9 +24,8 @@ class _DetailAdzanState extends State<DetailAdzan>
 
     final detailAdzanViewModel =
         Provider.of<DetailAdzanViewModel>(context, listen: false);
-    String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    detailDataFuture =
-        detailAdzanViewModel.getAdzanDetail(widget.id, currentDate);
+    String currentDate = DateFormat('yyyy/MM/dd').format(DateTime.now());
+    detailDataFuture = detailAdzanViewModel.getAdzanDetail("1501", currentDate);
 
     // ignore: unused_local_variable
     String formattedTime = DateFormat.Hms().format(DateTime.now());
@@ -209,23 +208,28 @@ class _DetailAdzanState extends State<DetailAdzan>
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: const BoxDecoration(
-                                    color: Color(
-                                      0xFF0C5138,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, "/adzan");
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: const BoxDecoration(
+                                      color: Color(
+                                        0xFF0C5138,
+                                      ),
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                      ),
                                     ),
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(15),
-                                      bottomRight: Radius.circular(15),
-                                    ),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      "Ganti Kota Adzan",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white,
+                                    child: const Center(
+                                      child: Text(
+                                        "Ganti Kota Adzan",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
