@@ -112,7 +112,7 @@ class _DetailAdzanState extends State<DetailAdzan>
                           Container(
                             margin: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFEFF8F2),
+                              color: const Color(0xFFE1EDEC),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Column(

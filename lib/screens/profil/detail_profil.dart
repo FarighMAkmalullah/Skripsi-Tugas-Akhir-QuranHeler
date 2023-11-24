@@ -71,11 +71,35 @@ class _DetailProfilState extends State<DetailProfil> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Nama Lengkap'),
-                  Text('Nama Lengkap Pengguna'),
+                  Text(
+                    'Nama Lengkap Pengguna',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Text('Email'),
-                  Text('Email Pengguna'),
+                  Text(
+                    'Email Pengguna',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Text('Gender'),
-                  Text('Gender Pengguna'),
+                  Text(
+                    'Gender Pengguna',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ],
               ),
             )
