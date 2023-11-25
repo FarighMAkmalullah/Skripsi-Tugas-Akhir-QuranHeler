@@ -16,6 +16,7 @@ import 'package:quranhealer/screens/quran/quran_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/register/register_screen.dart';
+import 'package:quranhealer/screens/register/register_view_mode.dart';
 
 void main() {
   runApp(
@@ -35,6 +36,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => DoaViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => RegisterViewModel(),
         ),
       ],
       child: const QuranHealer(),
