@@ -107,7 +107,116 @@ class OnBoardingAutentication extends StatelessWidget {
                             ),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          return showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (BuildContext context) {
+                              return Stack(
+                                children: [
+                                  SizedBox(
+                                    height: 350,
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 50,
+                                        ),
+                                        Container(
+                                          height: 300,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 20),
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20),
+                                              )),
+                                          child: Column(
+                                            children: [
+                                              const SizedBox(
+                                                height: 50,
+                                              ),
+                                              const Text(
+                                                "Failed",
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              const Text(
+                                                  "Akunmu sudah terdaftar di QuranHealer"),
+                                              const Text(
+                                                  'Yuk login biar bisa masuk ke aplikasi QuranHealer'),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              FractionallySizedBox(
+                                                widthFactor: 1,
+                                                child: ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    elevation:
+                                                        MaterialStateProperty
+                                                            .all(0),
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(
+                                                      const Color(0xFF0E6927),
+                                                    ),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                5), // Bentuk border
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(
+                                                        context, '/login');
+                                                  },
+                                                  child: const Text('Login'),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 200,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                            child: SizedBox(
+                                          height: 100,
+                                          width: 100,
+                                          child: CircleAvatar(
+                                            radius: 100,
+                                            backgroundColor: Colors.red,
+                                            child: Icon(
+                                              Icons.close,
+                                              size: 70,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         child: Row(
                           children: [
                             const SizedBox(
