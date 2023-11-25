@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/register/register_view_mode.dart';
-import 'package:quranhealer/screens/register/widget/success.widget.dart';
 import 'package:quranhealer/services/register/register_service.dart';
 
 class RegisterForm extends StatefulWidget {

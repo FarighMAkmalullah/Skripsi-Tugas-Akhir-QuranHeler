@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/core/init/untils/shared_preference.dart';
 import 'package:quranhealer/screens/profil/detail_profil.dart';
 import 'package:quranhealer/screens/profil/edit_profil_screen.dart';
 import 'package:quranhealer/screens/profil/widget/header_profil_card.dart';
@@ -280,24 +281,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Mohon Maaf'),
-                            content: const Text(
-                                'Fitur ini masih dalam pengembangan'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Close'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      removeToken();
+
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (route) => false);
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(15),

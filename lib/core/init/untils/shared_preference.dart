@@ -10,9 +10,10 @@ saveToken({
   await prefs.setString(token, valueToken);
 }
 
-Future<String> getToken() async {
+Future<String?> getToken() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final dataToken = prefs.getString(token).toString();
+  // ignore: unnecessary_nullable_for_final_variable_declarations
+  final String? dataToken = prefs.getString(token).toString();
   return dataToken;
 }
 

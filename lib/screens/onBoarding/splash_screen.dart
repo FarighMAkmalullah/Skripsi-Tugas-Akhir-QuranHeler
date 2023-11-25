@@ -1,7 +1,10 @@
 // import 'dart:async';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quranhealer/core/init/untils/shared_preference.dart';
+import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,21 +17,24 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      const Duration(seconds: 3),
-      () async {
-        var token = await getToken();
-        if (token.toString() == 'null') {
-          // ignore: use_build_context_synchronously
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil('/boarding', (route) => false);
-        } else {
-          // ignore: use_build_context_synchronously
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil('/bottombar', (route) => true);
-        }
-      },
-    );
+    Timer(const Duration(seconds: 3), () async {
+      var token = await getToken();
+      if (token.toString() == "null") {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/boarding', (route) => false);
+      } else {
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const BottomBar(dashboardIndex: 0),
+          ),
+          (route) => false,
+        );
+      }
+    });
   }
 
   @override
