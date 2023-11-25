@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_screen.dart';
+import 'package:quranhealer/screens/dashboard/dashboard_view_model.dart';
 import 'package:quranhealer/screens/dashboard/widget/notification_widget.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final int dashboardIndex;
+  const DashboardScreen({
+    super.key,
+    required this.dashboardIndex,
+  });
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -18,12 +24,14 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
+    currentIndex = widget.dashboardIndex;
     _listFeatoreController = TabController(length: 6, vsync: this);
     _listFeatoreController.addListener(() {
       setState(() {
         currentIndex = _listFeatoreController.index;
       });
     });
+    _listFeatoreController.index = widget.dashboardIndex;
   }
 
   @override
@@ -32,7 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     super.dispose();
   }
 
-  int currentIndex = 0;
+  late int currentIndex;
 
   void _onTabChanged(int index) {
     setState(() {
@@ -77,6 +85,8 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    DashboarViewModel dashboardViewModel =
+        Provider.of<DashboarViewModel>(context);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -244,17 +254,19 @@ class _DashboardScreenState extends State<DashboardScreen>
                 Expanded(
                   child: TabBarView(
                     controller: _listFeatoreController,
-                    children: const [
-                      QuranScreen(),
-                      DoaScreen(),
-                      DetailAdzan(id: "779", nama: "Bantul"),
-                      Center(
+                    children: [
+                      const QuranScreen(),
+                      const DoaScreen(),
+                      DetailAdzan(
+                          id: dashboardViewModel.kodeKota,
+                          nama: dashboardViewModel.kotaAdzan),
+                      const Center(
                         child: Text('Hadist Coming Soon'),
                       ),
-                      Center(
+                      const Center(
                         child: Text('Iqro Coming Soon'),
                       ),
-                      Center(
+                      const Center(
                         child: Text('Kisah Nabi Coming Soon'),
                       ),
                     ],

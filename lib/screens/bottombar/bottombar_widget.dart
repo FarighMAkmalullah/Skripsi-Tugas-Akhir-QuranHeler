@@ -4,7 +4,11 @@ import 'package:quranhealer/screens/dashboard/dahboard_screen.dart';
 import 'package:quranhealer/screens/profil/profil_screen.dart';
 
 class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+  final int dashboardIndex;
+  const BottomBar({
+    super.key,
+    required this.dashboardIndex,
+  });
 
   @override
   State<BottomBar> createState() => _BottomBarState();
@@ -14,16 +18,19 @@ class _BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     super.initState();
+    _children = [
+      DashboardScreen(
+        dashboardIndex: widget.dashboardIndex,
+      ),
+      const ChooseUstadzScreen(),
+      const ProfilScreen(),
+    ];
     currentIndex = 0;
   }
 
   int currentIndex = 0;
 
-  final List<Widget> _children = [
-    const DashboardScreen(),
-    const ChooseUstadzScreen(),
-    const ProfilScreen(),
-  ];
+  late List<Widget> _children;
 
   void onTabTapped(int index) {
     setState(() {

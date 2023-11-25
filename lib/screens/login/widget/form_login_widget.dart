@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:provider/provider.dart';
+import 'package:quranhealer/core/init/untils/shared_preference.dart';
+import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
+import 'package:quranhealer/screens/login/login_view_model.dart';
+import 'package:quranhealer/services/login/login_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -9,14 +14,20 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
   final formKey = GlobalKey<FormState>();
 
-  bool loading = false;
   @override
   Widget build(BuildContext context) {
+    LoginViewModel loginViewModel = Provider.of<LoginViewModel>(context);
+
+    // ignore: unused_element
+    @override
+    void dispose() {
+      loginViewModel.emailController;
+      loginViewModel.passwordController;
+      super.dispose();
+    }
+
     return Form(
       key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -25,7 +36,7 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 40.0),
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            controller: emailController,
+            controller: loginViewModel.emailController,
             validator: (email) {
               if (email != null && !EmailValidator.validate(email)) {
                 return 'Enter a valid email';
@@ -50,7 +61,7 @@ class _LoginFormState extends State<LoginForm> {
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             // obscureText: loginViewModel.getObsecureText,
-            controller: passwordController,
+            controller: loginViewModel.passwordController,
             validator: (value) {
               if (value != null && value.length < 5) {
                 return 'Enter min. 5 characters';
@@ -105,13 +116,36 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
                 ),
-                onPressed: () {
-                  setState(() {
-                    loading = true;
-                  });
-                  Navigator.pushNamed(context, '/bottombar');
+                onPressed: () async {
+                  FocusScope.of(context).unfocus();
+                  var res = await LoginService().postLogin(
+                    email: loginViewModel.emailController.text,
+                    password: loginViewModel.passwordController.text,
+                  );
+                  if (res.containsKey('accessToken')) {
+                    print(res['accessToken']);
+                    String accessToken = res['accessToken'] ?? '';
+
+                    saveToken(valueToken: accessToken);
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            const BottomBar(dashboardIndex: 0),
+                      ),
+                      (route) => false,
+                    );
+                  } else {
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      res['error'],
+                      style: const TextStyle(color: Colors.white),
+                    )));
+                  }
                 },
-                child: !loading
+                child: !loginViewModel.loading
                     ? const Text(
                         'Login',
                         style: TextStyle(

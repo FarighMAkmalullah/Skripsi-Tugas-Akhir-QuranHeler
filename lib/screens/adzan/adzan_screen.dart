@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_screen.dart';
+import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
+import 'package:quranhealer/screens/dashboard/dashboard_view_model.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
 
 class AdzanScreen extends StatefulWidget {
@@ -29,10 +31,11 @@ class _AdzanScreenState extends State<AdzanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AdzanViewModel>(
+    return Consumer2<AdzanViewModel, DashboarViewModel>(
       builder: (
         context,
         adzan,
+        dashboard,
         _,
       ) {
         void filterAdzanList(String query) {
@@ -90,7 +93,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
                             filterAdzanList(value);
                           },
                           decoration: InputDecoration(
-                              hintText: 'Cari Surah...',
+                              hintText: 'Cari Kota...',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(100),
                                 borderSide: const BorderSide(
@@ -121,14 +124,14 @@ class _AdzanScreenState extends State<AdzanScreen> {
 
                               return InkWell(
                                 onTap: () {
-                                  Navigator.push(
+                                  dashboard.setKotaAdzan(data.lokasi, data.id);
+                                  Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => DetailAdzan(
-                                        id: data.id,
-                                        nama: data.lokasi,
-                                      ),
+                                      builder: (BuildContext context) =>
+                                          const BottomBar(dashboardIndex: 2),
                                     ),
+                                    (route) => false,
                                   );
                                 },
                                 child: Container(
