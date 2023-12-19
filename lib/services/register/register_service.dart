@@ -8,8 +8,6 @@ class RegisterService {
     required String gender,
     required String password,
   }) async {
-    print(
-        {"name": name, "email": email, "gender": gender, "password": password});
     try {
       Response response = await Dio().post('$quranHealerAPI/register',
           options: Options(headers: {

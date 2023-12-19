@@ -123,7 +123,6 @@ class _LoginFormState extends State<LoginForm> {
                     password: loginViewModel.passwordController.text,
                   );
                   if (res.containsKey('accessToken')) {
-                    print(res['accessToken']);
                     String accessToken = res['accessToken'] ?? '';
 
                     saveToken(valueToken: accessToken);

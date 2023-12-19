@@ -6,7 +6,6 @@ class LoginService {
     required String email,
     required String password,
   }) async {
-    print({"email": email, "password": password});
     try {
       Response response = await Dio().post('$quranHealerAPI/login',
           options: Options(headers: {

@@ -5,10 +5,12 @@ class OnBoardingAutentication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.of(context).pushReplacementNamed('/boarding');
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          Navigator.of(context).pushReplacementNamed('/boarding');
+        }
       },
       child: Scaffold(
         body: Container(

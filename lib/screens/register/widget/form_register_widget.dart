@@ -19,6 +19,7 @@ class _RegisterFormState extends State<RegisterForm> {
     RegisterViewModel registerViewModel =
         Provider.of<RegisterViewModel>(context);
 
+    // ignore: unused_element
     @override
     void dispose() {
       registerViewModel.confirmPasswordController;
@@ -223,9 +224,6 @@ class _RegisterFormState extends State<RegisterForm> {
                       password: registerViewModel.passwordController.text,
                     );
                     registerViewModel.penggantiDispose();
-
-                    print(res);
-
                     if (res.containsKey('result') && res != null) {
                       // =============================================================
                       // ignore: use_build_context_synchronously

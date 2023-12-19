@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:quranhealer/screens/adzan/adzan_screen.dart';
 import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_view_model.dart';
-import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
-import 'package:quranhealer/screens/dashboard/dahboard_screen.dart';
 import 'package:quranhealer/screens/dashboard/dashboard_view_model.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';
 import 'package:quranhealer/screens/doa/doa_view_model.dart';
