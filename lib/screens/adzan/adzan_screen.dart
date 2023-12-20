@@ -128,7 +128,10 @@ class _AdzanScreenState extends State<AdzanScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          const BottomBar(dashboardIndex: 2),
+                                          const BottomBar(
+                                        dashboardIndex: 0,
+                                        currentIndex: 0,
+                                      ),
                                     ),
                                     (route) => false,
                                   );

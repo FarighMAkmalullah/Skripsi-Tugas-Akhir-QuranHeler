@@ -113,7 +113,6 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                         height: 20,
                       ),
                       SizedBox(
-                        height: 50,
                         child: Text(
                           boardingData['boarding'][currentPage]['deskripsi'],
                           style: const TextStyle(

@@ -1,21 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/profil/profil_view_model.dart';
 
 class DetailProfil extends StatefulWidget {
-  const DetailProfil({super.key});
+  final String namaLengkap;
+  final String email;
+  final String gender;
+  const DetailProfil({
+    super.key,
+    required this.namaLengkap,
+    required this.email,
+    required this.gender,
+  });
 
   @override
   State<DetailProfil> createState() => _DetailProfilState();
 }
 
 class _DetailProfilState extends State<DetailProfil> {
+  late Future detailDataFuture;
+  @override
+  void initState() {
+    super.initState();
+
+    final detailViewModel =
+        Provider.of<ProfilViewModel>(context, listen: false);
+
+    detailDataFuture = detailViewModel.getProfilDetail();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Profil Saya"),
+          title: const Text(
+            "Profil Saya",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
           backgroundColor: const Color(0xFF0E6927),
           elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Column(
           children: [
@@ -67,35 +94,35 @@ class _DetailProfilState extends State<DetailProfil> {
               decoration: const BoxDecoration(
                 color: Color(0xFFD9DCE1),
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Nama Lengkap'),
+                  const Text('Nama Lengkap'),
                   Text(
-                    'Nama Lengkap Pengguna',
-                    style: TextStyle(
+                    widget.namaLengkap,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
-                  Text('Email'),
+                  const Text('Email'),
                   Text(
-                    'Email Pengguna',
-                    style: TextStyle(
+                    widget.email,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
-                  Text('Gender'),
+                  const Text('Gender'),
                   Text(
-                    'Gender Pengguna',
-                    style: TextStyle(
+                    widget.gender == "L" ? "Laki-laki" : "Perempuan",
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),

@@ -5,9 +5,11 @@ import 'package:quranhealer/screens/profil/profil_screen.dart';
 
 class BottomBar extends StatefulWidget {
   final int dashboardIndex;
+  final int currentIndex;
   const BottomBar({
     super.key,
     required this.dashboardIndex,
+    required this.currentIndex,
   });
 
   @override
@@ -25,7 +27,7 @@ class _BottomBarState extends State<BottomBar> {
       const ChooseUstadzScreen(),
       const ProfilScreen(),
     ];
-    currentIndex = 0;
+    currentIndex = widget.currentIndex;
   }
 
   int currentIndex = 0;

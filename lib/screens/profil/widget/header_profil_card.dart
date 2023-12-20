@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class HeaderProfilCard extends StatefulWidget {
-  const HeaderProfilCard({super.key});
+  String namaLengkap;
+  String email;
+  HeaderProfilCard({
+    super.key,
+    required this.namaLengkap,
+    required this.email,
+  });
 
   @override
   State<HeaderProfilCard> createState() => _HeaderProfilCardState();
@@ -31,9 +38,9 @@ class _HeaderProfilCardState extends State<HeaderProfilCard> {
           const SizedBox(
             height: 16,
           ),
-          const Row(
+          Row(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 80,
                 width: 80,
                 child: CircleAvatar(
@@ -46,25 +53,22 @@ class _HeaderProfilCardState extends State<HeaderProfilCard> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Nama Lengkap',
-                    style: TextStyle(
+                    widget.namaLengkap,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                     ),
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
                   Text(
-                    'email@email.com',
-                    style: TextStyle(
+                    widget.email,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
