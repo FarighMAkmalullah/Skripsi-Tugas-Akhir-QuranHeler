@@ -112,17 +112,19 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), // Bentuk border
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                 ),
                 onPressed: () async {
+                  loginViewModel.setLoading(true);
                   FocusScope.of(context).unfocus();
                   var res = await LoginService().postLogin(
                     email: loginViewModel.emailController.text,
                     password: loginViewModel.passwordController.text,
                   );
                   if (res.containsKey('accessToken')) {
+                    loginViewModel.setLoading(false);
                     String accessToken = res['accessToken'] ?? '';
 
                     saveToken(valueToken: accessToken);
@@ -130,12 +132,15 @@ class _LoginFormState extends State<LoginForm> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const BottomBar(dashboardIndex: 0),
+                        builder: (BuildContext context) => const BottomBar(
+                          dashboardIndex: 0,
+                          currentIndex: 0,
+                        ),
                       ),
                       (route) => false,
                     );
                   } else {
+                    loginViewModel.setLoading(false);
                     // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(

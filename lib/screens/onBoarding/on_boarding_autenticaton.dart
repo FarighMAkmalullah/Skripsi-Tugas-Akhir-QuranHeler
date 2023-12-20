@@ -55,9 +55,8 @@ class OnBoardingAutentication extends StatelessWidget {
                       child: ElevatedButton(
                         style: ButtonStyle(
                           elevation: MaterialStateProperty.all(0),
-                          backgroundColor: MaterialStateProperty.all(
-                            const Color(0xFF1F542E),
-                          ),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -82,7 +81,10 @@ class OnBoardingAutentication extends StatelessWidget {
                             const SizedBox(
                               width: 20,
                             ),
-                            const Text('LOGIN WITH QURAN HEALER'),
+                            const Text(
+                              'LOGIN WITH QURAN HEALER',
+                              style: TextStyle(color: Color(0xFF02410D)),
+                            ),
                           ],
                         ),
                       ),

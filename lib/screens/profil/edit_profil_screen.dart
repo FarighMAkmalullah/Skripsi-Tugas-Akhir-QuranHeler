@@ -1,26 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
+import 'package:quranhealer/screens/profil/edit_profil_view_model.dart';
+import 'package:quranhealer/services/edit_profil/edit_profil_service.dart';
 
+// ignore: must_be_immutable
 class EditProfilScreen extends StatefulWidget {
-  const EditProfilScreen({super.key});
+  String namaLengkap;
+  String email;
+  String gender;
+  EditProfilScreen({
+    super.key,
+    required this.namaLengkap,
+    required this.email,
+    required this.gender,
+  });
 
   @override
   State<EditProfilScreen> createState() => _EditProfilScreenState();
 }
 
 class _EditProfilScreenState extends State<EditProfilScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
-  bool isChecked = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
-  String gender = 'Laki - laki';
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    EditProfilViewModel editProfilScreen =
+        Provider.of<EditProfilViewModel>(context);
+    editProfilScreen.setEmailController(widget.email);
+    editProfilScreen.setNameController(widget.namaLengkap);
+  }
 
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    EditProfilViewModel editProfilScreen =
+        Provider.of<EditProfilViewModel>(context);
+
+    // ignore: unused_element
+    @override
+    void dispose() {
+      editProfilScreen.emailController;
+      editProfilScreen.nameController;
+      super.dispose();
+    }
+
     return SafeArea(
       child: Scaffold(
         body: ListView(
@@ -34,16 +65,27 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      _showCancelDialog(context);
                     },
                     child: const Text('Cancel'),
                   ),
                   const Text('Edit Profil'),
-                  const Text(
-                    'Save',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: () async {
+                      editProfilScreen.setLoading(true);
+                      var res = await EditProfilService().postEditProfil(
+                        name: editProfilScreen.nameController.text,
+                        email: editProfilScreen.emailController.text,
+                        gender: editProfilScreen.gender,
+                      );
+                      // ignore: use_build_context_synchronously
+                    },
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -70,7 +112,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                 ),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: const Color(0xFF082811),
                       elevation: 0,
                     ),
                     onPressed: () {},
@@ -86,7 +128,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                         TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           // obscureText: loginViewModel.getObsecureText,
-                          controller: nameController,
+                          controller: editProfilScreen.nameController,
                           validator: (value) {
                             if (value != null && value.length < 5) {
                               return 'Enter min. 5 characters';
@@ -116,7 +158,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                         const SizedBox(height: 25.0),
                         TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: emailController,
+                          controller: editProfilScreen.emailController,
                           validator: (email) {
                             if (email != null &&
                                 !EmailValidator.validate(email)) {
@@ -137,68 +179,6 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                           ),
                         ),
                         const SizedBox(height: 25.0),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          // obscureText: loginViewModel.getObsecureText,
-                          controller: passwordController,
-                          validator: (value) {
-                            if (value != null && value.length < 5) {
-                              return 'Enter min. 5 characters';
-                            } else {
-                              return null;
-                            }
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'Password',
-                            // hintStyle: GoogleFonts.roboto(
-                            //   fontWeight: FontWeight.w400,
-                            //   fontSize: 16,
-                            // ),
-                            // suffixIcon: IconButton(
-                            //   icon: Icon(
-                            //     getObsecureText ? Icons.visibility_off : Icons.visibility,
-                            //   ),
-                            //   onPressed: () {
-                            //     loginViewModel.setTogglePasswordVisibility(!getObsecureText);
-                            //   },
-                            // ),
-                            hintText: 'Masukkan Password',
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 25.0),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          // obscureText: loginViewModel.getObsecureText,
-                          controller: confirmPasswordController,
-                          validator: (value) {
-                            if (value != null && value.length < 5) {
-                              return 'Enter min. 5 characters';
-                            } else {
-                              return null;
-                            }
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'Confirm Password',
-                            // hintStyle: GoogleFonts.roboto(
-                            //   fontWeight: FontWeight.w400,
-                            //   fontSize: 16,
-                            // ),
-                            // suffixIcon: IconButton(
-                            //   icon: Icon(
-                            //     getObsecureText ? Icons.visibility_off : Icons.visibility,
-                            //   ),
-                            //   onPressed: () {
-                            //     loginViewModel.setTogglePasswordVisibility(!getObsecureText);
-                            //   },
-                            // ),
-                            hintText: 'Masukkan Password Lagi',
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 25.0),
                         const Text('Gender'),
                         const SizedBox(height: 10.0),
                         Container(
@@ -214,20 +194,18 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    setState(() {
-                                      gender = 'Laki - laki';
-                                    });
+                                    editProfilScreen.setGender('L');
                                   },
                                   child: Container(
                                     height: 50,
-                                    color: gender == 'Laki - laki'
+                                    color: editProfilScreen.gender == 'L'
                                         ? Colors.blue
                                         : Colors.transparent,
                                     child: Center(
                                       child: Text(
                                         'Laki - laki',
                                         style: TextStyle(
-                                          color: gender == 'Laki - laki'
+                                          color: editProfilScreen.gender == 'L'
                                               ? Colors.white
                                               : const Color(0xFF777070),
                                         ),
@@ -239,12 +217,10 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    setState(() {
-                                      gender = 'Perempuan';
-                                    });
+                                    editProfilScreen.setGender('P');
                                   },
                                   child: Container(
-                                    color: gender == 'Perempuan'
+                                    color: editProfilScreen.gender == 'P'
                                         ? Colors.blue
                                         : Colors.transparent,
                                     height: 50,
@@ -252,7 +228,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                                       child: Text(
                                         'Perempuan',
                                         style: TextStyle(
-                                          color: gender == 'Perempuan'
+                                          color: editProfilScreen.gender == 'P'
                                               ? Colors.white
                                               : const Color(0xFF777070),
                                         ),
@@ -274,6 +250,40 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showCancelDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi'),
+          content: const Text('Apakah Anda yakin ingin keluar?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Tidak'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BottomBar(
+                        dashboardIndex: 2,
+                        currentIndex: 2,
+                      ),
+                    ),
+                    (route) => false);
+              },
+              child: const Text('Ya'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

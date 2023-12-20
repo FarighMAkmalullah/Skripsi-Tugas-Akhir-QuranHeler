@@ -197,8 +197,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 unselectedLabelStyle: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                indicatorWeight: 0.1,
+                                // indicatorWeight: 0.1,
+                                tabAlignment: TabAlignment.start,
+                                // labelPadding: EdgeInsets.zero,
+                                // indicatorPadding: EdgeInsets.zero,
+                                // padding: EdgeInsets.zero,
                                 indicatorColor: Colors.transparent,
+                                indicatorSize: TabBarIndicatorSize.label,
                                 isScrollable: true,
                                 controller: _listFeatoreController,
                                 labelColor: const Color(0xFF0E6927),
@@ -222,6 +227,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   Tab(
                                     text: "Kisah Nabi",
                                   ),
+                                  // Tab(
+                                  //   text: "Coba",
+                                  // )
                                 ],
                               ),
                             ),
