@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/dashboard/widget/notification_widget.dart';
 
 class EditProfilViewModel with ChangeNotifier {
   TextEditingController emailController = TextEditingController();
@@ -11,7 +12,6 @@ class EditProfilViewModel with ChangeNotifier {
 
   void setGender(String value) {
     gender = value;
-    print(gender);
     notifyListeners();
   }
 
@@ -36,5 +36,6 @@ class EditProfilViewModel with ChangeNotifier {
 
   void setLoading(bool value) {
     loading = value;
+    notifyListeners();
   }
 }

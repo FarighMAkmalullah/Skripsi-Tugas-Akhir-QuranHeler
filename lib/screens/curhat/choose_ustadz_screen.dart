@@ -29,7 +29,6 @@ class _ChooseUstadzScreenState extends State<ChooseUstadzScreen> {
       return FutureBuilder(
           future: detailDataFuture,
           builder: (context, snapshot) {
-            print(provider.detailUstadz);
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -149,7 +148,6 @@ class _ChooseUstadzScreenState extends State<ChooseUstadzScreen> {
                 ),
               );
             } else if (snapshot.hasError) {
-              print(snapshot.error);
               return Center(
                 child: ErrorScreen(onRefreshPressed: () {
                   provider.getUstadzDetail();

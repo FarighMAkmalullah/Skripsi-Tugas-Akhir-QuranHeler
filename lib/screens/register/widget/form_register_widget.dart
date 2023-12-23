@@ -314,19 +314,20 @@ class _RegisterFormState extends State<RegisterForm> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Center(
-                                        child: SizedBox(
-                                      height: 100,
-                                      width: 100,
-                                      child: CircleAvatar(
-                                        radius: 100,
-                                        backgroundColor: Color(0xFF10AB6A),
-                                        child: Icon(
-                                          Icons.check,
-                                          size: 70,
-                                          color: Colors.white,
+                                      child: SizedBox(
+                                        height: 100,
+                                        width: 100,
+                                        child: CircleAvatar(
+                                          radius: 100,
+                                          backgroundColor: Color(0xFF10AB6A),
+                                          child: Icon(
+                                            Icons.check,
+                                            size: 70,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
-                                    )),
+                                    ),
                                   ],
                                 ),
                               ),

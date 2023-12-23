@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:quranhealer/core/init/untils/shared_preference.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
 import 'package:quranhealer/screens/profil/detail_profil.dart';
+import 'package:quranhealer/screens/profil/edit_password_screen.dart';
 import 'package:quranhealer/screens/profil/edit_profil_screen.dart';
 import 'package:quranhealer/screens/profil/profil_view_model.dart';
 import 'package:quranhealer/screens/profil/widget/header_profil_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilScreen extends StatefulWidget {
   const ProfilScreen({super.key});
@@ -24,6 +26,25 @@ class _ProfilScreenState extends State<ProfilScreen> {
         Provider.of<ProfilViewModel>(context, listen: false);
 
     detailDataFuture = detailViewModel.getProfilDetail();
+  }
+
+  _openWhatsApp() async {
+    // Ganti nomor berikut dengan nomor yang ingin Anda hubungi
+    String phoneNumber = "6281234567890";
+
+    // Ganti pesan berikut sesuai kebutuhan
+    String message = "Halo, apa kabar?";
+
+    // Format URL dengan menggunakan URI Scheme WhatsApp
+    String url =
+        "https://wa.me/$phoneNumber/?text=${Uri.encodeQueryComponent(message)}";
+
+    // Buka URL menggunakan package url_launcher
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Tidak dapat membuka WhatsApp.';
+    }
   }
 
   @override
@@ -135,30 +156,18 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('Mohon Maaf'),
-                                            content: const Text(
-                                                'Fitur ini masih dalam pengembangan'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Close'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EditPasswordScreen(),
+                                          ));
                                     },
                                     child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Delete Akun'),
+                                        Text('Edit Password'),
                                         Icon(
                                           Icons.chevron_right,
                                           size: 17,
@@ -309,7 +318,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Help Centre'),
+                                        Text('About Us'),
                                         Icon(
                                           Icons.chevron_right,
                                           size: 17,
