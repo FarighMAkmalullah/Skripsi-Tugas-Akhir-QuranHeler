@@ -6,48 +6,28 @@ import 'package:quranhealer/screens/profil/edit_profil_view_model.dart';
 import 'package:quranhealer/services/edit_profil/edit_profil_service.dart';
 
 // ignore: must_be_immutable
-class EditProfilScreen extends StatefulWidget {
-  String namaLengkap;
-  String email;
-  String gender;
-  EditProfilScreen({
+class EditPasswordScreen extends StatefulWidget {
+  const EditPasswordScreen({
     super.key,
-    required this.namaLengkap,
-    required this.email,
-    required this.gender,
   });
 
   @override
-  State<EditProfilScreen> createState() => _EditProfilScreenState();
+  State<EditPasswordScreen> createState() => _EditPasswordScreenState();
 }
 
-class _EditProfilScreenState extends State<EditProfilScreen> {
+class _EditPasswordScreenState extends State<EditPasswordScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     EditProfilViewModel editProfilScreen =
         Provider.of<EditProfilViewModel>(context);
-    editProfilScreen.setEmailController(widget.email);
-    editProfilScreen.setNameController(widget.namaLengkap);
-  }
-
-  _showHasilEdit(bool value) async {
-    if (value) {
-      return const Column(
-        children: [Text('Berhasil')],
-      );
-    } else {
-      return const Column(
-        children: [Text('Gagal')],
-      );
-    }
+    // editProfilScreen.setEmailController(widget.email);
+    // editProfilScreen.setNameController(widget.namaLengkap);
   }
 
   final formKey = GlobalKey<FormState>();
@@ -86,7 +66,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                       },
                       child: const Text('Cancel'),
                     ),
-                    const Text('Edit Profil'),
+                    const Text('Edit Password'),
                     InkWell(
                       onTap: () async {
                         editProfilScreen.setLoading(true);
@@ -144,7 +124,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                                           SizedBox(
                                             height: 15,
                                           ),
-                                          Text('Data Berhasil Diubah'),
+                                          Text('Password Berhasil Diubah'),
                                         ],
                                       ),
                                     ),
@@ -258,26 +238,6 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 120,
-                          width: 120,
-                          child: CircleAvatar(
-                            backgroundColor: Color(0xFFD9DCE1),
-                            radius: 100,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 80,
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF082811),
-                              elevation: 0,
-                            ),
-                            onPressed: () {},
-                            child: const Text('Ubah Foto')),
                         Padding(
                           padding: const EdgeInsets.all(16),
                           child: Form(
@@ -291,7 +251,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   // obscureText: loginViewModel.getObsecureText,
-                                  controller: editProfilScreen.nameController,
+                                  // controller: editProfilScreen.nameController,
                                   validator: (value) {
                                     if (value != null && value.length < 5) {
                                       return 'Enter min. 5 characters';
@@ -300,20 +260,8 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                                     }
                                   },
                                   decoration: const InputDecoration(
-                                    labelText: 'Nama Lengkap',
-                                    // hintStyle: GoogleFonts.roboto(
-                                    //   fontWeight: FontWeight.w400,
-                                    //   fontSize: 16,
-                                    // ),
-                                    // suffixIcon: IconButton(
-                                    //   icon: Icon(
-                                    //     getObsecureText ? Icons.visibility_off : Icons.visibility,
-                                    //   ),
-                                    //   onPressed: () {
-                                    //     loginViewModel.setTogglePasswordVisibility(!getObsecureText);
-                                    //   },
-                                    // ),
-                                    hintText: 'Maukkan Nama Lengkap',
+                                    labelText: 'Old Password',
+                                    hintText: 'Masukkan Password Lama',
                                     floatingLabelBehavior:
                                         FloatingLabelBehavior.always,
                                     border: OutlineInputBorder(),
@@ -323,96 +271,24 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                                 TextFormField(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
-                                  controller: editProfilScreen.emailController,
-                                  validator: (email) {
-                                    if (email != null &&
-                                        !EmailValidator.validate(email)) {
-                                      return 'Enter a valid email';
+                                  // controller: editProfilScreen.emailController,
+
+                                  validator: (value) {
+                                    if (value != null && value.length < 5) {
+                                      return 'Enter min. 5 characters';
                                     } else {
                                       return null;
                                     }
                                   },
                                   decoration: const InputDecoration(
-                                    labelText: 'Email',
-                                    // hintStyle: GoogleFonts.roboto(
-                                    //   fontWeight: FontWeight.w400,
-                                    //   fontSize: 16,
-                                    // ),
-                                    hintText: 'Masukkan Email',
+                                    labelText: 'New Password',
+                                    hintText: 'Confirm Password Baru',
                                     floatingLabelBehavior:
                                         FloatingLabelBehavior.always,
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
                                 const SizedBox(height: 25.0),
-                                const Text('Gender'),
-                                const SizedBox(height: 10.0),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1,
-                                      color: const Color(0xFF777070),
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            editProfilScreen.setGender('L');
-                                          },
-                                          child: Container(
-                                            height: 50,
-                                            color:
-                                                editProfilScreen.gender == 'L'
-                                                    ? Colors.blue
-                                                    : Colors.transparent,
-                                            child: Center(
-                                              child: Text(
-                                                'Laki - laki',
-                                                style: TextStyle(
-                                                  color: editProfilScreen
-                                                              .gender ==
-                                                          'L'
-                                                      ? Colors.white
-                                                      : const Color(0xFF777070),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            editProfilScreen.setGender('P');
-                                          },
-                                          child: Container(
-                                            color:
-                                                editProfilScreen.gender == 'P'
-                                                    ? Colors.blue
-                                                    : Colors.transparent,
-                                            height: 50,
-                                            child: Center(
-                                              child: Text(
-                                                'Perempuan',
-                                                style: TextStyle(
-                                                  color: editProfilScreen
-                                                              .gender ==
-                                                          'P'
-                                                      ? Colors.white
-                                                      : const Color(0xFF777070),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 10.0),
                               ],
                             ),
                           ),

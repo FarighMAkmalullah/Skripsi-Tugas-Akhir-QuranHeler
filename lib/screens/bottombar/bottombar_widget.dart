@@ -53,7 +53,16 @@ class _BottomBarState extends State<BottomBar> {
     return Scaffold(
       appBar: null,
       backgroundColor: Colors.white,
-      body: _children[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: [
+          DashboardScreen(
+            dashboardIndex: widget.dashboardIndex,
+          ),
+          const ChooseUstadzScreen(),
+          const ProfilScreen(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         unselectedItemColor: const Color(0xFFC7C6CA),
