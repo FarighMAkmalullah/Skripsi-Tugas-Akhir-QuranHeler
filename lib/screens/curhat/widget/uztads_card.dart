@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/post/ustsdz_post_screen.dart';
 
 class UztadsCard extends StatefulWidget {
   final String nama;
   final String spesialis;
-  const UztadsCard({
+  final int idUstadz;
+  UztadsCard({
     super.key,
     required this.nama,
     required this.spesialis,
+    required this.idUstadz,
   });
 
   @override
@@ -66,7 +69,18 @@ class _UztadsCardState extends State<UztadsCard> {
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UstadzPostScreen(
+                          ustadzName: widget.nama,
+                          spesialisasi: widget.spesialis,
+                          idUstadz: widget.idUstadz,
+                        ),
+                      ),
+                    );
+                  },
                   child: const Text('Mulai Post'))
             ],
           ),

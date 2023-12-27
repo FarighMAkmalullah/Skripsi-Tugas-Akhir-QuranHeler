@@ -32,6 +32,7 @@ class _BottomBarState extends State<BottomBar> {
 
   int currentIndex = 0;
 
+  // ignore: unused_field
   late List<Widget> _children;
 
   void onTabTapped(int index) {

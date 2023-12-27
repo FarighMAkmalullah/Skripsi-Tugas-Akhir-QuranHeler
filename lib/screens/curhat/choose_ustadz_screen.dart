@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/curhat/ustadz_view_model.dart';
 import 'package:quranhealer/screens/curhat/widget/uztads_card.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
+import 'package:quranhealer/screens/post/all_post_screen.dart';
 
 class ChooseUstadzScreen extends StatefulWidget {
   const ChooseUstadzScreen({super.key});
@@ -84,23 +85,37 @@ class _ChooseUstadzScreenState extends State<ChooseUstadzScreen> {
                             padding: const EdgeInsets.fromLTRB(16, 25, 16, 16),
                             child: Column(
                               children: [
-                                const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Lihat Seluruh Post',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    Icon(Icons.chevron_right)
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                const Divider(
-                                  color: Color(0xFF8B8A8A),
-                                  height: 1,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AllPostScreen(),
+                                        ));
+                                  },
+                                  child: const Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Lihat Seluruh Post',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Icon(Icons.chevron_right)
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Divider(
+                                        color: Color(0xFF8B8A8A),
+                                        height: 1,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 Padding(
                                   padding:
@@ -135,6 +150,8 @@ class _ChooseUstadzScreenState extends State<ChooseUstadzScreen> {
                                       nama: provider.detailUstadz[index]!.name,
                                       spesialis: provider
                                           .detailUstadz[index]!.spesialisasi,
+                                      idUstadz:
+                                          provider.detailUstadz[index]!.userId,
                                     );
                                   },
                                 )
