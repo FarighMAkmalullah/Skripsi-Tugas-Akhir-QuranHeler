@@ -4,6 +4,7 @@ import 'package:quranhealer/screens/adzan/detail_adzan_screen.dart';
 import 'package:quranhealer/screens/dashboard/dashboard_view_model.dart';
 import 'package:quranhealer/screens/dashboard/widget/notification_widget.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';
+import 'package:quranhealer/screens/menu_dashboard/menu_dashboard_screen.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -243,12 +244,23 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         color: const Color(0xFF8B8A8A)),
                                   ),
                                 ),
-                                Container(
-                                  width: 50,
-                                  height: 45,
-                                  padding: const EdgeInsets.all(10),
-                                  child: Image.asset(
-                                      "assets/icons/dashboard/list.png"),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MenuDashboardScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 45,
+                                    padding: const EdgeInsets.all(10),
+                                    child: Image.asset(
+                                        "assets/icons/dashboard/list.png"),
+                                  ),
                                 ),
                               ],
                             )

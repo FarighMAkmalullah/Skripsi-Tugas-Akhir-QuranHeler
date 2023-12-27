@@ -6,11 +6,14 @@ import 'package:quranhealer/screens/curhat/ustadz_view_model.dart';
 import 'package:quranhealer/screens/dashboard/dashboard_view_model.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';
 import 'package:quranhealer/screens/doa/doa_view_model.dart';
+import 'package:quranhealer/screens/jawaban/jawaban_view_model.dart';
 import 'package:quranhealer/screens/login/login_screen.dart';
 import 'package:quranhealer/screens/login/login_view_model.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_autenticaton.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_screen.dart';
 import 'package:quranhealer/screens/onBoarding/splash_screen.dart';
+import 'package:quranhealer/screens/post/all_post_view_model.dart';
+import 'package:quranhealer/screens/post/ustadz_post_view_model.dart';
 import 'package:quranhealer/screens/profil/edit_profil_view_model.dart';
 import 'package:quranhealer/screens/profil/profil_view_model.dart';
 import 'package:quranhealer/screens/quran/detail_quran_view_model.dart';
@@ -57,6 +60,15 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => EditProfilViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AllPostViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => JawabanViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UstadzPostViewModel(),
         ),
       ],
       child: const QuranHealer(),
