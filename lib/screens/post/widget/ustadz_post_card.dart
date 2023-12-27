@@ -5,6 +5,7 @@ import 'package:quranhealer/services/like/like_service.dart';
 
 // ignore: must_be_immutable
 class UstadzPostCard extends StatefulWidget {
+  bool byUstadz;
   String judul;
   String username;
   String tanggalUpdate;
@@ -16,19 +17,21 @@ class UstadzPostCard extends StatefulWidget {
   int id_post;
   bool byUser;
   bool? isLiked;
-  UstadzPostCard(
-      {super.key,
-      required this.judul,
-      required this.commentCount,
-      required this.down,
-      required this.jamUpdate,
-      required this.konten,
-      required this.tanggalUpdate,
-      required this.up,
-      required this.username,
-      required this.id_post,
-      required this.byUser,
-      required this.isLiked});
+  UstadzPostCard({
+    super.key,
+    required this.judul,
+    required this.commentCount,
+    required this.down,
+    required this.jamUpdate,
+    required this.konten,
+    required this.tanggalUpdate,
+    required this.up,
+    required this.username,
+    required this.id_post,
+    required this.byUser,
+    required this.isLiked,
+    required this.byUstadz,
+  });
 
   @override
   State<UstadzPostCard> createState() => _UstadzPostCardState();
@@ -36,6 +39,11 @@ class UstadzPostCard extends StatefulWidget {
 
 class _UstadzPostCardState extends State<UstadzPostCard> {
   var isLike = null;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -262,6 +270,7 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => JawabanScreen(
+                                  byUstadz: widget.byUstadz,
                                   judul: widget.judul,
                                   commentCount: widget.commentCount,
                                   down: widget.down,

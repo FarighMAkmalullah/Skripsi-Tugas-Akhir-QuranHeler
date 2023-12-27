@@ -20,5 +20,9 @@ class JawabanViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearJawaban() {
+    _listJawaban.clear();
+  }
+
   notifyListeners();
 }

@@ -402,7 +402,8 @@ class _UstadzPostScreenState extends State<UstadzPostScreen> {
                                   var detailPost =
                                       postViewModel.allUstadzData[index];
                                   return UstadzPostCard(
-                                    judul: detailPost!.judul,
+                                    byUstadz: detailPost!.byUstadz,
+                                    judul: detailPost.judul,
                                     commentCount: detailPost.commentCount,
                                     down: int.parse(detailPost.down),
                                     jamUpdate: jamUpdate(detailPost.updatedAt),
