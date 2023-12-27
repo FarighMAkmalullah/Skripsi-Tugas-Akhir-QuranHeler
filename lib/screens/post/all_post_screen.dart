@@ -246,6 +246,8 @@ class _AllPostScreenState extends State<AllPostScreen> {
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           JawabanScreen(
+                                                        byUstadz:
+                                                            detailPost.byUstadz,
                                                         judul: detailPost.judul,
                                                         commentCount: detailPost
                                                             .commentCount,

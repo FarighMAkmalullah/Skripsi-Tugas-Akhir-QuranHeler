@@ -7,7 +7,6 @@ class DisLikeService {
     required int idPost,
   }) async {
     String? token = await getToken();
-    print(idPost);
     try {
       Response response = await Dio().get(
         '$quranHealerAPI/post/$idPost/dislike',
@@ -20,7 +19,6 @@ class DisLikeService {
       );
       return response.data;
     } on DioException catch (e) {
-      print(e);
       return e.response?.data;
     }
   }
