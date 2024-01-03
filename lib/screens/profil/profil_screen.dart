@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/core/init/untils/shared_preference.dart';
@@ -7,6 +9,9 @@ import 'package:quranhealer/screens/profil/edit_password_screen.dart';
 import 'package:quranhealer/screens/profil/edit_profil_screen.dart';
 import 'package:quranhealer/screens/profil/profil_view_model.dart';
 import 'package:quranhealer/screens/profil/widget/header_profil_card.dart';
+import 'package:quranhealer/screens/terms_and_privacy_policy/privacy_policy.dart';
+import 'package:quranhealer/screens/terms_and_privacy_policy/terms_screen.dart';
+import 'package:quranhealer/services/logout/logout_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilScreen extends StatefulWidget {
@@ -27,6 +32,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
     detailDataFuture = detailViewModel.getProfilDetail();
   }
+
+  bool isLoading = false;
 
   _openWhatsApp() async {
     // Ganti nomor berikut dengan nomor yang ingin Anda hubungi
@@ -156,12 +163,24 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const EditPasswordScreen(),
-                                          ));
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Mohon Maaf'),
+                                            content: const Text(
+                                                'Fitur ini masih dalam pengembangan'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Close'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
                                     },
                                     child: const Row(
                                       mainAxisAlignment:
@@ -201,24 +220,12 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('Mohon Maaf'),
-                                            content: const Text(
-                                                'Fitur ini masih dalam pengembangan'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Close'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const PrivacyPolicyScreen(),
+                                          ));
                                     },
                                     child: const Row(
                                       mainAxisAlignment:
@@ -258,23 +265,12 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                     },
                                     child: InkWell(
                                       onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('Mohon Maaf'),
-                                              content: const Text(
-                                                  'Fitur ini masih dalam pengembangan'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('Close'),
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const TermsScreen(),
+                                          ),
                                         );
                                       },
                                       child: const Row(
@@ -335,25 +331,52 @@ class _ProfilScreenState extends State<ProfilScreen> {
                               thickness: 5,
                             ),
                             InkWell(
-                              onTap: () {
-                                removeToken();
+                              onTap: () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                var res = await LogoutService().logout();
+                                if (res.containsKey('result') && res != null) {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  const snackBar = SnackBar(
+                                    content: Text('Logout Berhasil'),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
 
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, '/', (route) => false);
+                                  removeToken();
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, '/', (route) => false);
+                                } else if (res.containsKey('error') &&
+                                    res != null) {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  const snackBar = SnackBar(
+                                    content:
+                                        Text('Logout Gagal Silahkan COba Lagi'),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
                               },
-                              child: const Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Logout'),
-                                    Icon(
-                                      Icons.logout,
-                                      size: 17,
-                                    ),
-                                  ],
-                                ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: isLoading
+                                    ? const CircularProgressIndicator()
+                                    : const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Logout'),
+                                          Icon(
+                                            Icons.logout,
+                                            size: 17,
+                                          ),
+                                        ],
+                                      ),
                               ),
                             ),
                           ],

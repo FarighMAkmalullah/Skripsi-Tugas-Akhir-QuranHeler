@@ -519,7 +519,7 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
                                         isPlaying: isPlaying,
                                         onPlayToggle: (bool isPlaying) {
                                           playAyat(index,
-                                              detail.ayat[index].audio["01"]!);
+                                              detail.ayat[index].audio["02"]!);
                                         },
                                       )
                                     : Container();
@@ -545,7 +545,6 @@ class _DetailSurahScreensState extends State<DetailSurahScreens>
               ],
             ),
           ),
-          bottomNavigationBar: const BottomAppBar(),
         );
       },
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
 import 'package:quranhealer/screens/profil/edit_profil_view_model.dart';

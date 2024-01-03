@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:quranhealer/core/init/const/api.dart';
 import 'package:dio/dio.dart';
 import 'package:quranhealer/core/init/untils/shared_preference.dart';

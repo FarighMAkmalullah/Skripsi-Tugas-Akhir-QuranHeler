@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
-import 'package:quranhealer/screens/jawaban/jawaban_screen.dart';
 import 'package:quranhealer/screens/post/all_post_view_model.dart';
 import 'package:intl/intl.dart';
+import 'package:quranhealer/screens/post/widget/ustadz_post_card.dart';
 
 class AllPostScreen extends StatefulWidget {
   const AllPostScreen({super.key});
@@ -19,9 +19,16 @@ class _AllPostScreenState extends State<AllPostScreen> {
     final postViewModel = Provider.of<AllPostViewModel>(context, listen: false);
     postDataViewModel = postViewModel.getAllPostData();
 
+    filteredAllPostList = postViewModel.allPostData;
+
     // filteredQuranList = quranViewModel.quranlist;
     super.initState();
   }
+
+  List filteredAllPostList = [];
+
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
 
   String tanggalUpdate(data) {
     DateTime dateTime = DateTime.parse(data);
@@ -59,6 +66,16 @@ class _AllPostScreenState extends State<AllPostScreen> {
         ],
       ),
       body: Consumer<AllPostViewModel>(builder: (context, provider, _) {
+        void filterAllPostList(String query) {
+          final filteredList = provider.allPostData.where((post) {
+            return post.judul.toLowerCase().contains(query.toLowerCase());
+          }).toList();
+
+          setState(() {
+            filteredAllPostList = filteredList;
+          });
+        }
+
         return FutureBuilder(
             future: postDataViewModel,
             builder: (context, snapshot) {
@@ -74,6 +91,13 @@ class _AllPostScreenState extends State<AllPostScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 16, horizontal: 20),
                         child: TextField(
+                          controller: searchController,
+                          onChanged: (value) {
+                            setState(() {
+                              isSearching = true;
+                            });
+                            filterAllPostList(value);
+                          },
                           decoration: InputDecoration(
                               hintText: 'Cari Post...',
                               border: OutlineInputBorder(
@@ -99,203 +123,30 @@ class _AllPostScreenState extends State<AllPostScreen> {
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: provider.allPostData.length,
+                        itemCount: isSearching
+                            ? filteredAllPostList.length
+                            : provider.allPostData.length,
                         itemBuilder: (context, index) {
-                          var detailPost = provider.allPostData[index];
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${detailPost!.judul} ?",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              padding: const EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xFFD9D9D9),
-                                                borderRadius:
-                                                    BorderRadius.circular(100),
-                                              ),
-                                              child: const Icon(
-                                                Icons.person,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  detailPost.username,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 15),
-                                                ),
-                                                const Text(
-                                                  'User',
-                                                  style:
-                                                      TextStyle(fontSize: 13),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text(tanggalUpdate(
-                                                detailPost.updatedAt)),
-                                            Text(jamUpdate(
-                                                detailPost.updatedAt)),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(detailPost.konten),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Column(
-                                      children: [
-                                        const Divider(
-                                          thickness: 1,
-                                          height: 1,
-                                          color: Color(0xFFA5A5A5),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                const Icon(
-                                                    Icons.keyboard_arrow_up),
-                                                Text(
-                                                  detailPost.up,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                const SizedBox(
-                                                  width: 25,
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                const Icon(
-                                                    Icons.keyboard_arrow_down),
-                                                Text(
-                                                  detailPost.down,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                const SizedBox(
-                                                  width: 25,
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              width: 20,
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    width: 0.4,
-                                                    color: const Color(
-                                                        0xFF8B8A8A)),
-                                              ),
-                                              height: 40,
-                                            ),
-                                            Expanded(
-                                                child: Center(
-                                              child: InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          JawabanScreen(
-                                                        byUstadz:
-                                                            detailPost.byUstadz,
-                                                        judul: detailPost.judul,
-                                                        commentCount: detailPost
-                                                            .commentCount,
-                                                        down: int.parse(
-                                                            detailPost.down),
-                                                        jamUpdate: jamUpdate(
-                                                            detailPost
-                                                                .updatedAt),
-                                                        konten:
-                                                            detailPost.konten,
-                                                        tanggalUpdate:
-                                                            tanggalUpdate(
-                                                                detailPost
-                                                                    .updatedAt),
-                                                        up: int.parse(
-                                                            detailPost.up),
-                                                        username:
-                                                            detailPost.username,
-                                                        id_post: detailPost.id,
-                                                        byUser:
-                                                            detailPost.byUser,
-                                                        isLiked:
-                                                            detailPost.isLiked,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Text(
-                                                  "Jawaban ${detailPost.commentCount}",
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ))
-                                          ],
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const Divider(
-                                color: Color(0xFFDEDEDE),
-                                height: 5,
-                                thickness: 5,
-                              ),
-                            ],
+                          var detailPost = isSearching
+                              ? filteredAllPostList[index]
+                              : provider.allPostData[index];
+                          return UstadzPostCard(
+                            judul: detailPost.judul,
+                            commentCount: detailPost.commentCount,
+                            down: int.parse(detailPost.down),
+                            jamUpdate: jamUpdate(detailPost.updatedAt),
+                            konten: detailPost.konten,
+                            tanggalUpdate: tanggalUpdate(detailPost.updatedAt),
+                            up: int.parse(detailPost.up),
+                            username: detailPost.username,
+                            id_post: detailPost.id,
+                            byUser: detailPost.byUser,
+                            isLiked: detailPost.isLiked,
+                            byUstadz: detailPost.byUstadz,
+                            isUstadzPage: false,
+                            ustadzId: 0,
+                            spesialisasi: '',
+                            ustadzName: '',
                           );
                         },
                       ),

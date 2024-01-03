@@ -13,7 +13,7 @@ import 'package:quranhealer/screens/post/widget/ustadz_post_card.dart';
 import 'package:quranhealer/services/comment/comment_sercive.dart';
 
 // ignore: must_be_immutable
-class JawabanScreen extends StatefulWidget {
+class NotificationDetail extends StatefulWidget {
   String judul;
   String username;
   String tanggalUpdate;
@@ -30,7 +30,7 @@ class JawabanScreen extends StatefulWidget {
   int ustadzId;
   String ustadzName;
   String spesialisasi;
-  JawabanScreen({
+  NotificationDetail({
     super.key,
     required this.judul,
     required this.commentCount,
@@ -51,10 +51,10 @@ class JawabanScreen extends StatefulWidget {
   });
 
   @override
-  State<JawabanScreen> createState() => _JawabanScreenState();
+  State<NotificationDetail> createState() => _NotificationDetailState();
 }
 
-class _JawabanScreenState extends State<JawabanScreen> {
+class _NotificationDetailState extends State<NotificationDetail> {
   late Future<void> jawabanDataViewModel;
   late int jawabanCount;
 

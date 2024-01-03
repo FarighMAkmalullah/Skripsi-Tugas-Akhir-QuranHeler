@@ -9,6 +9,7 @@ import 'package:quranhealer/screens/doa/doa_view_model.dart';
 import 'package:quranhealer/screens/jawaban/jawaban_view_model.dart';
 import 'package:quranhealer/screens/login/login_screen.dart';
 import 'package:quranhealer/screens/login/login_view_model.dart';
+import 'package:quranhealer/screens/notification/notification_view_model.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_autenticaton.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_screen.dart';
 import 'package:quranhealer/screens/onBoarding/splash_screen.dart';
@@ -69,6 +70,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => UstadzPostViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => NotificationViewModel(),
         ),
       ],
       child: const QuranHealer(),

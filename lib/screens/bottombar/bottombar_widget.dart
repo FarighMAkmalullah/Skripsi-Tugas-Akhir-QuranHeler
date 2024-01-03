@@ -24,6 +24,7 @@ class _BottomBarState extends State<BottomBar> {
       DashboardScreen(
         dashboardIndex: widget.dashboardIndex,
       ),
+      // Container(),
       const ChooseUstadzScreen(),
       const ProfilScreen(),
     ];
