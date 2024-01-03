@@ -5,7 +5,7 @@ class UztadsCard extends StatefulWidget {
   final String nama;
   final String spesialis;
   final int idUstadz;
-  UztadsCard({
+  const UztadsCard({
     super.key,
     required this.nama,
     required this.spesialis,

@@ -2,19 +2,21 @@ import 'package:quranhealer/core/init/const/api.dart';
 import 'package:dio/dio.dart';
 import 'package:quranhealer/core/init/untils/shared_preference.dart';
 
-class CommentService {
-  Future postComment({
-    required String comment,
+class EditPostService {
+  Future postEdit({
+    required String judul,
+    required String konten,
     required int idPost,
   }) async {
     String? token = await getToken();
     try {
-      Response response = await Dio().post('$quranHealerAPI/post/$idPost',
+      Response response = await Dio().put('$quranHealerAPI/post/$idPost',
           options: Options(headers: {
             "Content-Type": 'text/plain',
             "Authorization": "Bearer $token",
           }),
-          data: '''{\r\n    "comment": "$comment" \r\n}''');
+          data:
+              '''{\r\n    "username": "Anonymous",\r\n    "judul": "$judul",\r\n    "konten": "$konten"\r\n}''');
       return response.data;
     } on DioException catch (e) {
       return e.response?.data;

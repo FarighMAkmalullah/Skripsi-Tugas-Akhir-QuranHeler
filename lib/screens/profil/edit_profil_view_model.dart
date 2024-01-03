@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quranhealer/screens/dashboard/widget/notification_widget.dart';
 
 class EditProfilViewModel with ChangeNotifier {
   TextEditingController emailController = TextEditingController();

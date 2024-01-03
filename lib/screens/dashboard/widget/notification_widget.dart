@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/notification/notification_screen.dart';
 
 class NotifocationWidget extends StatefulWidget {
   const NotifocationWidget({super.key});
@@ -35,10 +36,20 @@ class _LogoAndAccountWidgetState extends State<NotifocationWidget> {
               )
             ],
           ),
-          SizedBox(
-            width: 28,
-            height: 23,
-            child: Image.asset("assets/icons/dashboard/notification.png"),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationScreen(),
+                ),
+              );
+            },
+            child: SizedBox(
+              width: 28,
+              height: 23,
+              child: Image.asset("assets/icons/dashboard/notification.png"),
+            ),
           ),
         ],
       ),

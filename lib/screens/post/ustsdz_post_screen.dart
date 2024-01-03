@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/models/jawaban/detail_post_model.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
-import 'package:quranhealer/screens/jawaban/jawaban_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:quranhealer/screens/post/ustadz_post_view_model.dart';
 import 'package:quranhealer/screens/post/widget/ustadz_post_card.dart';
-import 'package:quranhealer/services/like/like_service.dart';
 import 'package:quranhealer/services/post/add_post_service.dart';
 
 // ignore: must_be_immutable
@@ -58,7 +56,6 @@ class _UstadzPostScreenState extends State<UstadzPostScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     judulController.dispose();
     kontenController.dispose();
@@ -356,13 +353,15 @@ class _UstadzPostScreenState extends State<UstadzPostScreen> {
                                                             const SnackBar(
                                                                 content: Text(
                                                                     "Kamu berhasil Post")));
-
+                                                    provider.clearUstadzPost();
                                                     setState(() {
                                                       postCurhat = false;
                                                       isLoading = false;
                                                       apiCalled = false;
                                                       postDataViewModel = provider
-                                                          .getUstadzPostData();
+                                                          .getUstadzPostData(
+                                                              idUstadz: widget
+                                                                  .idUstadz);
                                                     });
                                                   } catch (e) {
                                                     ScaffoldMessenger.of(
@@ -415,6 +414,10 @@ class _UstadzPostScreenState extends State<UstadzPostScreen> {
                                     id_post: detailPost.id,
                                     byUser: detailPost.byUser,
                                     isLiked: detailPost.isLiked,
+                                    isUstadzPage: true,
+                                    ustadzId: widget.idUstadz,
+                                    spesialisasi: widget.spesialisasi,
+                                    ustadzName: widget.ustadzName,
                                   );
                                 },
                               ),

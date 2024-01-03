@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/curhat/ustadz_view_model.dart';
 import 'package:quranhealer/screens/curhat/widget/uztads_card.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
+import 'package:quranhealer/screens/notification/notification_screen.dart';
 import 'package:quranhealer/screens/post/all_post_screen.dart';
 
 class ChooseUstadzScreen extends StatefulWidget {
@@ -68,11 +69,22 @@ class _ChooseUstadzScreenState extends State<ChooseUstadzScreen> {
                                   )
                                 ],
                               ),
-                              SizedBox(
-                                width: 28,
-                                height: 23,
-                                child: Image.asset(
-                                    "assets/icons/dashboard/notification.png"),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const NotificationScreen(),
+                                    ),
+                                  );
+                                },
+                                child: SizedBox(
+                                  width: 28,
+                                  height: 23,
+                                  child: Image.asset(
+                                      "assets/icons/dashboard/notification.png"),
+                                ),
                               ),
                             ],
                           ),
