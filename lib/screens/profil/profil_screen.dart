@@ -163,12 +163,24 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const EditPasswordScreen(),
-                                          ));
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Mohon Maaf'),
+                                            content: const Text(
+                                                'Fitur ini masih dalam pengembangan'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Close'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
                                     },
                                     child: const Row(
                                       mainAxisAlignment:
