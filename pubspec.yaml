@@ -93,6 +93,7 @@ flutter:
   - assets/icons/dashboard/pray.png
   - assets/icons/dashboard/time.png
   - assets/icons/dashboard/list.png
+  - assets/icons/dashboard/chat.png
   - assets/icons/bottombar/home.png
   - assets/icons/bottombar/chat.png
   - assets/icons/bottombar/user.png

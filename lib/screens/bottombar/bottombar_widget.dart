@@ -66,17 +66,17 @@ class _BottomBarState extends State<BottomBar> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+        // type: BottomNavigationBarType.fixed,
         unselectedItemColor: const Color(0xFFC7C6CA),
         selectedItemColor: const Color(0xFF0E6927),
         unselectedLabelStyle: const TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
           color: Color(0xFFC7C6CA),
         ),
         selectedLabelStyle: const TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w400,
           color: Color(0xFF0E6927),
         ),
         currentIndex: currentIndex,

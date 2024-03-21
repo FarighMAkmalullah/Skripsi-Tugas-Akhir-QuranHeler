@@ -5,7 +5,6 @@ import 'package:quranhealer/screens/error/error_screen.dart';
 import 'package:quranhealer/screens/jawaban/jawaban_screen.dart';
 import 'package:quranhealer/screens/notification/notification_view_model.dart';
 import 'package:quranhealer/screens/post/all_post_view_model.dart';
-import 'package:quranhealer/services/notification/notification_service.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -19,7 +18,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   late Future<void> postDataViewModel;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final notificationViewModel =
         Provider.of<NotificationViewModel>(context, listen: false);
@@ -130,7 +128,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => JawabanScreen(
-                                                judul: post!.judul,
+                                                judul: post.judul,
                                                 commentCount: post.commentCount,
                                                 down: int.parse(post.down),
                                                 jamUpdate:
@@ -162,7 +160,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                 BorderRadius.circular(100),
                                             color: Colors.blueGrey[100],
                                           ),
-                                          child: detailData!.isRead
+                                          child: detailData.isRead
                                               ? const Icon(
                                                   Icons.notifications_none)
                                               : const Icon(
