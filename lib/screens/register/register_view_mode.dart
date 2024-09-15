@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
 class RegisterViewModel with ChangeNotifier {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
   bool isChecked = false;
 
   String gender = 'L';
@@ -26,13 +21,6 @@ class RegisterViewModel with ChangeNotifier {
     isChecked = false;
     loading = false;
     gender = "L";
-    emailController.text = '';
-
-    passwordController.text = '';
-
-    nameController.text = '';
-
-    confirmPasswordController.text = '';
     notifyListeners();
   }
 
@@ -41,12 +29,21 @@ class RegisterViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // @override
-  // void dispose() {
-  //   emailController.dispose();
-  //   passwordController.dispose();
-  //   nameController.dispose();
-  //   confirmPasswordController.dispose();
-  //   super.dispose();
-  // }
+  bool _obscureText = true;
+
+  bool get obscureText => _obscureText;
+
+  void toggleObscureText() {
+    _obscureText = !_obscureText;
+    notifyListeners();
+  }
+
+  bool _obscureText2 = true;
+
+  bool get obscureText2 => _obscureText2;
+
+  void toggleObscureText2() {
+    _obscureText2 = !_obscureText2;
+    notifyListeners();
+  }
 }

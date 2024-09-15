@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quranhealer/screens/login/login_screen.dart';
 import 'package:quranhealer/screens/register/widget/form_register_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class _LoginScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1F542E),
+      backgroundColor: const Color(0xFF0E6969),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -49,7 +50,28 @@ class _LoginScreenState extends State<RegisterScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.of(context).pushNamed('/login');
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const LoginScreen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var begin = Offset(1.0, 0.0);
+                                    var end = Offset.zero;
+                                    var curve = Curves.ease;
+
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(8.0),
@@ -71,7 +93,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "Daftar",
+                            "DAFTAR",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
@@ -104,6 +126,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
                   ),
                 ),
                 child: const Column(
@@ -124,18 +147,36 @@ class _LoginScreenState extends State<RegisterScreen> {
                   children: [
                     const Text(
                       'You have an account ?',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.of(context).pushNamed('/login');
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    const LoginScreen(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              var begin = Offset(1.0, 0.0);
+                              var end = Offset.zero;
+                              var curve = Curves.ease;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       },
                       child: const Text(
                         'Login Here',
                         style: TextStyle(
-                          color: Colors.blue,
+                          color: Color(0xFF0047FD),
                           fontWeight: FontWeight.w600,
                         ),
                       ),

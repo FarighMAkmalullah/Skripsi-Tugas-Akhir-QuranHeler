@@ -3,8 +3,8 @@ import 'package:quranhealer/models/adzan/detail_adzan_model.dart';
 import 'package:quranhealer/services/adzan/detail_adzan_service.dart';
 
 class DetailAdzanViewModel extends ChangeNotifier {
-  DataAdzan? _detailAdzan;
-  DataAdzan? get detailAdzan => _detailAdzan;
+  DataSholat? _detailAdzan;
+  DataSholat? get detailAdzan => _detailAdzan;
 
   Future<void> getAdzanDetail(String kode, String tanggal) async {
     try {
@@ -12,7 +12,7 @@ class DetailAdzanViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final responseData = response.data['data'];
-        _detailAdzan = DataAdzan.fromJson(responseData);
+        _detailAdzan = DataSholat.fromJson(responseData);
         notifyListeners();
       } else {
         throw Exception(

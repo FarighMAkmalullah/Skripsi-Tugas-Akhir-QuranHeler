@@ -1,4 +1,4 @@
-class Post {
+class PostDetail {
   final int idPost;
   final String username;
   final bool byUser;
@@ -13,7 +13,7 @@ class Post {
   final String updatedAt;
   final List<Comment> comments;
 
-  Post({
+  PostDetail({
     required this.idPost,
     required this.username,
     required this.byUser,
@@ -29,7 +29,7 @@ class Post {
     required this.comments,
   });
 
-  factory Post.fromJson(Map<String, dynamic> json) {
+  factory PostDetail.fromJson(Map<String, dynamic> json) {
     List<Comment> commentsList = [];
     if (json['comment'] != null) {
       for (var comment in json['comment']) {
@@ -37,7 +37,7 @@ class Post {
       }
     }
 
-    return Post(
+    return PostDetail(
       idPost: json['id_post'],
       username: json['username'],
       byUser: json['byUser'],

@@ -1,8 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
-import 'package:quranhealer/screens/profil/edit_profil_view_model.dart';
-import 'package:quranhealer/services/edit_profil/edit_profil_service.dart';
+import 'package:quranhealer/services/edit_password/edit_password_service.dart';
 
 // ignore: must_be_immutable
 class EditPasswordScreen extends StatefulWidget {
@@ -15,31 +16,40 @@ class EditPasswordScreen extends StatefulWidget {
 }
 
 class _EditPasswordScreenState extends State<EditPasswordScreen> {
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    EditProfilViewModel editProfilScreen =
-        Provider.of<EditProfilViewModel>(context);
-    // editProfilScreen.setEmailController(widget.email);
-    // editProfilScreen.setNameController(widget.namaLengkap);
+  _showHasilEdit(bool value) async {
+    if (value) {
+      return const Column(
+        children: [Text('Berhasil')],
+      );
+    } else {
+      return const Column(
+        children: [Text('Gagal')],
+      );
+    }
   }
+
+  bool loading = false;
+
+  bool getObsecureText = true;
+
+  bool getObsecureTextConfirmation = true;
 
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    EditProfilViewModel editProfilScreen =
-        Provider.of<EditProfilViewModel>(context);
-
     // ignore: unused_element
     @override
     void dispose() {
-      editProfilScreen.emailController;
-      editProfilScreen.nameController;
+      passwordController.dispose();
+      confirmPasswordController.dispose();
       super.dispose();
     }
 
@@ -65,22 +75,20 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                       },
                       child: const Text('Cancel'),
                     ),
-                    const Text('Edit Password'),
+                    const Text('Edit Profil'),
                     InkWell(
                       onTap: () async {
-                        editProfilScreen.setLoading(true);
-                        var res = await EditProfilService().postEditProfil(
-                          name: editProfilScreen.nameController.text,
-                          email: editProfilScreen.emailController.text,
-                          gender: editProfilScreen.gender,
+                        setState(() {
+                          loading = true;
+                        });
+                        var res = await EditPasswordService().postEditPassword(
+                          newPassword: passwordController.text,
                         );
-
-                        print(res);
-
-                        editProfilScreen.setLoading(false);
+                        setState(() {
+                          loading = false;
+                        });
 
                         if (res.containsKey('result') && res != null) {
-                          // ignore: use_build_context_synchronously
                           return showModalBottomSheet(
                             context: context,
                             backgroundColor: Colors.transparent,
@@ -123,7 +131,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                                           SizedBox(
                                             height: 15,
                                           ),
-                                          Text('Password Berhasil Diubah'),
+                                          Text('Data Berhasil Diubah'),
                                         ],
                                       ),
                                     ),
@@ -137,7 +145,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                                                   builder: (context) =>
                                                       const BottomBar(
                                                     dashboardIndex: 0,
-                                                    currentIndex: 2,
+                                                    currentIndex: 3,
                                                   ),
                                                 ),
                                                 (route) => false);
@@ -153,7 +161,6 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                             },
                           );
                         } else if (res.containsKey('error') && res != null) {
-                          // ignore: use_build_context_synchronously
                           return showModalBottomSheet(
                             context: context,
                             backgroundColor: Colors.transparent,
@@ -217,7 +224,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                           );
                         }
                       },
-                      child: !editProfilScreen.loading
+                      child: !loading
                           ? const Text(
                               'Save',
                               style: TextStyle(
@@ -233,7 +240,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
               const SizedBox(
                 height: 20,
               ),
-              !editProfilScreen.loading
+              !loading
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -241,26 +248,37 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                           padding: const EdgeInsets.all(16),
                           child: Form(
                             key: formKey,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextFormField(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
-                                  // obscureText: loginViewModel.getObsecureText,
-                                  // controller: editProfilScreen.nameController,
+                                  obscureText: getObsecureText,
+                                  controller: passwordController,
                                   validator: (value) {
                                     if (value != null && value.length < 5) {
-                                      return 'Enter min. 5 characters';
+                                      return 'Masukkan min. 5 karakter';
                                     } else {
                                       return null;
                                     }
                                   },
-                                  decoration: const InputDecoration(
-                                    labelText: 'Old Password',
-                                    hintText: 'Masukkan Password Lama',
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    prefixIcon: const Icon(Icons.lock),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        getObsecureText
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          getObsecureText = !getObsecureText;
+                                        });
+                                      },
+                                    ),
+                                    hintText: 'Maukkan Password',
                                     floatingLabelBehavior:
                                         FloatingLabelBehavior.always,
                                     border: OutlineInputBorder(),
@@ -270,24 +288,42 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                                 TextFormField(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
-                                  // controller: editProfilScreen.emailController,
-
+                                  obscureText: getObsecureTextConfirmation,
+                                  controller: confirmPasswordController,
                                   validator: (value) {
-                                    if (value != null && value.length < 5) {
-                                      return 'Enter min. 5 characters';
+                                    if (value != null &&
+                                        value.length < 5 &&
+                                        value != passwordController.text) {
+                                      return 'Masukkan Confirm Password sesuai dengan Password';
                                     } else {
                                       return null;
                                     }
                                   },
-                                  decoration: const InputDecoration(
-                                    labelText: 'New Password',
-                                    hintText: 'Confirm Password Baru',
+                                  decoration: InputDecoration(
+                                    labelText: 'Confirm Password',
+                                    prefixIcon:
+                                        const Icon(Icons.lock_reset_rounded),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        getObsecureTextConfirmation
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          getObsecureTextConfirmation =
+                                              !getObsecureTextConfirmation;
+                                        });
+                                      },
+                                    ),
+                                    hintText: 'Masukkan Confirm Password',
                                     floatingLabelBehavior:
                                         FloatingLabelBehavior.always,
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
                                 const SizedBox(height: 25.0),
+                                const SizedBox(height: 10.0),
                               ],
                             ),
                           ),

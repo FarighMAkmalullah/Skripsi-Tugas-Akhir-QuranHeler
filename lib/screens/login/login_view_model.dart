@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class LoginViewModel with ChangeNotifier {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   bool loading = false;
-  void penggantiDispose() {
-    emailController.text = '';
-    passwordController.text = '';
+
+  bool _obscureText = true;
+
+  bool get obscureText => _obscureText;
+
+  void toggleObscureText() {
+    _obscureText = !_obscureText;
     notifyListeners();
   }
 

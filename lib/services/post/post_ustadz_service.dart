@@ -1,10 +1,10 @@
 import 'package:quranhealer/core/init/const/api.dart';
 import 'package:dio/dio.dart';
 import 'package:quranhealer/core/init/untils/shared_preference.dart';
+import 'package:quranhealer/models/post/post_model.dart';
 
 class PostUstadzService {
-  static Future<List<Map<String, dynamic>>> fetchPostUstadzData(
-      {idUstadz}) async {
+  static Future<List<Post>> fetchPostUstadzData({idUstadz}) async {
     String? token = await getToken();
     try {
       final dio = Dio();
@@ -17,10 +17,7 @@ class PostUstadzService {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data["result"];
-        return data
-            .map<Map<String, dynamic>>(
-                (item) => Map<String, dynamic>.from(item))
-            .toList();
+        return data.map((item) => Post.fromJson(item)).toList();
       } else {
         throw Exception('Failed to load Post Data');
       }

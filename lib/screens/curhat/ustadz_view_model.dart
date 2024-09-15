@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quranhealer/models/ustadz/ustadz_model.dart';
-import 'package:quranhealer/services/uztads/ustadz_service.dart';
+import 'package:quranhealer/services/uztadz/ustadz_service.dart';
 
 class UstadzViewModel extends ChangeNotifier {
   List<UstadzData?> _listUstadz = [];

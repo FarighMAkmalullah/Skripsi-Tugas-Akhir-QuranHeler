@@ -75,7 +75,7 @@ class _AyatItemState extends State<AyatItem> {
                         height: 35,
                         padding: const EdgeInsets.all(15),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF0E6927),
+                          color: Colors.green.shade300,
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
@@ -86,7 +86,7 @@ class _AyatItemState extends State<AyatItem> {
                           child: Text(
                             "${widget.nomorAyat}",
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 12,
                             ),
                           ),

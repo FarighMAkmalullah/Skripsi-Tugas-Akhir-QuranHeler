@@ -22,4 +22,9 @@ class ProfilViewModel extends ChangeNotifier {
       throw Exception('Gagal memuat detail user : $error');
     }
   }
+
+  void clearDetailUser() {
+    _detailUser = null;
+    notifyListeners();
+  }
 }

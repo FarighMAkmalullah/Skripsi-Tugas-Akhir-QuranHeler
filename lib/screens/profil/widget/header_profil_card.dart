@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 class HeaderProfilCard extends StatefulWidget {
   String namaLengkap;
   String email;
+  String gender;
+  String role;
   HeaderProfilCard({
     super.key,
     required this.namaLengkap,
     required this.email,
+    required this.gender,
+    required this.role,
   });
 
   @override
@@ -19,52 +23,77 @@ class _HeaderProfilCardState extends State<HeaderProfilCard> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Color(0xFF0E6927),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xFF0E6969).withOpacity(0.9),
+            const Color(0xFF0E6969),
+          ],
+        ),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(15),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: const Text(
-              'Profil',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
+            child: const Center(
+              child: Text(
+                'Akun Profil',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
           const SizedBox(
             height: 16,
           ),
-          Row(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 80,
-                width: 80,
-                child: CircleAvatar(
-                  backgroundColor: Color(0xFFD9DCE1),
-                  radius: 100,
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 50,
-                  ),
+              Center(
+                child: SizedBox(
+                  height: 80,
+                  width: 80,
+                  child: widget.role == 'user'
+                      ? widget.gender == 'L'
+                          ? Image.asset(
+                              "assets/images/chat/chat-account-user.png",
+                              fit: BoxFit.contain,
+                            )
+                          : Image.asset(
+                              "assets/images/chat/chat-account-userp.png",
+                              fit: BoxFit.contain,
+                            )
+                      : Image.asset(
+                          "assets/images/chat/chat-account-ustadz.png",
+                          fit: BoxFit.contain),
                 ),
               ),
               const SizedBox(
-                width: 20,
+                height: 20,
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     widget.namaLengkap,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   Text(
                     widget.email,

@@ -46,6 +46,20 @@ dependencies:
   http: ^1.1.0
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.2
+  curved_navigation_bar: ^1.0.3
+  flutter_tawkto: ^0.0.3
+  flutter_tawk: ^0.1.0
+  firebase_core: ^3.2.0
+  firebase_auth: ^5.1.2
+  cloud_firestore: ^5.1.0
+  firebase_messaging: ^15.0.3
+  googleapis_auth: ^1.6.0
+  rxdart: ^0.28.0
+  googleapis: ^13.1.0
+  flutter_phoenix: ^1.1.1
+  awesome_notifications: ^0.8.2
+  webview_flutter: ^3.0.4
+  google_fonts: ^6.2.0
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +95,11 @@ flutter:
   - assets/images/onboarding/updevide1.svg
   - assets/images/onboarding/updevide2.svg
   - assets/images/onboarding/updevide3.svg
+  - assets/images/chat/chat-button.png
+  - assets/images/chat/chat-header.png
+  - assets/images/chat/chat-account-ustadz.png
+  - assets/images/chat/chat-account-user.png
+  - assets/images/chat/chat-account-userp.png
   - assets/icons/onboarding/login.png
   - assets/icons/onboarding/google.png
   - assets/icons/login/arrowback.png
@@ -110,6 +129,17 @@ flutter:
   - assets/icons/adzan/city.png
   - assets/icons/error/error.png
   - assets/icons/pray/down.png
+  - assets/icons/menu/mosque.png
+  - assets/icons/hadist/book.png
+  - assets/icons/Iqro/education.png
+  - assets/icons/Iqro/Iqro (1).png
+  - assets/icons/Iqro/Iqro (2).png
+  - assets/icons/Iqro/Iqro (3).png
+  - assets/icons/Iqro/Iqro (4).png
+  - assets/icons/Iqro/Iqro (5).png
+  - assets/icons/Iqro/Iqro (6).png
+  - assets/icons/Iqro/Iqro.png
+  - assets/icons/post/anonymous.png
   - assets/images/splash2-1.svg
   - assets/images/splash2-2.svg
   - assets/images/splash1.svg

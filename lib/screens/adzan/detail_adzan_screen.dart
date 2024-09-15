@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/adzan/detail_adzan_new_screen.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/widget/adzan_time.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
@@ -109,21 +110,90 @@ class _DetailAdzanState extends State<DetailAdzan>
                     } else {
                       return ListView(
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.all(9.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailNewAdzan(
+                                      id: widget.id,
+                                      nama: widget.nama,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 7),
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    left: BorderSide(
+                                      width: 3,
+                                      color: Color.fromARGB(255, 123, 151, 151),
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Text(
+                                          "Lihat di halaman baru",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 123, 151, 151),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: const Icon(
+                                        Icons.chevron_right,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                           Container(
-                            margin: const EdgeInsets.all(20),
+                            margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFE1EDEC),
+                              // color: const Colors.,
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  decoration: const BoxDecoration(
-                                    color: Color(
-                                      0xFF0C5138,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        const Color(0xFF0E6969)
+                                            .withOpacity(0.8),
+                                        const Color(0xFF0E6969)
+                                            .withOpacity(0.9),
+                                        const Color(0xFF0E6969),
+                                      ],
                                     ),
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(15),
                                       topRight: Radius.circular(15),
                                     ),
@@ -196,9 +266,13 @@ class _DetailAdzanState extends State<DetailAdzan>
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
+                                      horizontal: 10),
                                   child: Column(
                                     children: [
+                                      AdzanTime(
+                                        jadwalShalat: 'Imsak',
+                                        waktuShalat: '${detail?.jadwal.imsak}',
+                                      ),
                                       AdzanTime(
                                         jadwalShalat: 'Subuh',
                                         waktuShalat: '${detail?.jadwal.subuh}',
@@ -237,11 +311,19 @@ class _DetailAdzanState extends State<DetailAdzan>
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(16),
-                                    decoration: const BoxDecoration(
-                                      color: Color(
-                                        0xFF0C5138,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          const Color(0xFF0E6969)
+                                              .withOpacity(0.8),
+                                          const Color(0xFF0E6969)
+                                              .withOpacity(0.9),
+                                          const Color(0xFF0E6969),
+                                        ],
                                       ),
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius: const BorderRadius.only(
                                         bottomLeft: Radius.circular(15),
                                         bottomRight: Radius.circular(15),
                                       ),
@@ -250,8 +332,9 @@ class _DetailAdzanState extends State<DetailAdzan>
                                       child: Text(
                                         "Ganti Kota Adzan",
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           color: Colors.white,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),

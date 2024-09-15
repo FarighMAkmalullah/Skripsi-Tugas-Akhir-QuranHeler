@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/Iqro/iqro_screen.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_screen.dart';
 import 'package:quranhealer/screens/dashboard/dashboard_view_model.dart';
 import 'package:quranhealer/screens/dashboard/widget/notification_widget.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';
+import 'package:quranhealer/screens/hadist/hadist_screen.dart';
 import 'package:quranhealer/screens/menu_dashboard/menu_dashboard_screen.dart';
 import 'package:quranhealer/screens/quran/quran_sceen.dart';
 
@@ -89,16 +91,22 @@ class _DashboardScreenState extends State<DashboardScreen>
     DashboarViewModel dashboardViewModel =
         Provider.of<DashboarViewModel>(context);
     return Scaffold(
+      extendBody: true,
       body: SafeArea(
         child: Stack(
           children: [
             Container(
               height: 174,
-              decoration: const BoxDecoration(
-                color: Color(
-                  0xFF0E6927,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color(0xFF0E6969).withOpacity(0.9),
+                    const Color(0xFF0E6969),
+                  ],
                 ),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(10),
                   bottomRight: Radius.circular(
                     10,
@@ -142,7 +150,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 height: 45,
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF0E6927),
+                                  color: const Color(0xFF186D68),
                                   borderRadius: BorderRadius.circular(100),
                                 ),
                                 child: Image.asset(
@@ -161,8 +169,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         ['judul'],
                                     style: const TextStyle(
                                       fontSize: 16,
-                                      color: Color(0xFF0E6927),
-                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF186D68),
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
@@ -207,7 +215,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 indicatorSize: TabBarIndicatorSize.label,
                                 isScrollable: true,
                                 controller: _listFeatoreController,
-                                labelColor: const Color(0xFF0E6927),
+                                labelColor: const Color(0xFF186D68),
                                 unselectedLabelColor: const Color(0xFF3E3C3C),
                                 tabs: const [
                                   Tab(
@@ -280,12 +288,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                       DetailAdzan(
                           id: dashboardViewModel.kodeKota,
                           nama: dashboardViewModel.kotaAdzan),
-                      const Center(
-                        child: Text('Hadist Coming Soon'),
-                      ),
-                      const Center(
-                        child: Text('Iqro Coming Soon'),
-                      ),
+                      const HadistScreen(),
+                      const IqroScreen(),
                       const Center(
                         child: Text('Kisah Nabi Coming Soon'),
                       ),

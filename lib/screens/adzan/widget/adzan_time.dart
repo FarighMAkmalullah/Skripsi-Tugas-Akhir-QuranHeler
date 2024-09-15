@@ -29,7 +29,7 @@ class _AdzanTimeState extends State<AdzanTime> {
               widget.jadwalShalat,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -37,7 +37,7 @@ class _AdzanTimeState extends State<AdzanTime> {
               widget.waktuShalat,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
             )

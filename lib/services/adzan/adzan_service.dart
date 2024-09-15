@@ -9,7 +9,8 @@ class AdzanService {
       final response = await _dio.get("$adzanAPI/sholat/kota/semua");
 
       if (response.statusCode == 200) {
-        return response.data
+        List<dynamic> data = response.data['data'];
+        return data
             .map<Map<String, dynamic>>(
                 (item) => Map<String, dynamic>.from(item))
             .toList();

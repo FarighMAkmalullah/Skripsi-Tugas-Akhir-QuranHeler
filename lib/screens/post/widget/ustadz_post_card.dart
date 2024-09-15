@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/bottombar/bottombar_widget.dart';
 import 'package:quranhealer/screens/jawaban/jawaban_screen.dart';
+import 'package:quranhealer/screens/post/ustadz_post_view_model.dart';
 import 'package:quranhealer/services/dislike/dislike_service.dart';
 import 'package:quranhealer/services/like/like_service.dart';
-import 'package:quranhealer/services/post/delete_post_service.dart';
 import 'package:quranhealer/services/post/edit_post_service.dart';
 
 // ignore: must_be_immutable
@@ -14,7 +15,6 @@ class UstadzPostCard extends StatefulWidget {
   String judul;
   String username;
   String tanggalUpdate;
-  String jamUpdate;
   String konten;
   int up;
   int down;
@@ -22,16 +22,15 @@ class UstadzPostCard extends StatefulWidget {
   int id_post;
   bool byUser;
   bool? isLiked;
-  bool isUstadzPage;
   final int ustadzId;
-  final String spesialisasi;
-  final String ustadzName;
+  bool jawaban;
+  VoidCallback onDelete;
+  BuildContext context;
   UstadzPostCard({
     super.key,
     required this.judul,
     required this.commentCount,
     required this.down,
-    required this.jamUpdate,
     required this.konten,
     required this.tanggalUpdate,
     required this.up,
@@ -40,10 +39,10 @@ class UstadzPostCard extends StatefulWidget {
     required this.byUser,
     required this.isLiked,
     required this.byUstadz,
-    required this.isUstadzPage,
     required this.ustadzId,
-    required this.spesialisasi,
-    required this.ustadzName,
+    required this.jawaban,
+    required this.onDelete,
+    required this.context,
   });
 
   @override
@@ -52,6 +51,8 @@ class UstadzPostCard extends StatefulWidget {
 
 class _UstadzPostCardState extends State<UstadzPostCard> {
   var isLike = null;
+
+  final formKey = GlobalKey<FormState>();
 
   late String judulPost;
   late String kontenPost;
@@ -96,7 +97,7 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
                       fontSize: 16,
                     ),
                   ),
-                  widget.byUser == true
+                  widget.byUser || widget.byUstadz == true
                       ? InkWell(
                           onTap: () {
                             showPopupMenu(context);
@@ -107,7 +108,7 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
                 ],
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,13 +117,14 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(10),
+                        height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFD9D9D9),
+                          color: const Color(0xFFe3f0f0),
                           borderRadius: BorderRadius.circular(100),
                         ),
-                        child: const Icon(
-                          Icons.person,
-                          color: Colors.white,
+                        child: Image.asset(
+                          "assets/icons/post/anonymous.png",
+                          fit: BoxFit.contain,
                         ),
                       ),
                       const SizedBox(
@@ -146,8 +148,8 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(widget.tanggalUpdate),
                       Text(widget.tanggalUpdate),
                     ],
                   )
@@ -156,7 +158,10 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
               const SizedBox(
                 height: 10,
               ),
-              Text(kontenPost),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(kontenPost),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -170,134 +175,219 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                isLike = true;
-                              });
-                              try {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text("loading..")));
-                                LikeService().likeAdd(idPost: widget.id_post);
-
-                                setState(() {
-                                  isLike = true;
-                                });
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text("Gagal Like Post")));
-                                setState(() {
-                                  isLike = null;
-                                });
-                              }
-                            },
-                            child: Icon(
-                              Icons.keyboard_arrow_up,
-                              color: widget.isLiked == true && isLike == true
-                                  ? Colors.blue
-                                  : widget.isLiked == false && isLike == true
-                                      ? Colors.blue
-                                      : widget.isLiked == true && isLike == null
-                                          ? Colors.blue
-                                          : widget.isLiked != true &&
-                                                  isLike == true
-                                              ? Colors.blue
-                                              : Colors.black,
-                            ),
-                          ),
-                          Text(
-                            isLike == true && widget.isLiked != true
-                                ? "${widget.up + 1}"
-                                : isLike == false && widget.isLiked == true
-                                    ? "${widget.up - 1}"
-                                    : "${widget.up}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: widget.isLiked == true && isLike == true
-                                  ? Colors.blue
-                                  : widget.isLiked == false && isLike == true
-                                      ? Colors.blue
-                                      : widget.isLiked == true && isLike == null
-                                          ? Colors.blue
-                                          : widget.isLiked != true &&
-                                                  isLike == true
-                                              ? Colors.blue
-                                              : Colors.black,
-                            ),
-                          ),
                           const SizedBox(
-                            width: 25,
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    isLike = true;
+                                  });
+                                  try {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text("loading..")));
+                                    LikeService()
+                                        .likeAdd(idPost: widget.id_post);
+
+                                    setState(() {
+                                      isLike = true;
+                                    });
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text("Gagal Like Post")));
+                                    setState(() {
+                                      isLike = null;
+                                    });
+                                  }
+                                },
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.thumb_up,
+                                      color: widget.isLiked == true &&
+                                              isLike == true
+                                          ? Colors.blue
+                                          : widget.isLiked == false &&
+                                                  isLike == true
+                                              ? Colors.blue
+                                              : widget.isLiked == true &&
+                                                      isLike == null
+                                                  ? Colors.blue
+                                                  : widget.isLiked != true &&
+                                                          isLike == true
+                                                      ? Colors.blue
+                                                      : Colors.black45,
+                                      size: 20,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                isLike == true && widget.isLiked != true
+                                    ? "${widget.up + 1}"
+                                    : isLike == false && widget.isLiked == true
+                                        ? "${widget.up - 1}"
+                                        : "${widget.up}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      widget.isLiked == true && isLike == true
+                                          ? Colors.blue
+                                          : widget.isLiked == false &&
+                                                  isLike == true
+                                              ? Colors.blue
+                                              : widget.isLiked == true &&
+                                                      isLike == null
+                                                  ? Colors.blue
+                                                  : widget.isLiked != true &&
+                                                          isLike == true
+                                                      ? Colors.blue
+                                                      : Colors.black45,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                'Like',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      widget.isLiked == true && isLike == true
+                                          ? Colors.blue
+                                          : widget.isLiked == false &&
+                                                  isLike == true
+                                              ? Colors.blue
+                                              : widget.isLiked == true &&
+                                                      isLike == null
+                                                  ? Colors.blue
+                                                  : widget.isLiked != true &&
+                                                          isLike == true
+                                                      ? Colors.blue
+                                                      : Colors.black45,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                isLike = false;
-                              });
-                              try {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text("loading..")));
-                                DisLikeService()
-                                    .dislikeAdd(idPost: widget.id_post);
-
-                                setState(() {
-                                  isLike = false;
-                                });
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text("Gagal Like Post")));
-                                setState(() {
-                                  isLike = null;
-                                });
-                              }
-                            },
-                            child: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: widget.isLiked == false && isLike == false
-                                  ? Colors.red
-                                  : widget.isLiked == true && isLike == false
-                                      ? Colors.red
-                                      : widget.isLiked == false &&
-                                              isLike == null
-                                          ? Colors.red
-                                          : widget.isLiked != false &&
-                                                  isLike == false
-                                              ? Colors.red
-                                              : Colors.black,
-                            ),
-                          ),
-                          Text(
-                            isLike == false && widget.isLiked != false
-                                ? "${widget.down + 1}"
-                                : isLike == true && widget.isLiked == false
-                                    ? "${widget.down - 1}"
-                                    : "${widget.down}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: widget.isLiked == false && isLike == false
-                                  ? Colors.red
-                                  : widget.isLiked == true && isLike == false
-                                      ? Colors.red
-                                      : widget.isLiked == false &&
-                                              isLike == null
-                                          ? Colors.red
-                                          : widget.isLiked != false &&
-                                                  isLike == false
-                                              ? Colors.red
-                                              : Colors.black,
-                            ),
-                          ),
                           const SizedBox(
-                            width: 25,
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    isLike = false;
+                                  });
+                                  try {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text("loading..")));
+                                    DisLikeService()
+                                        .dislikeAdd(idPost: widget.id_post);
+
+                                    setState(() {
+                                      isLike = false;
+                                    });
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text("Gagal Like Post")));
+                                    setState(() {
+                                      isLike = null;
+                                    });
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.thumb_down,
+                                  color:
+                                      widget.isLiked == false && isLike == false
+                                          ? Colors.red
+                                          : widget.isLiked == true &&
+                                                  isLike == false
+                                              ? Colors.red
+                                              : widget.isLiked == false &&
+                                                      isLike == null
+                                                  ? Colors.red
+                                                  : widget.isLiked != false &&
+                                                          isLike == false
+                                                      ? Colors.red
+                                                      : Colors.black45,
+                                  size: 20,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                isLike == false && widget.isLiked != false
+                                    ? "${widget.down + 1}"
+                                    : isLike == true && widget.isLiked == false
+                                        ? "${widget.down - 1}"
+                                        : "${widget.down}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      widget.isLiked == false && isLike == false
+                                          ? Colors.red
+                                          : widget.isLiked == true &&
+                                                  isLike == false
+                                              ? Colors.red
+                                              : widget.isLiked == false &&
+                                                      isLike == null
+                                                  ? Colors.red
+                                                  : widget.isLiked != false &&
+                                                          isLike == false
+                                                      ? Colors.red
+                                                      : Colors.black45,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                'Dislike',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      widget.isLiked == false && isLike == false
+                                          ? Colors.red
+                                          : widget.isLiked == true &&
+                                                  isLike == false
+                                              ? Colors.red
+                                              : widget.isLiked == false &&
+                                                      isLike == null
+                                                  ? Colors.red
+                                                  : widget.isLiked != false &&
+                                                          isLike == false
+                                                      ? Colors.red
+                                                      : Colors.black45,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -305,43 +395,67 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
                         width: 20,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 0.4, color: const Color(0xFF8B8A8A)),
-                        ),
-                        height: 40,
-                      ),
+                          // decoration: BoxDecoration(
+                          //   border: Border.all(
+                          //       width: 0.4, color: const Color(0xFF8B8A8A)),
+                          // ),
+                          // height: 50,
+                          ),
                       Expanded(
                           child: Center(
                         child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => JawabanScreen(
-                                  byUstadz: widget.byUstadz,
-                                  judul: judulPost,
-                                  commentCount: widget.commentCount,
-                                  down: widget.down,
-                                  jamUpdate: widget.jamUpdate,
-                                  konten: kontenPost,
-                                  tanggalUpdate: widget.tanggalUpdate,
-                                  up: widget.up,
-                                  username: widget.username,
-                                  id_post: widget.id_post,
-                                  byUser: widget.byUser,
-                                  isLiked: widget.isLiked,
-                                  isUstadzPage: widget.isUstadzPage,
-                                  ustadzId: widget.ustadzId,
-                                  ustadzName: widget.ustadzName,
-                                  spesialisasi: widget.spesialisasi,
-                                ),
+                          onTap: widget.jawaban
+                              ? () {}
+                              : () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => JawabanScreen(
+                                        id_post: widget.id_post,
+                                        byUser: widget.byUser,
+                                        byUstadz: widget.byUstadz,
+                                        onDelete: () {},
+                                        onDeleteNavigation: () {
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const BottomBar(
+                                                      dashboardIndex: 0,
+                                                      currentIndex: 1),
+                                            ),
+                                            (route) => false,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ).then((value) => setState(() {}));
+                                },
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
                               ),
-                            );
-                          },
-                          child: Text(
-                            "Jawaban ${widget.commentCount}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.comment,
+                                    size: 20,
+                                    color: Colors.black45,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Text(
+                                    "Jawaban",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(' ${widget.commentCount}'),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ))
@@ -354,8 +468,8 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
         ),
         const Divider(
           color: Color(0xFFDEDEDE),
-          height: 5,
-          thickness: 5,
+          height: 10,
+          thickness: 10,
         ),
       ],
     );
@@ -373,13 +487,17 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
         offset.dy + renderBox.size.height + 50,
       ),
       items: [
-        const PopupMenuItem<String>(
-          value: 'edit',
-          child: ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Edit'),
-          ),
-        ),
+        widget.byUser
+            ? const PopupMenuItem<String>(
+                value: 'edit',
+                child: ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text('Edit'),
+                ),
+              )
+            : const PopupMenuItem<String>(
+                child: null,
+              ),
         const PopupMenuItem<String>(
           value: 'hapus',
           child: ListTile(
@@ -394,114 +512,208 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
         // Lakukan aksi untuk edit
         showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
           builder: (BuildContext context) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  const Text('Edit Post'),
-                  const SizedBox(
-                    height: 10,
+            return Consumer<UstadzPostViewModel>(
+              builder: (context, provider, _) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  TextFormField(
-                    controller: judulController,
-                    decoration: InputDecoration(
-                      hintText: widget.judul,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF888888),
-                          width: 2,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 1),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: kontenController,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      hintText: widget.konten,
-                      hintMaxLines: 5,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF888888),
-                          width: 2,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  FractionallySizedBox(
-                    widthFactor: 1,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(0),
-                        backgroundColor: MaterialStateProperty.all(
-                          const Color(0xFF0E6927),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    padding: const EdgeInsets.all(16),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 30,
                           ),
-                        ),
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          isLoadingEdit = true;
-                        });
-                        try {
-                          await EditPostService().postEdit(
-                            judul: judulController.text,
-                            konten: kontenController.text,
-                            idPost: widget.id_post,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Kamu berhasil Edit Post")));
-                          // provider.clearUstadzPost();
-                          setState(() {
-                            // postCurhat = false;
-                            isLoadingEdit = false;
-                            // apiCalled = false;
-                            judulPost = judulController.text;
-                            kontenPost = kontenController.text;
-                            // postDataViewModel = provider.getUstadzPostData(
-                            //     idUstadz: widget.idUstadz);
-                          });
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text("Mohon Maaf edit Post kamu gagal")));
-                          setState(() {
-                            // postCurhat = false;
-                            isLoadingEdit = false;
-                          });
-                        }
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFe3f0f0),
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Image.asset(
+                                      "assets/icons/post/anonymous.png",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Anonymous",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Edit Post",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              const Icon(
+                                Icons.post_add,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: judulController,
+                            validator: (value) {
+                              if (value != null && value.length < 5) {
+                                return 'Enter min. 5 characters';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Judul',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF888888),
+                                  width: 2,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 1),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              controller: kontenController,
+                              validator: (value) {
+                                if (value != null && value.length < 5) {
+                                  return 'Enter min. 5 characters';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              maxLines: null,
+                              expands: true,
+                              textAlignVertical: TextAlignVertical.top,
+                              decoration: InputDecoration(
+                                hintText: 'Keterangan',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFF888888),
+                                    width: 2,
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          FractionallySizedBox(
+                            widthFactor: 1.0,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFF186D68),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        5), // Bentuk border
+                                  ),
+                                ),
+                              ),
+                              onPressed: () async {
+                                if (formKey.currentState!.validate()) {
+                                  setState(() {
+                                    isLoadingEdit = true;
+                                  });
+                                  try {
+                                    await EditPostService().postEdit(
+                                      judul: judulController.text,
+                                      konten: kontenController.text,
+                                      idPost: widget.id_post,
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Kamu berhasil Edit Post")));
+                                    setState(() {
+                                      isLoadingEdit = false;
+                                      judulPost = judulController.text;
+                                      kontenPost = kontenController.text;
+                                    });
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Mohon Maaf edit Post kamu gagal")));
+                                    setState(() {
+                                      // postCurhat = false;
+                                      isLoadingEdit = false;
+                                    });
+                                  }
 
-                        Navigator.pop(context);
-                      },
-                      child: isLoadingEdit
-                          ? const CircularProgressIndicator()
-                          : const Text('Edit Post'),
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: isLoadingEdit
+                                  ? const CircularProgressIndicator()
+                                  : const Icon(Icons.send),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                );
+              },
             );
           },
         );
+
         print('Edit terpilih');
       } else if (value == 'hapus') {
         // Lakukan aksi untuk hapus
@@ -510,6 +722,8 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
       }
     });
   }
+
+  bool _isLoading = false;
 
   Future<void> _showAlertDialog(BuildContext context) async {
     return showDialog(
@@ -527,30 +741,13 @@ class _UstadzPostCardState extends State<UstadzPostCard> {
             ),
             TextButton(
               onPressed: () async {
-                try {
-                  await DeletePostService().deletePost(
-                    idPost: widget.id_post,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Kamu berhasil Hapus Post")));
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const BottomBar(dashboardIndex: 0, currentIndex: 1),
-                      ),
-                      (route) => false);
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text("Sepertinya ada kesalahan gagal Hapus Post"),
-                    ),
-                  );
-                  Navigator.pop(context);
-                }
+                setState(() {
+                  _isLoading = true;
+                });
+                widget.onDelete();
+                Navigator.pop(context);
               },
-              child: const Text('OK'),
+              child: _isLoading ? const Text('Loading') : const Text('OK'),
             ),
           ],
         );

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
@@ -89,153 +91,150 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                     const Text('Edit Profil'),
                     InkWell(
                       onTap: () async {
-                        editProfilScreen.setLoading(true);
-                        var res = await EditProfilService().postEditProfil(
-                          name: editProfilScreen.nameController.text,
-                          email: editProfilScreen.emailController.text,
-                          gender: editProfilScreen.gender,
-                        );
+                        if (formKey.currentState!.validate()) {
+                          editProfilScreen.setLoading(true);
+                          var res = await EditProfilService().postEditProfil(
+                            name: editProfilScreen.nameController.text,
+                            email: editProfilScreen.emailController.text,
+                            gender: editProfilScreen.gender,
+                          );
+                          editProfilScreen.setLoading(false);
 
-                        print(res);
-
-                        editProfilScreen.setLoading(false);
-
-                        if (res.containsKey('result') && res != null) {
-                          // ignore: use_build_context_synchronously
-                          return showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            isScrollControlled: true,
-                            builder: (BuildContext context) {
-                              return Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    topRight: Radius.circular(16),
-                                  ),
-                                ),
-                                padding: const EdgeInsets.all(16),
-                                height: 350,
-                                width: MediaQuery.of(context).size.width,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            height: 100,
-                                            width: 100,
-                                            child: CircleAvatar(
-                                              radius: 100,
-                                              backgroundColor:
-                                                  Color(0xFF10AB6A),
-                                              child: Icon(
-                                                Icons.check,
-                                                size: 70,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text('Data Berhasil Diubah'),
-                                        ],
-                                      ),
+                          if (res.containsKey('result') && res != null) {
+                            return showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              builder: (BuildContext context) {
+                                return Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(16),
+                                      topRight: Radius.circular(16),
                                     ),
-                                    FractionallySizedBox(
-                                      widthFactor: 1.0,
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const BottomBar(
-                                                    dashboardIndex: 0,
-                                                    currentIndex: 2,
-                                                  ),
+                                  ),
+                                  padding: const EdgeInsets.all(16),
+                                  height: 350,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: CircleAvatar(
+                                                radius: 100,
+                                                backgroundColor:
+                                                    Color(0xFF10AB6A),
+                                                child: Icon(
+                                                  Icons.check,
+                                                  size: 70,
+                                                  color: Colors.white,
                                                 ),
-                                                (route) => false);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 0,
-                                          ),
-                                          child: const Text('Kembali')),
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        } else if (res.containsKey('error') && res != null) {
-                          // ignore: use_build_context_synchronously
-                          return showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            isScrollControlled: true,
-                            builder: (BuildContext context) {
-                              return Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    topRight: Radius.circular(16),
-                                  ),
-                                ),
-                                padding: const EdgeInsets.all(16),
-                                height: 350,
-                                width: MediaQuery.of(context).size.width,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            height: 100,
-                                            width: 100,
-                                            child: CircleAvatar(
-                                              radius: 100,
-                                              backgroundColor: Colors.red,
-                                              child: Icon(
-                                                Icons.close,
-                                                size: 70,
-                                                color: Colors.white,
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text('Sepertinya ada kesalahan'),
-                                        ],
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            Text('Data Berhasil Diubah'),
+                                          ],
+                                        ),
                                       ),
+                                      FractionallySizedBox(
+                                        widthFactor: 1.0,
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const BottomBar(
+                                                      dashboardIndex: 0,
+                                                      currentIndex: 2,
+                                                    ),
+                                                  ),
+                                                  (route) => false);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 0,
+                                            ),
+                                            child: const Text('Kembali')),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          } else if (res.containsKey('error') && res != null) {
+                            return showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              builder: (BuildContext context) {
+                                return Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(16),
+                                      topRight: Radius.circular(16),
                                     ),
-                                    FractionallySizedBox(
-                                      widthFactor: 1.0,
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 0,
-                                          ),
-                                          child: const Text('Coba Lagi')),
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
-                          );
+                                  ),
+                                  padding: const EdgeInsets.all(16),
+                                  height: 350,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: CircleAvatar(
+                                                radius: 100,
+                                                backgroundColor: Colors.red,
+                                                child: Icon(
+                                                  Icons.close,
+                                                  size: 70,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            Text('Sepertinya ada kesalahan'),
+                                          ],
+                                        ),
+                                      ),
+                                      FractionallySizedBox(
+                                        widthFactor: 1.0,
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 0,
+                                            ),
+                                            child: const Text('Coba Lagi')),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         }
                       },
                       child: !editProfilScreen.loading
@@ -258,32 +257,26 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(
+                        SizedBox(
                           height: 120,
                           width: 120,
-                          child: CircleAvatar(
-                            backgroundColor: Color(0xFFD9DCE1),
-                            radius: 100,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 80,
-                            ),
-                          ),
+                          child: widget.gender == 'L'
+                              ? Image.asset(
+                                  "assets/images/chat/chat-account-user.png",
+                                  fit: BoxFit.contain,
+                                )
+                              : Image.asset(
+                                  "assets/images/chat/chat-account-userp.png",
+                                  fit: BoxFit.contain,
+                                ),
                         ),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF082811),
-                              elevation: 0,
-                            ),
-                            onPressed: () {},
-                            child: const Text('Ubah Foto')),
+                        const SizedBox(
+                          height: 25,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(16),
                           child: Form(
                             key: formKey,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -301,6 +294,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'Nama Lengkap',
+                                    prefixIcon: Icon(Icons.perm_identity),
                                     // hintStyle: GoogleFonts.roboto(
                                     //   fontWeight: FontWeight.w400,
                                     //   fontSize: 16,
@@ -334,6 +328,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'Email',
+                                    prefixIcon: Icon(Icons.email),
                                     // hintStyle: GoogleFonts.roboto(
                                     //   fontWeight: FontWeight.w400,
                                     //   fontSize: 16,
@@ -448,7 +443,7 @@ class _EditProfilScreenState extends State<EditProfilScreen> {
                     MaterialPageRoute(
                       builder: (context) => const BottomBar(
                         dashboardIndex: 0,
-                        currentIndex: 2,
+                        currentIndex: 3,
                       ),
                     ),
                     (route) => false);

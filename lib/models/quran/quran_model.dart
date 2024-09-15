@@ -6,7 +6,7 @@ class QuranModel {
   final String tempatTurun;
   final String arti;
   final String deskripsi;
-  final Map<String, String> audioFull;
+  // final String audioFull;
 
   QuranModel({
     required this.nomor,
@@ -16,7 +16,7 @@ class QuranModel {
     required this.tempatTurun,
     required this.arti,
     required this.deskripsi,
-    required this.audioFull,
+    // required this.audioFull,
   });
 
   factory QuranModel.fromJson(Map<String, dynamic> json) {
@@ -28,7 +28,7 @@ class QuranModel {
       tempatTurun: json['tempatTurun'],
       arti: json['arti'],
       deskripsi: json['deskripsi'],
-      audioFull: Map<String, String>.from(json['audioFull']),
+      // audioFull: json['audio'],
     );
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 class UserModel {
   final String message;
   final UserData result;
@@ -13,6 +15,7 @@ class UserModel {
 }
 
 class UserData {
+  final int user_id;
   final String name;
   final String role;
   final String email;
@@ -20,6 +23,7 @@ class UserData {
   final String gender;
 
   UserData({
+    required this.user_id,
     required this.name,
     required this.role,
     required this.email,
@@ -34,6 +38,7 @@ class UserData {
       email: json['email'],
       emailVerification: json['email_verif'],
       gender: json['gender'],
+      user_id: json['user_id'],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quranhealer/models/quran/quran_model.dart';
 import 'package:quranhealer/services/quran/quran_service.dart';
+import 'dart:developer';
 
 class QuranViewModel extends ChangeNotifier {
   final QuranService _apiService = QuranService();
@@ -14,7 +15,7 @@ class QuranViewModel extends ChangeNotifier {
           await _apiService.fetchQuranData();
 
       _quranlist = quranData.map((item) => QuranModel.fromJson(item)).toList();
-
+      log('message');
       notifyListeners();
     } catch (error) {
       throw Exception('Error: $error');

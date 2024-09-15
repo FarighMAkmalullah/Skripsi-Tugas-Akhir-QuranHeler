@@ -29,10 +29,10 @@ class _DoaWidgetState extends State<DoaWidget> {
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.black,
+            color: visibility ? Colors.black : const Color(0xFF777070),
           ),
           borderRadius: BorderRadius.circular(
-            15,
+            10,
           )),
       child: Column(
         children: [
@@ -41,17 +41,21 @@ class _DoaWidgetState extends State<DoaWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      visibility = !visibility;
-                    });
-                  },
-                  child: Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        visibility = !visibility;
+                      });
+                    },
+                    child: Text(
+                      widget.title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: visibility
+                              ? Colors.black
+                              : const Color(0xFF777070)),
                     ),
                   ),
                 ),

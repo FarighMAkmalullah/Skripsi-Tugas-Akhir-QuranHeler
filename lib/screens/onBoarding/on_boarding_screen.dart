@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:quranhealer/screens/onBoarding/on_boarding_autenticaton.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -15,13 +16,12 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingState extends State<OnBoardingScreen> {
   final PageController _pageControllerDescription = PageController();
-  int currentPage = 0; // Atur nilai awal sesuai kebutuhan
+  int currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    currentPage =
-        widget.page; // Mengambil nilai parameter dan menetapkannya di initState
+    currentPage = widget.page;
   }
 
   Map<String, dynamic> boardingData = {
@@ -86,6 +86,7 @@ class _OnBoardingState extends State<OnBoardingScreen> {
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width,
+            // height: 300,
             child: Column(
               children: [
                 SizedBox(
@@ -121,15 +122,50 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                           ),
                         ),
                       ),
+                      Visibility(
+                        visible: boardingData['boarding'][currentPage]
+                                ['judul'] ==
+                            "Daftar Gratis",
+                        child: const SizedBox(
+                          child: Text(
+                            " ",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF6D6666),
+                            ),
+                          ),
+                        ),
+                      ),
                       const SizedBox(
                         height: 25,
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).pushNamed('/boarding-2');
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const OnBoardingAutentication(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                var begin = const Offset(1.0, 0.0);
+                                var end = Offset.zero;
+                                var curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         },
                         child: Text(
-                          currentPage == 2 ? "" : "GET STARTED",
+                          currentPage == 2 ? "GET STARTED" : "GET STARTED",
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -176,8 +212,29 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                                 )
                               : InkWell(
                                   onTap: () {
-                                    Navigator.of(context)
-                                        .pushReplacementNamed('/boarding-2');
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            const OnBoardingAutentication(),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          var begin = const Offset(1.0, 0.0);
+                                          var end = Offset.zero;
+                                          var curve = Curves.ease;
+
+                                          var tween = Tween(
+                                                  begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
+
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        },
+                                      ),
+                                    );
                                   },
                                   child: const Text(
                                     "GET STARTED",

@@ -1,4 +1,6 @@
 // import 'dart:async';
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -20,11 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () async {
       var token = await getToken();
       if (token.toString() == "null") {
-        // ignore: use_build_context_synchronously
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/boarding', (route) => false);
       } else {
-        // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

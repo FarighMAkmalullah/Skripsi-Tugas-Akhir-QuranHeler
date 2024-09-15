@@ -11,21 +11,6 @@ class CardJawaban extends StatefulWidget {
   final bool byUser;
   final String comment;
   final int id_comment;
-  final String judul;
-  final String username;
-  final String tanggalUpdate;
-  final String jamUpdate;
-  final String konten;
-  final int up;
-  final int down;
-  final String commentCount;
-  final int id_post;
-  final bool? isLiked;
-  final bool byUstadz;
-  final String spesialisasi;
-  final String ustadzName;
-  final bool isUstadzPage;
-  final int ustadzId;
   const CardJawaban({
     super.key,
     required this.byUser,
@@ -33,32 +18,24 @@ class CardJawaban extends StatefulWidget {
     required this.name,
     required this.comment,
     required this.id_comment,
-    required this.judul,
-    required this.username,
-    required this.tanggalUpdate,
-    required this.jamUpdate,
-    required this.konten,
-    required this.up,
-    required this.down,
-    required this.commentCount,
-    required this.id_post,
-    this.isLiked,
-    required this.byUstadz,
-    required this.spesialisasi,
-    required this.ustadzName,
-    required this.isUstadzPage,
-    required this.ustadzId,
   });
 
   @override
   State<CardJawaban> createState() => _CardJawabanState();
 }
 
-final TextEditingController jawabanEditedController = TextEditingController();
-
 class _CardJawabanState extends State<CardJawaban> {
+  final TextEditingController jawabanEditedController = TextEditingController();
   bool isLoadingEdit = false;
   bool isLoadingDelete = false;
+
+  final formKey = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    jawabanEditedController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -73,17 +50,27 @@ class _CardJawabanState extends State<CardJawaban> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD9D9D9),
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: const Icon(
-                          Icons.person,
-                          color: Colors.white,
-                        ),
-                      ),
+                      widget.role == 'ustadz'
+                          ? SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: Image.asset(
+                                "assets/images/chat/chat-account-ustadz.png",
+                                fit: BoxFit.contain,
+                              ),
+                            )
+                          : Container(
+                              padding: const EdgeInsets.all(10),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFe3f0f0),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Image.asset(
+                                "assets/icons/post/anonymous.png",
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                       const SizedBox(
                         width: 10,
                       ),
@@ -107,7 +94,7 @@ class _CardJawabanState extends State<CardJawaban> {
                       ),
                     ],
                   ),
-                  widget.byUser == true
+                  widget.byUser == true && widget.role != 'ustadz'
                       ? InkWell(
                           onTap: () {
                             showPopupMenu(context);
@@ -123,11 +110,6 @@ class _CardJawabanState extends State<CardJawaban> {
               Text(widget.comment),
             ],
           ),
-        ),
-        const Divider(
-          color: Color(0xFFDEDEDE),
-          height: 5,
-          thickness: 5,
         ),
       ],
     );
@@ -163,129 +145,123 @@ class _CardJawabanState extends State<CardJawaban> {
     ).then((value) {
       // Handle pilihan dari menu pop-up (jika diperlukan)
       if (value == 'edit') {
+        setState(() {
+          jawabanEditedController.text = widget.comment;
+        });
         // Lakukan aksi untuk edit
         showModalBottomSheet(
           context: context,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
           builder: (BuildContext context) {
-            return Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: Column(
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Wrap(
                 children: [
-                  const Text('Kirim Comment'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: jawabanEditedController,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      hintText: 'Comment',
-                      hintMaxLines: 5,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF888888),
-                          width: 2,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  FractionallySizedBox(
-                    widthFactor: 1,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(0),
-                        backgroundColor: MaterialStateProperty.all(
-                          const Color(0xFF0E6927),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(5), // Bentuk border
-                          ),
-                        ),
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          isLoadingEdit = true;
-                        });
-                        try {
-                          await EditCommentService().editComment(
-                            comment: jawabanEditedController.text,
-                            idComment: widget.id_comment,
-                          );
-                          // await CommentService().postComment(
-                          //   comment: jawabanController.text,
-                          //   idPost: widget.id_post,
-                          // );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text("Kamu berhasil Edit Commment")));
-
-                          // jawabanViewModel.clearJawaban();
-
-                          setState(() {
-                            isLoadingEdit = false;
-                            // apiCalled = false;
-                            // jawabanDataViewModel =
-                            //     provider.getAllJawaban(
-                            //         idPost: widget.id_post);
-                            // jawabanCount = jawabanCount + 1;
-                          });
-                          Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => JawabanScreen(
-                                judul: widget.judul,
-                                commentCount:
-                                    "${int.parse(widget.commentCount) - 1}",
-                                down: widget.down,
-                                jamUpdate: widget.jamUpdate,
-                                konten: widget.konten,
-                                tanggalUpdate: widget.tanggalUpdate,
-                                up: widget.up,
-                                username: widget.username,
-                                id_post: widget.id_post,
-                                byUser: widget.byUser,
-                                isLiked: widget.isLiked,
-                                byUstadz: widget.byUstadz,
-                                isUstadzPage: widget.isUstadzPage,
-                                ustadzId: widget.ustadzId,
-                                ustadzName: widget.ustadzName,
-                                spesialisasi: widget.spesialisasi,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFD9D9D9),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: const Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      "Mohon Maaf Edit Comment kamu gagal")));
-                          setState(() {
-                            isLoadingEdit = false;
-                          });
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: jawabanEditedController,
+                                  validator: (value) {
+                                    if (value != null && value.length < 5) {
+                                      return 'Enter min. 5 characters';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: 'Jawab',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF888888),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              isLoadingEdit
+                                  ? const CircularProgressIndicator()
+                                  : IconButton(
+                                      onPressed: () async {
+                                        if (formKey.currentState!.validate()) {
+                                          setState(() {
+                                            isLoadingEdit = true;
+                                          });
+                                          try {
+                                            await EditCommentService()
+                                                .editComment(
+                                              comment:
+                                                  jawabanEditedController.text,
+                                              idComment: widget.id_comment,
+                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        "Kamu berhasil Edit Commment")));
 
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: isLoadingEdit
-                          ? const CircularProgressIndicator()
-                          : const Text('Post'),
+                                            setState(() {
+                                              isLoadingEdit = false;
+                                            });
+                                            Navigator.pop(context);
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        "Mohon Maaf Edit Comment kamu gagal")));
+                                            setState(() {
+                                              isLoadingEdit = false;
+                                            });
+
+                                            Navigator.pop(context);
+                                          }
+                                        }
+                                      },
+                                      icon: const Icon(Icons.send),
+                                    )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
           },
         );
+
         print('Edit terpilih');
       } else if (value == 'hapus') {
         // Lakukan aksi untuk hapus
@@ -323,29 +299,6 @@ class _CardJawabanState extends State<CardJawaban> {
                     isLoadingEdit = false;
                   });
                   Navigator.pop(context);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => JawabanScreen(
-                        judul: widget.judul,
-                        commentCount: "${int.parse(widget.commentCount) - 1}",
-                        down: widget.down,
-                        jamUpdate: widget.jamUpdate,
-                        konten: widget.konten,
-                        tanggalUpdate: widget.tanggalUpdate,
-                        up: widget.up,
-                        username: widget.username,
-                        id_post: widget.id_post,
-                        byUser: widget.byUser,
-                        isLiked: widget.isLiked,
-                        byUstadz: widget.byUstadz,
-                        isUstadzPage: widget.isUstadzPage,
-                        ustadzId: widget.ustadzId,
-                        ustadzName: widget.ustadzName,
-                        spesialisasi: widget.spesialisasi,
-                      ),
-                    ),
-                  );
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(

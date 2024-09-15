@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
@@ -14,29 +16,32 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     LoginViewModel loginViewModel = Provider.of<LoginViewModel>(context);
 
     // ignore: unused_element
-    @override
-    void dispose() {
-      loginViewModel.emailController;
-      loginViewModel.passwordController;
-      super.dispose();
-    }
 
     return Form(
       key: formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           const SizedBox(height: 40.0),
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            controller: loginViewModel.emailController,
+            controller: emailController,
             validator: (email) {
               if (email != null && !EmailValidator.validate(email)) {
                 return 'Enter a valid email';
@@ -46,10 +51,7 @@ class _LoginFormState extends State<LoginForm> {
             },
             decoration: const InputDecoration(
               labelText: 'Email',
-              // hintStyle: GoogleFonts.roboto(
-              //   fontWeight: FontWeight.w400,
-              //   fontSize: 16,
-              // ),
+              prefixIcon: Icon(Icons.email),
               hintText: 'Masukkan Email',
               floatingLabelBehavior: FloatingLabelBehavior.always,
               border: OutlineInputBorder(),
@@ -60,8 +62,8 @@ class _LoginFormState extends State<LoginForm> {
           //========================================================
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            // obscureText: loginViewModel.getObsecureText,
-            controller: loginViewModel.passwordController,
+            obscureText: loginViewModel.obscureText,
+            controller: passwordController,
             validator: (value) {
               if (value != null && value.length < 5) {
                 return 'Enter min. 5 characters';
@@ -69,23 +71,22 @@ class _LoginFormState extends State<LoginForm> {
                 return null;
               }
             },
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Password',
-              // hintStyle: GoogleFonts.roboto(
-              //   fontWeight: FontWeight.w400,
-              //   fontSize: 16,
-              // ),
-              // suffixIcon: IconButton(
-              //   icon: Icon(
-              //     getObsecureText ? Icons.visibility_off : Icons.visibility,
-              //   ),
-              //   onPressed: () {
-              //     loginViewModel.setTogglePasswordVisibility(!getObsecureText);
-              //   },
-              // ),
+              prefixIcon: const Icon(Icons.lock),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  loginViewModel.obscureText
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                ),
+                onPressed: () {
+                  loginViewModel.toggleObscureText();
+                },
+              ),
               hintText: 'Masukkan Password',
               floatingLabelBehavior: FloatingLabelBehavior.always,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 25.0),
@@ -108,7 +109,7 @@ class _LoginFormState extends State<LoginForm> {
                 style: ButtonStyle(
                   elevation: MaterialStateProperty.all(0),
                   backgroundColor: MaterialStateProperty.all(
-                    const Color(0xFF0E6927),
+                    const Color(0xFF0E6969),
                   ),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
@@ -117,36 +118,36 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
                 onPressed: () async {
-                  loginViewModel.setLoading(true);
-                  FocusScope.of(context).unfocus();
-                  var res = await LoginService().postLogin(
-                    email: loginViewModel.emailController.text,
-                    password: loginViewModel.passwordController.text,
-                  );
-                  if (res.containsKey('accessToken')) {
-                    loginViewModel.setLoading(false);
-                    String accessToken = res['accessToken'] ?? '';
-
-                    saveToken(valueToken: accessToken);
-                    // ignore: use_build_context_synchronously
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const BottomBar(
-                          dashboardIndex: 0,
-                          currentIndex: 0,
-                        ),
-                      ),
-                      (route) => false,
+                  if (formKey.currentState!.validate()) {
+                    loginViewModel.setLoading(true);
+                    FocusScope.of(context).unfocus();
+                    var res = await LoginService().postLogin(
+                      email: emailController.text,
+                      password: passwordController.text,
                     );
-                  } else {
-                    loginViewModel.setLoading(false);
-                    // ignore: use_build_context_synchronously
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                      res['error'],
-                      style: const TextStyle(color: Colors.white),
-                    )));
+                    if (res.containsKey('accessToken')) {
+                      loginViewModel.setLoading(false);
+                      String accessToken = res['accessToken'] ?? '';
+
+                      saveToken(valueToken: accessToken);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => const BottomBar(
+                            dashboardIndex: 0,
+                            currentIndex: 0,
+                          ),
+                        ),
+                        (route) => false,
+                      );
+                    } else {
+                      loginViewModel.setLoading(false);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                        res['error'],
+                        style: const TextStyle(color: Colors.white),
+                      )));
+                    }
                   }
                 },
                 child: !loginViewModel.loading

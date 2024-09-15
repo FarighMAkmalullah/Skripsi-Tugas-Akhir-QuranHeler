@@ -1,10 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/models/notification/notification_model.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
 import 'package:quranhealer/screens/jawaban/jawaban_screen.dart';
 import 'package:quranhealer/screens/notification/notification_view_model.dart';
 import 'package:quranhealer/screens/post/all_post_view_model.dart';
+import 'package:quranhealer/services/notification/notification_read_service.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -14,32 +21,7 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  late Future<void> notificationDataViewModel;
   late Future<void> postDataViewModel;
-  @override
-  void initState() {
-    super.initState();
-    final notificationViewModel =
-        Provider.of<NotificationViewModel>(context, listen: false);
-    notificationDataViewModel = notificationViewModel.getNotificationPostData();
-
-    final postViewModel = Provider.of<AllPostViewModel>(context, listen: false);
-    postDataViewModel = postViewModel.getAllPostData();
-  }
-
-  String dateTime(params) {
-    DateTime originalDate = DateTime.parse(params);
-
-    // Format DateTime to desired string
-    String formattedDate =
-        "${originalDate.year}-${_addLeadingZero(originalDate.month)}-${_addLeadingZero(originalDate.day)}";
-    return formattedDate;
-  }
-
-  String _addLeadingZero(int value) {
-    // Helper function to add leading zero if needed
-    return value.toString().padLeft(2, '0');
-  }
 
   String tanggalUpdate(data) {
     DateTime dateTime = DateTime.parse(data);
@@ -48,6 +30,58 @@ class _NotificationScreenState extends State<NotificationScreen> {
         "${dateTime.year}/${dateTime.month}/${dateTime.day}";
 
     return formattedDateString;
+  }
+
+  String formatLine(String input) {
+    List<String> words = input.split(' ');
+
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+
+    return words.join(' ');
+  }
+
+  String tanggalDate(DateTime tanggal) {
+    DateTime originalDate = tanggal;
+    String formattedDate =
+        "${originalDate.day.toString().padLeft(2, '0')} ${_getMonthName(originalDate.month)} ${originalDate.year} - ${originalDate.hour.toString().padLeft(2, '0')}:${originalDate.minute.toString().padLeft(2, '0')}";
+    return formattedDate;
+  }
+
+  String _getMonthName(int month) {
+    List<String> monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember"
+    ];
+
+    return monthNames[month - 1];
+  }
+
+  late Timer timer1;
+  bool _isTimerActive = false;
+  @override
+  void initState() {
+    super.initState();
+
+    if (!_isTimerActive) {
+      timer1 = Timer.periodic(const Duration(seconds: 1), (timer) {
+        Provider.of<NotificationViewModel>(context, listen: false)
+            .getNotificationData();
+      });
+    }
   }
 
   String jamUpdate(data) {
@@ -59,11 +93,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    timer1.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Notification",
+          "Notification Post",
           style: TextStyle(
             color: Colors.white,
           ),
@@ -71,7 +111,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: const Color(0xFF0E6927),
+        backgroundColor: const Color(0xFF186D68),
         centerTitle: true,
         actions: [
           IconButton(
@@ -89,118 +129,143 @@ class _NotificationScreenState extends State<NotificationScreen> {
           provider2,
           _,
         ) {
-          return FutureBuilder(
-            future: notificationDataViewModel,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                return ErrorScreen(onRefreshPressed: () {
-                  provider.getNotificationPostData();
-                });
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                return FutureBuilder(
-                    future: postDataViewModel,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return ErrorScreen(onRefreshPressed: () {
-                          provider.getNotificationPostData();
-                        });
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.done) {
-                        return ListView.builder(
-                          itemCount: provider.notificationData.length,
-                          itemBuilder: (context, index) {
-                            var detailData = provider.notificationData[index]!;
-                            var post = provider2.getPostById(detailData.idPost);
-                            return Column(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    if (post != null) {
-                                      Navigator.push(
+          return StreamBuilder(
+              stream: provider.notificationStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: ErrorScreen(onRefreshPressed: () {
+                      provider.notificationStream;
+                    }),
+                  );
+                } else {
+                  List<NotificationModel> notificationData =
+                      snapshot.data ?? [];
+                  if (notificationData.isEmpty) {
+                    return const Center(
+                      child: Text('Belum Ada Notifikasi'),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: notificationData.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        int reversedIndex = notificationData.length - index - 1;
+                        if (notificationData[reversedIndex].idPost != -1) {
+                          return InkWell(
+                            onTap: () async {
+                              try {
+                                var res = await NotivicationReadService
+                                    .fetchNotificationReadData(
+                                        idNotif: notificationData[reversedIndex]
+                                            .idNotif);
+                                if (res.containsKey('result')) {
+                                  log('Berhasil');
+                                } else {
+                                  log('Gagal');
+                                }
+                              } catch (e) {
+                                log("$e");
+                              }
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => JawabanScreen(
+                                      id_post: notificationData[reversedIndex]
+                                          .idPost,
+                                      byUser: true,
+                                      byUstadz: false,
+                                      onDelete: () {},
+                                      onDeleteNavigation: () {
+                                        Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => JawabanScreen(
-                                                judul: post.judul,
-                                                commentCount: post.commentCount,
-                                                down: int.parse(post.down),
-                                                jamUpdate:
-                                                    jamUpdate(post.updatedAt),
-                                                konten: post.konten,
-                                                tanggalUpdate: tanggalUpdate(
-                                                    post.updatedAt),
-                                                up: int.parse(post.up),
-                                                username: post.username,
-                                                id_post: post.id,
-                                                byUser: post.byUser,
-                                                isLiked: post.isLiked,
-                                                byUstadz: post.byUstadz,
-                                                isUstadzPage: false,
-                                                ustadzId: post.idUserUstadz,
-                                                ustadzName: '',
-                                                spesialisasi: ''),
-                                          ));
-                                    }
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(15),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            color: Colors.blueGrey[100],
+                                            builder: (context) =>
+                                                const NotificationScreen(),
                                           ),
-                                          child: detailData.isRead
-                                              ? const Icon(
-                                                  Icons.notifications_none)
-                                              : const Icon(
-                                                  Icons.notifications_active),
+                                        );
+                                      },
+                                    ),
+                                  )).then(
+                                (value) => setState(
+                                  () {},
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: notificationData[reversedIndex].isRead
+                                    ? Colors.transparent
+                                    : Colors.black12,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    margin: const EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              // '${notificationData[reversedIndex].isRead}',
+                                              tanggalDate(notificationData[
+                                                      reversedIndex]
+                                                  .createdAt),
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            )
+                                          ],
                                         ),
                                         const SizedBox(
-                                          width: 7,
+                                          height: 10,
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        Row(
                                           children: [
-                                            Text(detailData.status),
-                                            Text(
-                                                dateTime(detailData.createdAt)),
+                                            Icon(
+                                              notificationData[reversedIndex]
+                                                      .isRead
+                                                  ? Icons.mark_chat_read
+                                                  : Icons.mark_chat_unread,
+                                            ),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            Flexible(
+                                              child: Text(
+                                                formatLine(notificationData[
+                                                        reversedIndex]
+                                                    .status),
+                                              ),
+                                            )
                                           ],
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ),
-                                const Divider(
-                                  height: 1,
-                                  thickness: 1,
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        return ErrorScreen(onRefreshPressed: () {
-                          provider.getNotificationPostData();
-                        });
-                      }
-                    });
-              } else {
-                return const Text("data");
-              }
-            },
-          );
+                                  const Divider(
+                                    height: 1,
+                                    thickness: 1,
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    );
+                  }
+                }
+              });
         },
       ),
     );

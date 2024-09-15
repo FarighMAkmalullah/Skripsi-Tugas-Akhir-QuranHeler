@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "140721656982",
+    "project_id": "quranhealerapp",
+    "storage_bucket": "quranhealerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140721656982:android:45e9d70c7d5fe55c695eb7",
+        "android_client_info": {
+          "package_name": "com.example.quranhealer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQDp_4xHPiA1Rr3_lAUS-y1gFs4eHS4rk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

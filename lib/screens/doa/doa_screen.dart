@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/screens/doa/doa_new_screen.dart';
 import 'package:quranhealer/screens/doa/doa_view_model.dart';
 import 'package:quranhealer/screens/doa/widget/doa_widget.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
@@ -72,6 +73,62 @@ class _DoaScreenState extends State<DoaScreen>
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DoaNewScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 7),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              left: BorderSide(
+                                width: 3,
+                                color: Color.fromARGB(255, 123, 151, 151),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Row(
+                                children: [
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    "Lihat di halaman baru",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 123, 151, 151),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: const Icon(
+                                  Icons.chevron_right,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 25,
@@ -80,8 +137,15 @@ class _DoaScreenState extends State<DoaScreen>
                         margin: const EdgeInsets.all(8),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF0C5138),
-                          borderRadius: BorderRadius.circular(15),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              const Color(0xFF0E6969).withOpacity(0.9),
+                              const Color(0xFF0E6969),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,6 +181,9 @@ class _DoaScreenState extends State<DoaScreen>
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 5,
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         height: 55,
@@ -129,9 +196,9 @@ class _DoaScreenState extends State<DoaScreen>
                             filterQuranList(value);
                           },
                           decoration: InputDecoration(
-                              hintText: 'Cari Surah...',
+                              hintText: 'Cari Doa...',
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(100),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
                                   color: Colors.black,
                                   width: 2,

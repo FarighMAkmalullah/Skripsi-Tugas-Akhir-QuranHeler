@@ -1,32 +1,58 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:quranhealer/models/notification/notification_model.dart';
-import 'package:quranhealer/models/post/post_model.dart';
 import 'package:quranhealer/services/notification/notification_service.dart';
-import 'package:quranhealer/services/post/post_service.dart';
+import 'package:rxdart/rxdart.dart';
 
 class NotificationViewModel extends ChangeNotifier {
-  List<NotificationModel?> _listNotification = [];
-  List<NotificationModel?> get notificationData => _listNotification;
+  final notificationController = BehaviorSubject<List<NotificationModel>>();
+  late Timer timer1;
+  Stream<List<NotificationModel>> get notificationStream =>
+      notificationController.stream;
 
-  Future getNotificationPostData() async {
+  bool _isTimerActive = false;
+
+  StreamSubscription<List<NotificationModel>>? subscription;
+
+  final _blmDibacaSubject = BehaviorSubject<String>();
+
+  Stream<String> get blmDibacaStream => _blmDibacaSubject.stream;
+
+  Future<void> getNotificationData() async {
     try {
-      final List<Map<String, dynamic>> notificationData =
+      final notificationData =
           await NotificationService.fetchNotificationData();
-
-      _listNotification = notificationData
-          .map((item) => NotificationModel.fromJson(item))
-          .toList();
-
-      notifyListeners();
+      notificationController.add(notificationData.result);
     } catch (error) {
-      throw Exception('Gagal memuat all data notification : $error');
+      throw Exception('Error loading notificaion data: $error');
     }
   }
 
-  void clearAllPost() {
-    _listNotification.clear();
+  void fetchBlmDibaca() async {
+    try {
+      final apiResponse = await NotificationService.fetchNotificationData();
+      _blmDibacaSubject.add(apiResponse.blmDibaca);
+    } catch (e) {
+      _blmDibacaSubject.addError(e);
+    }
+  }
+
+  void cancelTimer() {
+    if (_isTimerActive) {
+      timer1.cancel();
+      _isTimerActive = false;
+    }
   }
 
   @override
-  notifyListeners();
+  void dispose() {
+    _blmDibacaSubject.close();
+    notificationController.close();
+    subscription?.cancel();
+    if (_isTimerActive) {
+      timer1.cancel();
+    }
+    super.dispose();
+  }
 }

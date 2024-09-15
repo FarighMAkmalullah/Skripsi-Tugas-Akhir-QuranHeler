@@ -1,4 +1,8 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:quranhealer/core/init/untils/firebase_api.dart';
+import 'package:quranhealer/firebase_options.dart';
 import 'package:quranhealer/screens/adzan/adzan_screen.dart';
 import 'package:quranhealer/screens/adzan/adzan_view_model.dart';
 import 'package:quranhealer/screens/adzan/detail_adzan_view_model.dart';
@@ -6,9 +10,12 @@ import 'package:quranhealer/screens/curhat/ustadz_view_model.dart';
 import 'package:quranhealer/screens/dashboard/dashboard_view_model.dart';
 import 'package:quranhealer/screens/doa/doa_screen.dart';
 import 'package:quranhealer/screens/doa/doa_view_model.dart';
+import 'package:quranhealer/screens/hadist/hadist_detail_view_model.dart';
+import 'package:quranhealer/screens/hadist/hadist_view_model.dart';
 import 'package:quranhealer/screens/jawaban/jawaban_view_model.dart';
 import 'package:quranhealer/screens/login/login_screen.dart';
 import 'package:quranhealer/screens/login/login_view_model.dart';
+import 'package:quranhealer/screens/notification/notification_screen.dart';
 import 'package:quranhealer/screens/notification/notification_view_model.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_autenticaton.dart';
 import 'package:quranhealer/screens/onBoarding/on_boarding_screen.dart';
@@ -24,8 +31,27 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:quranhealer/screens/register/register_screen.dart';
 import 'package:quranhealer/screens/register/register_view_mode.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:quranhealer/services/chat/chat_service.dart';
+import 'package:quranhealer/services/notification_input/notification_input.dart';
+import 'package:quranhealer/services/ustadz_chat/ustadz_chat_service.dart';
 
-void main() {
+final navigatorKey = GlobalKey<NavigatorState>();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'quran_healer',
+        channelName: 'Quran Healer',
+        channelDescription: 'Notification Channel',
+      )
+    ],
+    debug: true,
+  );
+  await FirebaseApi().initNotification();
   runApp(
     MultiProvider(
       providers: [
@@ -74,6 +100,21 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => NotificationViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ChatService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChatUstadzService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => HadistViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => NotificationInputService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DetailHadistViewModel(),
+        ),
       ],
       child: const QuranHealer(),
     ),
@@ -82,14 +123,32 @@ void main() {
       .then((_) {});
 }
 
-class QuranHealer extends StatelessWidget {
+class QuranHealer extends StatefulWidget {
   const QuranHealer({super.key});
+
+  @override
+  State<QuranHealer> createState() => _QuranHealerState();
+}
+
+class _QuranHealerState extends State<QuranHealer> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       theme: ThemeData(
+        fontFamily: GoogleFonts.lato().fontFamily,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
@@ -117,6 +176,7 @@ class QuranHealer extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/daftar': (context) => const RegisterScreen(),
         // '/bottombar': (context) => const BottomBar(),
+        '/notification_screen': (context) => const NotificationScreen(),
       },
     );
   }

@@ -1,5 +1,5 @@
-import 'package:quranhealer/core/init/const/api.dart';
 import 'package:dio/dio.dart';
+import 'package:quranhealer/core/init/const/api.dart';
 
 class QuranService {
   final _dio = Dio();

@@ -12,10 +12,8 @@ class AdzanViewModel extends ChangeNotifier {
     try {
       final List<Map<String, dynamic>> adzanData =
           await _apiService.fetchAdzanData();
-
       _adzanlist =
           adzanData.map((item) => AdzanListModel.fromJson(item)).toList();
-
       notifyListeners();
     } catch (error) {
       throw Exception('Error: $error');

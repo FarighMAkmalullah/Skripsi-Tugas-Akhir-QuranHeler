@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:quranhealer/core/init/const/api.dart';
 import 'package:dio/dio.dart';
 import 'package:quranhealer/core/init/untils/shared_preference.dart';
+import 'package:quranhealer/models/notification/notification_model.dart';
 
 class NotificationService {
-  static Future<List<Map<String, dynamic>>> fetchNotificationData() async {
+  static Future<ApiNotification> fetchNotificationData() async {
     String? token = await getToken();
     try {
       final dio = Dio();
@@ -15,11 +18,7 @@ class NotificationService {
           }));
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = response.data["result"];
-        return data
-            .map<Map<String, dynamic>>(
-                (item) => Map<String, dynamic>.from(item))
-            .toList();
+        return ApiNotification.fromJson(response.data);
       } else {
         throw Exception('Failed to load Notification Data');
       }

@@ -1,3 +1,28 @@
+class ApiNotification {
+  final String message;
+  final String role;
+  final String blmDibaca;
+  final List<NotificationModel> result;
+
+  ApiNotification({
+    required this.message,
+    required this.role,
+    required this.blmDibaca,
+    required this.result,
+  });
+
+  factory ApiNotification.fromJson(Map<String, dynamic> json) {
+    return ApiNotification(
+      message: json['message'],
+      role: json['role'],
+      blmDibaca: json['blm_dibaca'],
+      result: (json['result'] as List)
+          .map((i) => NotificationModel.fromJson(i))
+          .toList(),
+    );
+  }
+}
+
 class NotificationModel {
   final int idNotif;
   final int userId;
@@ -5,7 +30,7 @@ class NotificationModel {
   final int? idComment;
   final String status;
   final bool isRead;
-  final String createdAt;
+  final DateTime createdAt;
 
   NotificationModel({
     required this.idNotif,
@@ -21,11 +46,11 @@ class NotificationModel {
     return NotificationModel(
       idNotif: json['id_notif'],
       userId: json['user_id'],
-      idPost: json['id_post'],
+      idPost: json['id_post'] ?? -1,
       idComment: json['id_comment'],
       status: json['status'],
       isRead: json['is_read'],
-      createdAt: json['created_at'],
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 }

@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranhealer/core/init/untils/firebase_api.dart';
 import 'package:quranhealer/core/init/untils/shared_preference.dart';
+import 'package:quranhealer/screens/aboutus/aboutus_screen.dart';
 import 'package:quranhealer/screens/error/error_screen.dart';
 import 'package:quranhealer/screens/profil/detail_profil.dart';
 import 'package:quranhealer/screens/profil/edit_password_screen.dart';
@@ -12,6 +14,7 @@ import 'package:quranhealer/screens/profil/widget/header_profil_card.dart';
 import 'package:quranhealer/screens/terms_and_privacy_policy/privacy_policy.dart';
 import 'package:quranhealer/screens/terms_and_privacy_policy/terms_screen.dart';
 import 'package:quranhealer/services/logout/logout_service.dart';
+import 'package:quranhealer/services/notification_input/notification_input.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilScreen extends StatefulWidget {
@@ -23,6 +26,7 @@ class ProfilScreen extends StatefulWidget {
 
 class _ProfilScreenState extends State<ProfilScreen> {
   late Future detailDataFuture;
+  bool _isFunctionCalled = false;
   @override
   void initState() {
     super.initState();
@@ -31,6 +35,25 @@ class _ProfilScreenState extends State<ProfilScreen> {
         Provider.of<ProfilViewModel>(context, listen: false);
 
     detailDataFuture = detailViewModel.getProfilDetail();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isFunctionCalled) {
+      detailDataFuture.then((_) {
+        final detailUser =
+            Provider.of<ProfilViewModel>(context, listen: false).detailUser;
+        if (detailUser != null) {
+          sendTokenNotification(
+              detailUser.user_id, detailUser.role, detailUser.email);
+          // if (detailUser.role == "ustadz") {
+          //   sendTokenNotification(detailUser.user_id);
+          // } else if (detailUser.role == "user") {}
+        }
+      });
+      _isFunctionCalled = true;
+    }
   }
 
   bool isLoading = false;
@@ -53,6 +76,49 @@ class _ProfilScreenState extends State<ProfilScreen> {
       throw 'Tidak dapat membuka WhatsApp.';
     }
   }
+
+  void sendTokenNotification(
+    int userId,
+    String role,
+    String email,
+  ) async {
+    var tokenMobile = await FirebaseApi().initNotification();
+    if (role == "ustadz") {
+      try {
+        await _chatService.addTokenNotificationUstadz(tokenMobile, userId);
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(e.toString()),
+          ),
+        );
+      }
+    } else if (role == "user") {
+      try {
+        await _chatService.addUser(userId, email);
+        try {
+          await _chatService.addTokenNotificationUser(tokenMobile, userId);
+        } catch (e) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(e.toString()),
+            ),
+          );
+        }
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(e.toString()),
+          ),
+        );
+      }
+    }
+  }
+
+  final NotificationInputService _chatService = NotificationInputService();
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +145,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
                       HeaderProfilCard(
                         namaLengkap: detail!.name,
                         email: detail.email,
+                        gender: detail.gender,
+                        role: detail.role,
                       ),
                       Container(
                         decoration: const BoxDecoration(
@@ -116,13 +184,26 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                             email: detail.email,
                                             namaLengkap: detail.name,
                                             gender: detail.gender,
+                                            role: detail.role,
                                           ),
                                         )),
                                     child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Profil Saya'),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.person,
+                                              color: Color.fromARGB(
+                                                  255, 134, 134, 132),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text('Profil Saya'),
+                                          ],
+                                        ),
                                         Icon(
                                           Icons.chevron_right,
                                           size: 17,
@@ -150,7 +231,19 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Edit Akun'),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.edit,
+                                              color: Color.fromARGB(
+                                                  255, 134, 134, 132),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text('Edit Akun'),
+                                          ],
+                                        ),
                                         Icon(
                                           Icons.chevron_right,
                                           size: 17,
@@ -163,30 +256,29 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('Mohon Maaf'),
-                                            content: const Text(
-                                                'Fitur ini masih dalam pengembangan'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Close'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const EditPasswordScreen()));
                                     },
                                     child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Edit Password'),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.lock,
+                                              color: Color.fromARGB(
+                                                  255, 134, 134, 132),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text('Edit Password'),
+                                          ],
+                                        ),
                                         Icon(
                                           Icons.chevron_right,
                                           size: 17,
@@ -231,7 +323,19 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Privacy Policy'),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.privacy_tip,
+                                              color: Color.fromARGB(
+                                                  255, 134, 134, 132),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text('Privacy Policy'),
+                                          ],
+                                        ),
                                         Icon(
                                           Icons.chevron_right,
                                           size: 17,
@@ -277,7 +381,19 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Terms and Condition'),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.privacy_tip,
+                                                color: Color.fromARGB(
+                                                    255, 134, 134, 132),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text('Terms and Condition'),
+                                            ],
+                                          ),
                                           Icon(
                                             Icons.chevron_right,
                                             size: 17,
@@ -291,30 +407,29 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('Mohon Maaf'),
-                                            content: const Text(
-                                                'Fitur ini masih dalam pengembangan'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Close'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AboutUsScreen()));
                                     },
                                     child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('About Us'),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.web,
+                                              color: Color.fromARGB(
+                                                  255, 134, 134, 132),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text('About Us'),
+                                          ],
+                                        ),
                                         Icon(
                                           Icons.chevron_right,
                                           size: 17,
@@ -335,6 +450,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                 setState(() {
                                   isLoading = true;
                                 });
+
                                 var res = await LogoutService().logout();
                                 if (res.containsKey('result') && res != null) {
                                   setState(() {
@@ -347,6 +463,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                       .showSnackBar(snackBar);
 
                                   removeToken();
+
                                   Navigator.pushNamedAndRemoveUntil(
                                       context, '/', (route) => false);
                                 } else if (res.containsKey('error') &&
@@ -360,6 +477,37 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                   );
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
+                                }
+                                if (detail.role == "ustadz") {
+                                  var tokenMobile =
+                                      await FirebaseApi().initNotification();
+                                  try {
+                                    await _chatService
+                                        .deleteNotificationTokenUstadz(
+                                            tokenMobile, detail.user_id);
+                                  } catch (e) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text(e.toString()),
+                                      ),
+                                    );
+                                  }
+                                } else if (detail.role == "user") {
+                                  var tokenMobile =
+                                      await FirebaseApi().initNotification();
+                                  try {
+                                    await _chatService
+                                        .deleteNotificationTokenUser(
+                                            tokenMobile, detail.user_id);
+                                  } catch (e) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text(e.toString()),
+                                      ),
+                                    );
+                                  }
                                 }
                               },
                               child: Padding(

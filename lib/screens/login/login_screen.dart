@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quranhealer/screens/login/widget/form_login_widget.dart';
+import 'package:quranhealer/screens/register/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,7 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1F542E),
+      backgroundColor: const Color(0xFF0E6969),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -49,7 +50,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.of(context).pushNamed('/daftar');
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const RegisterScreen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var begin = Offset(1.0, 0.0);
+                                    var end = Offset.zero;
+                                    var curve = Curves.ease;
+
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(16.0),
@@ -65,26 +87,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: 71,
-                            height: 56,
-                            child: Image.asset("assets/logo/logo.png"),
+                          Text(
+                            'QURAN HEALER',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w500),
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 15,
                           ),
-                          const Text(
+                          Text(
                             "Senang bertemu denganmu lagi...",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500),
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 15,
                           ),
                         ],
@@ -102,6 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
                   ),
                 ),
                 child: const Column(
@@ -175,18 +200,36 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const Text(
                       'Dont have an account ?',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.of(context).pushNamed('/daftar');
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    const RegisterScreen(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              var begin = Offset(1.0, 0.0);
+                              var end = Offset.zero;
+                              var curve = Curves.ease;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       },
                       child: const Text(
-                        'Regiter Here',
+                        'Register Here',
                         style: TextStyle(
-                          color: Colors.blue,
+                          color: Color(0xFF0047FD),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
